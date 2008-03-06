@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : pseudoCode.xml
+    Created on : Streda, 2007, jún 13, 18:14
+    Author     : Ivan Vlcek
+    Description:
+        Pseudokod, popisujem alogorytmus.
+-->
+
+<root>
+    <author>Ivan Vlcek</author>
+    <classes>
+        <class>
+            <name>Crawler</name>
+            <description></description>
+        </class>
+    </classes>
+    <zmenyheritrix>
+        WriterPool MAXDEFAULTTIME = 5 * 60 * 1000
+        FetchFTTP
+    </zmenyheritrix>
+    <popis>
+        Popis integracie do Heritrixu:
+        V heritrixe mam DecidingRule nazvany IsCzechDecidingRule, ktory dostava
+        na vstupe URL (to je zahodena url zo sklizne 2007). Nasledne zavola
+        hlavnu metodu mojho modulu, nazvanu isCzech(URL analyzovanaURL) : boolean,
+        ktora vrati true ak je stranka ceska, inak vrati false. To znamena ze
+        cela analyza(crawlovanie, vyhodnocovanie) tejto jednej URL 
+        sa odohrava v mojom module. Potom IsCzechDecidingRule dostane dalsiu
+        url zahodenu zo sklizne 2007 a opet spusti celu analyzu na tejto novej
+        url.
+        
+        Popis cinnosti modulu:
+        Vstup: 
+        - AnalyzovanaURL, o ktorej chceme zistit ci je ceska (to je ta zahodena zo sklizne 2007)
+        - MaxUrlsToCrawl je cislo, ktore udava kolko maximalne odkazov najdenych od AnalyzedURL sa ma zcrawlovat.
+        Priklad:
+        Zadam analyzovanu URL www.atlas.sk, MaxUrlsToCrawl nastavim na 1000. 
+        Zacne sa crawlovanie... 
+        (stahuju sa najdene odkazy z www.atlas.sk, analyzuje sa text, hladaju sa cz slova atd..., pripocitavaju sa body analyzovanej URL za kazde najdene cz slovo, cz IP, atd.). 
+        Crawlovanie sa skonci iba v 2 pripadoch.
+        1. www.atlas.sk  nazbiera urcity pocet bodov, potrebnych pre cesku stranku. Tj. analyzovana URL sa vyhodnoti ako ceska.
+        2. zcrawlovalo sa uz 1000 stranok (MaxUrlsToCrawl), ale potrebny pocet bodov sa este nenazbieral. To znamena ze stranku vyhodnotime ako NEcesku.
+        Po skonceni analyzy tejto URL sa vykona reset mojho modulu (zrusia sa objekty, vyprazdnia sa kolekcie). 
+        Tj. Heap space JVM sa vyprazdni. Po resetovani je modul pripraveny na 
+        analyzu novej url predanej z IsCzechDecidingRule.
+        
+        Problem JVM Heap Space:
+        Pri nastaveni MaxUrlsToCrawl > 10000 sa moze stat ze prudko narastu 
+        kolekcie a zoznamy => Heap Space sa zaplni a nastane Runtime vynimka
+        java.Heap.OutOfMemory.
+        Myslim ze toto nieje take zavazne, nepredpokladam ze budeme nastavovat
+        MaxUrlToCrawl na viac ako 100. Pri analyzovani do takeho hlbokeho zanorenia
+        to uz nema zmysel, lebo odkazy su s velkou pravdepodobnostou mimo 
+        analyzovanejUrl a nemaju s nou uz nic spolocne a preto nas ani 
+        nezaujimaju.
+        
+        Problem efektivnosti:
+        Postup je neefektivny v pripade ked budu dve AnalyzovaneUrl zo sklizne 2007 pribuzne.
+        To znamena ze budem dva krat stahovat napr. 500 odkazov, ktore su pre 
+        obe analyzovane URL spolocne. 
+        Riesenie ktore ma napada.
+        Aby som zabranil stahovaniu tej istej URL dva alebo aj viac krat, tak si 
+        nutne potrebujem v nejakom ulozisti pametat, ktore url som uz stiahol.
+        Kedze ale nutne potrebujem aj hodnotenie tejto stranky (pocet bodov, 
+        ktore jej moj modul pricital) musim si pri kazdej stiahnutej url navyse
+        pametat jej pocet pridelenych bodov. Toto je nevyhnutne spravit ci uz
+        v mojom module alebo v Heritrixe, pretoze Heritrix si pameta len URL
+        ktore uz stiahol. Mozno keby sa dalo prinutit Heritrix aby si pametal aj
+        tie body ku kazdej stiahnutej URL. Ak by to slo, tak by som mohol svoj
+        modul dekomponovat na mensie casti a zaintegrovat ich jednotlivo do 
+        Heritrixu. Ale to je asi nezmysel, prestudujem 
+        doc k heritrixu. Skor si myslim ze by bolo lepsie ukladat url a k nim 
+        body do DB.
+        Kazdopadne to treba este doriesit.
+        
+    </popis>
+    <pseudoCode>
+        WebAnalyzer bude mat staticku tovarnu metodu, ktora vrati instanciu, kt.
+        bude finalna(jedináčik). V IsCzechDecideRule zavoláme túto instanciu a
+        táto instancia bude mať statickú metodu isCzech(String uri), ktora 
+        vráti true ak bude stránka českého pôvodu. Postup analyzovania url.
+        WebAnalyzer si nastavi hodnoty pre krajinu a vytvori vsetkych 
+        jedniacikov podla predaneho parametru krajiny. Po tejto inicializacii
+        zavola metodu crawl jedinacika Crawler. Metoda crawl zacne crawlovat
+        predanu URL v nej alebo mimo nej sa bude extraktovat text z url a ten 
+        sa preda jedinacikovi PageTextAnalyzer, ktory bude na text volat 
+        metody jedinacikov Words, Phones, ktore budu inkrementovat Identifier.
+        Toto sa bude opakovat pokial 
+        1. crawl metoda prebehne MAX_URLS (return false)
+        2. Identifier presiahne COUNTRY_BORDER a zavola metodu stop jedinacika
+        Crawler. (return true)
+        Crawler v metode download page stiahne text a ten preda statickej metode
+        analyze(pageContent) jedinacika PageAnalyzer.
+    </pseudoCode>
+    <vysledky>
+        Pri crawlovani sa najde reklamny odkaz, v ktorom su stovky dalsich
+        odkazov a preto sa moze stat ze sa analyzuje 99% reklamych straniek ako
+        straniek zo zadaneho hostu napr. praso.webzdarma.cz. Naopak ak urcim
+        ze chcem crawlovat stranky len zo zadaneho hostu, tak samoze stat ze je
+        stranka presmerovana a nic sa nescrawluje. Preto je ziaduse stanovit
+        poradie, v ktorom by sa upradnostili stranky zo zadaneho hostu a ak sa 
+        nenajdu ziadne tak sa prejde na stranky najdene mino host.
+    </vysledky>
+    <vysledky>
+        Pri downloadovani stranky je potrebne zistit ako je dana stranka
+        kodovana, niekde vyhovuje "windows-1250" a nevyhovuje "UTF-8" a naopak.
+        Mohlo by sa to dat zistit z HTTP hlavicky.Tak som nastavil kodovanie 
+        stranok podla toho ci stanka mala nastaveny atribut "charset", ak 
+        nemala nastaveny tak som pouzil defaultne kodovanie "windows-1250",
+        ktore je pouzivane castejsie podla mojich doterajsich testov.
+    </vysledky>
+    <dorobit>
+        Uzatvaranie streamov pri prehladavani slovnika. Po scrawlovani stranky
+        by som mal zavolat metodu reset(), tak to aj robim v triede Crawler, kde
+        by som mal uzavriet prudy a pred hladanim slova v slovniku dalsej 
+        stranky by som mal prudy zas otvorit(vytvorit) v nejakej metode 
+        openStream(). V slovniku su slova ako je "out" ... odstranit.
+    </dorobit>
+    <dorobit>
+        Logovanie spravim vo WebAnalyzery. pre kazdu stranku, ktora bude ceska
+        otvorim streamy, nastavim sa na koniec suboru a zapisom doneho tuto
+        cesku URL. Potom zavriem streamy a poznacim si kde som skoncil.
+    </dorobit>
+    <dorobit>
+        Pridat prehlaadvanie odkazov seznam.cz. Otestovat pomocou logu, kolko
+        krat sa inicializuje CreateIndex. Mal by sa nainicializovat iba raz.
+        Ak sa bude inicializovat viac krat tak by som mohol skusit volat 
+        CreateIndex priamo v heritrixe IsCzechDecideRule. Pozor pri opetovnom
+        volani sa vyhodi chyba "cannot create index dir, delete it as first", 
+        takze bud zmenim metodu ktora tu vynimku vyhodi alebo pri skonceni 
+        vymazem dir index (to je asi blbost)
+    </dorobit>
+    <dorobit>
+        Spravit konfiguracny subor xml alebo properties z ktoreho by sa 
+        nainicializovali potrebne veci. Subor by sa volal v triede v 
+        Heritrixe IsCzechDecideRule.
+    </dorobit>
+    <dorobit>
+        Odcitat body pre zakazane stranky sex, porno atd...
+    </dorobit>
+    <dorobit>
+        Presunut do balikov a spravit testovacie triedy. JUnit
+    </dorobit>
+    <dodatky>
+        V subore odkazy.seznam.cz.2 je 149200 odkazov. Pricom mimo domenu.cz
+        ukazuje 26884. Treba pozbierat odkazy z ostatnych znamych portalov a
+        priradit ich k tomuto indexu urceneho pre craeling ceskych stranok.
+    </dodatky>
+    <maxmind>
+        GEOLite Country. Musim rozlisovat ci je startURL (pociatocna URL adresa
+        z ktorej sa zacina crawling) z CZ servera, ak ano ma to vecsiu hodnotu
+        ako ked je odkaz v tejto startURL z CZ servera. Odkazy budem asi
+        hodnotit inak.
+    </maxmind>
+    <dorobit>
+        Prerobit vyhladavanie ceskych miest do osobitnej triedy. Hodnotit ich 
+        inak ako ostatne cz slova.
+    </dorobit>
+    <dorobit>
+        Vyhladavanie slov na stranke. Slova sa ziskaju z cisteho textu a to tak 
+        ze sa dlhy retazec rozdeli na slova, ktore su oddelene medzerami, 
+        dorobit by som mal rozdelenie aj podla ciarok "," OK DONE
+    </dorobit>
+    <dorobit>
+        Vytvorit rozhranie pre pridavanie kriterii. A premysliet si si ich
+        metoda search() bude brat zoznam objektov alebo po jeden objekt a 
+        iterovat sa bude vo vyssej vrstve. Napr. GeoIPCountry berie zoznam na
+        vstupe metody search(List list).
+    </dorobit>
+    <dorobit>
+        Spravit jednodyche GUI k mojmu modulu. Mozno by sa v nom mali dat 
+        nastavit konfiguracne properties, alebo osobne v konfiguraku.
+    </dorobit>
+    <dorobit>
+        Nejako zjednodusit pridavanie slovnikov, odkazov a preformatovat ich
+        do pozadovaneho tvaru pre modul. Bud by sa to mohlo nastavovat
+        priamo v konfiguraku alebo nejak inak. Premysliet ako to zbuilovat, 
+        tak aby sa tam pridali aj moje data tj. priecinok _anal
+    </dorobit>
+    <dorobit>
+        http://seznam.cz crawluje inak ako http://www.seznam.cz. V prvom 
+        pripade skonci crawler po par strankach. riesenie
+        Narazi na stranky, ktore
+        maju zakazane crawlovanie obsahu robots.txt, preto skonci hned, ale
+        asi treba overit ci sa crawluju aj stranky z outOfHostLinks
+    </dorobit>
+    <zistenie>
+        Pri hladani odkazov na stranke sa nasli odkazy typu
+        "http://praso.webzdarma.cz/'+cgi+'/'+cgi+'/click.cgi?gid=54&id='+flash+'
+        Vsetky tieto odkazy s priponou ...+cgi+'... odkazovali na http chybu
+        404 , hladany subor nenajdeny (napr. server webzdarma.cz). Tieto
+        odkazy sa nachadzali a stranka sa prakticky cyklila na tycho 
+        odkazoch. Preto treba odkazu s touto priponou odstranit z listu stranok
+        ktore sa maju downloadovat.
+        - pri hladani ceskych slov som musel odstranit slova, ktore obsahovali 
+        v sebe nejaku cislicu, taketo slova niesu validne pre slovnik.
+        - pri hladani cz slov v nazve url sa takmer nic nenajde lebo slova su 
+        v url bez diakritiky, asi by som mal spravit inu verziu slovnika ?
+        - v slovniku mam aj slova typu hore-dole, preto som take slova spociatku
+        povazoval za validne. Statistiky ake ukazali ze sa mi vyhldava vela slov
+        typu "-", co nieje ziaduce, lebo to kazi percentnu uspesnost. Preto 
+        som tieto slova v slovniku rozdelil (napr. hore-dole na hore, dole) a 
+        znak "-" som odstranil z povolenej abecedy.
+        - taktiez som zistil ze sa casto nasli znakove entity, napr. "nbsp" aj 
+        tie treba odfiltrovat. Samozrejme nepouzivaju v html kode spravny
+        tvar &nbsp; tak musim odfiltrovat slovo "nbsp".
+        - pri velkom analyzovani stranky http://www.seznam.cz sa IDE netbeans
+        zasekli, ale v logach bolo napisane ze crawlovanie bolo zastavene a 
+        stranka seznam.cz bola uznana za cesku. Pritom pri analyzovani 
+        slovenkseho www.zoznam.sk sa IDE nezaseklo a skoncilo.
+        - metoda downloadPage mi pri velkom testovani zamrzla. Pri stahovani
+        url "http://zena-in.cz" jednoducho zastala pri citani niektoreho riadku.
+        Metoda pouzivala zabaleny inputStream do BufferedReader. Na webe
+        som nasiel ze ide o BUG (pricom sa nemoze nacitat zo streamy, ked nema 
+        zaplnene cele pole bytov, vid 
+        http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6192696
+        ==
+        Bug ID:   6192696 
+        Synopsis   BufferedInputStream.read(byte[], int, int) can block if the 
+        entire buffer can't be filled
+        ==
+        Pritom na windowse mi to fungovalo OK, verzia JAVY nehrala ulohu.
+        Zabalil som InputStream do BUfferedInputStream a pred citanim dalsieho
+        bytu z prudu som si overil jeho metodu avalilable() > 0, ktora overila, 
+        ci moze citat nejaky bit alebo nie.
+    </zistenie>
+    <bakalarka>
+        Nastudovat xml format bakalarky, Docbook
+        - tema 0 moja uloha vo webarchive, uloha modulu, ciel, vyuzitie modulu
+        a ako sa bude pouzivat.
+        - tema 1 Heritrix
+        - sklizen pomocou heritrixu, fungovanie heritrix procesora, a deciding
+        rulov, ktore vlastne len odhadzuju danu url zo sklizne, tj. url, ktora
+        prechadza danym deciding ruleom, moze byt bud vyhodena (zamietnuta)
+        tymto deciding rulom alebo moze prejst a preda sa dalsiemu deciding 
+        rulu. Ak prejde vsetkymi nadefinovanymi deciding rulami, tak sa tato 
+        stranka (url) bude sklizet(stiahne sa).
+        - tema 2 integracia do Heritrixu
+        - sposob ako by mohol moj modul spolupracovat s heritrixom, najlepsie
+        sa zdalo spravit deciding rule, ktory bude pouzivat moj modul. URL 
+        ktora bude prechadzat tymto deciding rulom sa bud odmietne alebo sa 
+        preda dalsim deciding rulom. Moze sa priamo stiahnut ak sa nadefinuju 
+        ostatne vlastnosti Heritrixu, kazdopadne sa bude do logov zapisovat
+        ktore stranky su ceske a ktore nie. Okrem toho sa loguje aj cely chod
+        modulu a loguju sa aj statistiky v percentach.
+        - tema 3
+        - poziadavky od modulu, open source, ako ma prisupovat k strankam ,
+        sposob ohodnotenia URL
+        - tema 4 sklizen 2007, vysledky, skusenosti, logovanie, emailBonzer,
+        - tema 5 statistika, matematika a vypocitanie statistiky uspesnosti, 
+        dat overit niekomu z Moravskej knihovny.
+    </bakalarka>
+    <dalej>
+        integrovat do heritrixu a pozret sa ci odpovedaju statistiky,
+        v percentach ako v netbeans, tak v heritrixe. SKontrolovat preco
+        sa na stranke muni.cz najde iba 8 percent ceskych slov (opravene
+        a doplnena filtracia, na muni. naslo okolo 25 percent cz slov).
+    </dalej>
+    <dorobit>
+        URL porovnavat v nejakom kanonickom tvare, tj. upravit URLFormater.
+        viz Heritrix API.
+    </dorobit>
+    <dorobit>
+        Pozri dokument DOWNLOAD_PAGE, KDE JE UKAZANE AKO SA MA STAHOVAT STRANKA
+        Z HTTP_CONNECTION. DOWNLOAD_PAGE JE V ROOT ADRESARI PROJEKTU.
+    </dorobit>
+    <dorobit>
+        Pri pouziti metody downloadPageByBytes() sa mi zda ze crawling trva 
+        ovela dlhsie ako pri pouziti povodnej metody downloadPage. Otestovat na
+        nejakej URL napr: praso://webzdarma.cz...POZOR MUSIM TESTOVAT NA 
+        ROVNAKOM INTERNETOVOM PRIPOJENI (NAJLEPSIE NA KOLEJI).
+    </dorobit>
+    <exception>
+        NullPointerException pri nacitavanie suboru "_anal/geoip/geoIP.dat"
+        Vyhodila sa ked som spustal cez konzolu, pretoze som nebol v root
+        adresari projektu WebAnalyzer. Ked sa dam do root projektu s spustim 
+        tak subor najde.
+    </exception>
+    <dorobit>
+        Zamrzne pri zistovani suboru robots.txt !!! Overit napr. stranku
+        urlToCheck=http://czech-properties.cz/
+        http://falcon.cz
+        skontroluj logami, kde sa vyhadzuje vynimka. :)
+    </dorobit>
+    <dorobit>
+        Pri metode isRobotAllowed mi obcas program zastane aj na 3 min kym zisti
+        ci existuje subor robots.txt pre dany host. Ked sa dotazuje na tento
+        host viackrat za crawling, tak to spomaluje. Preto potrebujem zaznamenat
+        hosty, pri ktorych sa mi vyhodi vynimka, aby sa pri dalsej url z tohto 
+        hostu nehladal subor robots.txt a hned vyhodnotim ze tento host nema 
+        robots.txt
+    </dorobit>
+    <dorobit>
+        Pri velkom crawlovani 10 mil url mi to zamrzlo pri metode 
+        downloadByBytes(URL url). Zistil som ze treba osetrit aj metodu
+        URLConnection.getInputStream(), kde mi to pravdepodone zhavarovalo,
+        pretoze nemohol ziskat inputStream z connectionu. Tak som predtym
+        nastavil timeout daneho URLConnection a vyzera ze to bude fungovat.
+        Tj. zmenit metody downloadByBytes a otestovat. see also
+        Download1.java
+    </dorobit>
+    <dorobit>
+        Zatial nastavim timeout pri metode downloadPage na 240 tisic milisekund
+        co su 4 minuty. Pretoze podla logov stranky natahuje za max 3 minuty.
+    </dorobit>
+    <dorobit>
+        java.lang.NullPointerException
+        addAll(Unknown Source)
+        Skontrolovat v javadoc, pozret v google. Spustit vo win. a skontrolovat
+        cestu lomitka vo vytvarani suborov. napr. "_anal/lucene/neco" alebo
+        "_anal\neco\neco"
+        Osetri vynimky v try catch.
+    </dorobit>
+    <dorobit>
+        Pehladavanie v nazve url. Upravit slovnik, tak aby tam nebola diakritika
+        Vid emaily z java konferencie, Odstranienie diakritiky okolo datumu
+        18.9.07 az 21.9.07. V url nazve sa nepouzivaju slova s diakritikou.
+    </dorobit>
+    <dorobit>
+        - Este nefunguje spravne kodovanie. Vid stranky v triede Main.java, sa zle
+        koduju, treba overit hlavne metodu downloadPageByBytes().
+        - Este treba preverit funkcnost outOfHostLinks, ci sa pridaju do 
+        toCrawlList ked treba, otestuj ne stranke http://praso.webzdarma.cz
+        - Este prefiltrovat subory, ktore sa maju uznat za link (napr .jar 
+        netreba crwlovat.)
+        - Stranka ma nastavene charset="ISO-8859" ale mne sa asi z urlConnection
+        vratilo windows-1250, neviem preco otestovat.
+    </dorobit>
+    <dorobit>
+        17:17:49,793 DEBUG org.archive.analyzer.Crawler - page succesfully downloaded
+        Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+        
+        MAX_URLS=1000 crawled=442
+        
+        Pri spusteni na http://is.muni.cz/
+        MAX_URLS = 1000;
+        private final int COUNTER_BORDER = 1000000;
+        
+        pri konzole mi vynimku outOfMemory nehodilo. Tak neviem
+    </dorobit>
+    <dolezite>
+        Niektore dolezite classy mam v projekte TestExpLib.
+        Cez windows mi sla len metoda downloadPage. Metoda downloadPageByBytes
+        mi tam nesla (ale teraz som si nie isty ci to bolo kvoli tomu alebo 
+        niecomu inemu). Metoda available() pri bufferedInputStream obcas nedeter-
+        ministicky preskocila par bytov, preto mi nenacitalo cely obsah html
+        stranky z URLConnection. Available som odstranil a vyzera ze staci
+        timeout a ked sa neda nacitat obsah stranky, tak sa vyhodi vynimka.
+    </dolezite>
+    <dolezite>
+        Mozno by bolo dobre urcovat kolko slov na danej stranke je ceskych. S 
+        tym ze by som kazde slovo hladal vo vsetkych slovnikoch. Ak sa to 
+        slovo nachadza v slovnikoch, tak to znamena ze je platne. A tym by som
+        si vyfiltroval len tie platne slova (eng, sk, cz, atd.) a z tychto
+        platnych by som urcil, kolko percent z nich je ceskych. To znamena ze
+        by som sa vyhol nezmyselnym slovam napr (css tagy, html tagy, ...). 
+        Dobre by bolo zo stranky odfiltrovat aj css, javasctipt, entity, 
+        direktivy, a ine skripty, ktore nevystupuju v prehliadaci ako text pre
+        citatela.
+    </dolezite>
+    <dolezite>
+        Zamrzol pri ziskavani odkazu na robots.txt na stranke 
+        http://palcobrokers.sk/robots.txt
+        Treba asi tiez otestovat TIMEOUTOM ako pri metode downloadPageByBytes.
+    </dolezite>
+    <dolezite>
+        Mal by som normalne z bufferedInputStreamu metodou read nacitat byte.
+        Metoda read() podla jirku je pomala, mal by som nacitavat po napr. 8B a 
+        tym sa zrychli citanie. Metoda read() mi vrati pocet bytov, ktore nacita
+        mal by som si zalogovat, kolko bytov metoda read nacitatala. Aby som 
+        zistil ci je malo pameti v JVM (podla jirku nastavit na Xmx 512 asi ???)
+        alebo tam je neco jineho (Memory leak asi tezko rikal jirka). Spys chce
+        nacist velky soubor , ktery se do JVM nezmesti.
+        Odporucanie ziskanie pole bajtov z URLConnection.getInputStream().
+        Pomocou metody read() ziskat precitany Byte a zapisat ho
+        do BAOS ByteArrayOutputStream.write(). Az potom z neho vezmem pole bytu
+        metodou getNeco()
+        Na stranke http://rsts-olomouc.euweb.cz/ mi vyhodilo vynimku.
+        Exception in thread "main" java.lang.OutOfMemoryError : Java heap space
+        at java.util.Arrays.copyOf(Unknown Source)
+        at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+        at java.lang.AbstractStringBuilder.append(Unknown Source)
+        at java.lang.StringBuffer.append(Unknown Source)
+        at java.lang.append(Unknown Source)
+        at org.archive.analyzer.Crawler.downloadPageByBytes(Crawler.java :604)
+        
+        - Ked som spustil na tejto stranke tak ju zanalyzoval, takze problem 
+        moze byt nekde jinde.
+        -Skus nastavit JVM na Xmx 512 
+        nastavil som parametre -Xmx521m -Xms512m
+        - treba nastavit pri kazdom 
+        spusteni protoze se vytvori vlastne novy proces s prirazenym JVM. 
+        Takze muzu mit spustene i dva a vic. Napr, IDEA, Squirell idu vo 
+        vlastnych JVM 
+    </dolezite>    
+    <zistenie>
+        Z metody getHeaderFields() nacitam macimalne to iste co z metody
+        getContentType() plus nieco viac. Toto mi vrati napr:
+        "text/html charset=UTF-8"
+    </zistenie>
+    <dorobit>
+        Zapisovanie do logu linky, ktore su ceske. Naj bude zapisovat ich 
+        osobitne do samostatneho logu. Treba nakonfigurovat spravne 
+        log4j.
+    </dorobit>
+    <dorobit>
+        Url pri ktorych bola IOException pri metode downloadPageByBytes()
+        http://magazin.auto.cz/?article=1576    , IOException = cause
+        http://auto.blesk.cz/clanek77463.htm
+        http://auto.blesk.cz/clanek77346.htm
+        http://mapy-pruvodce.cz/banner_click.php?idbanneru=126&amp;idbannerplocha=
+        pri tejto som mal IllegalArgException   protocol = http ,host = null
+        pri metode downloadPageByBytes(). Vyhodila sa mi vynimka IllegalArgEx
+        asi preto , lebo sa mi nezachytila prva vynimka, otestujem. ???
+    </dorobit>
+    <dorobit>
+        Este raz upravit zoznam linkov zo seznam.cz a otestovat vyhladavanie
+        pomocou LUCENE
+    </dorobit>
+    <dorobit>
+        Otestovat preco mi to skonci na GeoIP, asi je tam nejaka vynimka, alebo
+        je nieco zle, pretoze sa tam program zasekne a skonci.
+    </dorobit>
+    <bakalarka>
+        Vyvijal som postupom prototypovanie pozri slidy z ananasu str.33
+    </bakalarka>
+    <zistenie>
+        Kodovanie, isla mi metoda downloadPageByBytes(), aj downloadPageByBaos()
+        ale musel som nastavit vlastnost jvm encoding na utf-8.
+        -Dfile.encoding=UTF-8 
+        Naslo mi 21 percent slov. Nastavi sa kodovanie jvm na utf-8.
+    </zistenie>
+    <dorobit>
+        TU MI TO PADA a neviem preco !!! pozri v kode 
+        Otestovat velkost kolekcii, ked mi to spadne, zadat ich maxim velkost, napr. aksa
+        sa je maxUrls = 1000, tak toCrawlList je max 1000, outofhostlinks je max 1000
+        crawledList je max 1000...
+        OTESTOVAT VYPRAZDNOVANIE KOLEKCII. MAL SOM 7000 CRAWLED A 1700 TO CRAWL
+        skusist ziskavat stranku uz pod kodovanim charset. V pondelok napis na java.konference        
+    </dorobit>
+    
+    <integracia>
+        Pozri sa do logu heritrix.out a zisti chovanie posialania prave
+        jedneho seedu. Ci sa spravne skoncilo a co sa stalo s precesormi, 
+        ked som volal metody runFinalTaksks() a runInitTasks(). Vyhodili sa
+        tam nejake vynimky vo vlaknach overit. metoda removeItemFromQueue ci 
+        ako sa to vola, a blok while(iterator.hasNext()) :line 734
+    </integracia>
+    <integracia>
+        Skusk pokillovat ToeThready okrem aktualneho, ktory je v metode finish()
+        a nahradit ich priamo novymi.
+        OK crawlovanie seedov funguje, treba prerobit podmienku v procesore, aby
+        naozaj crawlovala napr. max 50 url pre jeden seed
+        Ako integrovat deciding rule:
+        1. skusit pridat nejaky modul, ktory bude crawlovat len cz stranky (zatial len 
+        kazdy druhu stranku, simpleDecidingRule-REJECT kazdu druhu url), pridaj k 
+        nejakemu procesoru, alebo defaultne ?
+        2.alebo upravit processor SimpleExtractor, tka aby dana URL preskocila processor,
+        ktory archivuje tuto URL (preskakovat by mali neceske URL)
+        3. Nemam vypracovane chovanie, ked bude jendo semienko nevalidne, tak 
+        sa zavola finished, ale moje next seed sa nenaloaduje
+        4.rozhodovcie podmienky upravit: ak bude url odkazovat na obrazok image, 
+        tak sa nic nezmeni, ak to bude html stranka, tak spustim analyzu
+        - ked bude html stranka zanalyzovana za cesku, tak vsetky jej najdene
+        odkazy (URL locatory na jej obrazky, videa, dokumenty) CandidateUri,
+        ponechám,čo znamená, že budú scheduled a následne sa zcrawlujú, pretože
+        nastavím archiváciu všetktého na true okrem .html dokumentov. Tj. na
+        ak html stránka bude označená za nečeskú tak vymažem všetky jej nádejné
+        odkazy URL (na obrázky, videa a iné dok.)Tým docielim, že sa mi budú
+        archivovať len URL(html, images, flash, videa), ktoré boli nájdené na 
+        cz html stránkach a to je to čo potrebujeme.
+        5. Chcemarchivovat len cz stranky a ich obsah. 
+        Spracujem CrawlURI : 
+        -> je ceska -> pridam vsetky najdene URI (image...)ako zvycajne
+        -> nieje ceska -> nearchivovat, vsetkym najdemym URIs (image...) nastavim priznak
+        ze ich nechcem archivovat pokial to niesu html, tj. ked bude procesor
+        spracovavat tuto URL s priznakom, tak sa pozrie na jej content, ak content
+        bude (text/html), tak ju normalne predam analyzatoru, (toto zapracovat do
+        vsetkych url, ktore predam analyzatoru, lebo chcem len html(aspon zatial)),
+        a ked analyzator rozhodne ze je ceska tak normalne archivujem a nastavim 
+        vsetkym najdenym URL priznak (predbezne archivuj, ale ak bude URL text/html,
+        tak ju zas predaj analyzatoru), pozri forum na zistenie fetch only html, 
+        a pozri kedy sa da nastavit najdenym odkazom danej URL priznak PREDBEZNE_ARCHIVUJ alebo
+        PREDBEZNE_NEARCHIVUJ (bude to niekde kde sa z linkou vid caUri.outLinks()
+        vytvaraju CandidateUri caUri, tu treba vsetkym vytvorenym caUri nastavit
+        tento priznak.)
+        - tot vyzaduje zmenu v LinksScopper, aby som pri vytvarani CandidateURIs
+        z Link-ov, nastavil kazdej CandidateURI priznak is czech, alebo iny
+        priznak toarchive, ak Link-y pochadzaju z neceskej stranky.
+        Potom ti tento priznak vezmem v mojom procesore a podla toho zadam ci
+        archivovat alebo nearhivovat crawlURI.
+        6. funfuje ziskavanie linkov ako z cz aj non-cz URL, ale je problem ze 
+        http://seznam.cz neuzna ako html, over este robots.txt, nastav viac ako
+        10 url pre seed(min 30-40), skus zisttit ako spustit webanalyzer na 
+        http://seznam.cz, kedze ho nehodnoti ako mime type = (text/html) a ako 
+        ho vobec hodnoti.
+        - asi namiesto metody crawlURI.content.equals(text/html), spravim podmienku
+        ktora prepusti vsetky obrazky, videa atd, rovno do vetvy c.2 (kde sa rozhodne
+        podla priznaku toarchive, co dalej) a vsetky ostatne crawlURI predam
+        svojmu web Analyzeru, tym zaistim ze budem analyzovat aj crawlURI typu
+        http://seznam.cz, ktoru mi predtym neuznalo ako text/html content.
+        -7.prerobit procesor tak, aby sa skoncilo crawlovanie jedneho seedu po 
+        10 URL, ale musia to byt ozajstne URL (html stranky), nesmiem pocitat 
+        URL obrazkov a podobnych medii.
+        8. ked som zo semienka praso.webzdarma.cz zcrawloval aj odkaz is.muni.cz
+        , tak sa mi pri semienku is.muni.cz uz toto semienko nenaloaduje, pretoze
+        uz bolo raz crawlovane. Takze treba zvolit pristup, kde bude crawlovat
+        a stranky, pokial to ma vyznam. Tj. ked sa nazbiera urcity pocet zapornych
+        bodov, (je evidentne ze poslednych 5 url bolo neceskych) tak az potom skoncim
+        a prejde na nove semienko. Ale ak uz to nove semienko bolo raz crawlovane, tak
+        sa mi nenascheduluje a ja musim zaistit, aby sa mi naloadovalo dalsie semienko
+        v poradi.
+        9. bod 8- Ok, ked loadnem seed, ktoreho url som uz crawloval, tak naloadujem
+        dalsie seed v poradi funguje OK. Ked crawling skonci prirodzenym sposobom
+        nenajde dalsie linky, alebo robots.txt zakaze, tak sa opet naloaduje 
+        dalsi seed v poradi.
+        10. pohladat kde sa presmeruje nevalidny seed do post-processor chain
+        v preconditionselector je par skipov, overit to tam. 
+        - ok riesil som to nakoniec vo FetchHTTP, nevalidne seedy sa nenafetchovali
+        vid. bod 11 (ok)
+        11. upravit load next seed, pre situaciu na vstupe
+        http://seznmacz
+        http://praso.webzdarma.cz
+        skonci po prvom seed a druhy nenaloaduje, opravit
+        - toto je ok, spravil som to vo FetchHTTP, ktora si pri prvom fetchovani
+        pozre ci moze fetchovat, ak ano a curi sa neda fetchovat (dns:seed)
+        tak nastavi curi priznak fetched=false a ten sa odchyti vo WorkQueueFrontier
+        metode finished(), a naloaduje sa dalsi seed, pricom metoda load next seed
+        opet resetuje boolean premennu, tak aby fetchHTTP mohol fetchovat dalsi
+        seed.(ok)
+        11. FetchHTTP nenafetchuje url <> seed, nastavi priznak fetched=false, a
+        Frontier mi ho vyhodnoti ako seed, takze prepracovat aby vyhodnocoval 
+        skutocne len seeds (ok)
+        12. ToeThready pracuju pomaly po jednom, alebo aj 0 aktivnych threadov.
+        Moze to byt tym, ze sa vykona metoda snoozeQueue, ktora sposobi, ze sa na 
+        urcity cas nebude z daneho HOSTu stahovat ziadna url.
+        14. Upravit cz slovnik, tak aby obsahoval skutocne len cz slova, asi 
+        bude treba spravit novu verziu slovnika. Slovnik.cz od m. Vita moze
+        byt dobry zdroj cz slov a to nielen z ceskeho slovnika, ale aj s prekladov
+        z inych jazykov, ziskam tym rozne skolonovane verzie slov.
+        Taktiez vypracovat slovnik nepristupnych slov. (porno, vulgarne,...)
+    </integracia>
+    <p_seedy>
+http://www.oracle.com/technology/products/ias/toplink/jpa/tutorials/jsf-jpa-tutorial.html
+http://praso.host.sk/
+http://flash.jakpsatweb.cz/index.php?page=pravidla
+http://www.eatj.com/plans.jsp
+http://www.dbsvet.cz/view.php?cisloclanku=2006050501
+http://doprava.martin.sk/?w=vypis&smer=tam&zastavka=D.Z%E1tur%E8ie%20I.&linka=11&poradie=17
+http://www.icq.com/download/icq2go/
+http://dev.mysql.com/doc/refman/5.0/en/index.html
+http://slovnik.zcu.cz/download.php
+http://wiki.kubuntu.sk/doku.php
+http://proc.linux.cz/ekvivalenty.html
+http://java.sun.com/j2ee/1.4/docs/tutorial/doc/        
+    </p_seedy>
+    <posledne>
+        -skusil som spravit czechExtractor, ten ale ako si nechcel skoncit 
+        -skus to iste implementovat cez deciding rule !!!
+        - !!! DecidingRule odstranuje CandidateURI este pred jej zpracovanim  !!! to nieje riesenie
+        -odpratat dns z archivu, toto zisti curi dns a potom v arcwriterprocessor
+        v metode pridam tuto condition and skip dns curis, but only those with
+        flag "archive" will be archived
+        - implement the method to CzechExtractor as I mentioned on my handouts.
+        It is on the table.
+        - if curi.skipToPostProcessor will not work out, try to implement method
+        to archive only curis flagged with "archive"
+        if (!curi.getUURI().getScheme().equals("dns")) {
+            // Only handles dns
+            return;
+        }
+        - prerobit metody, aby boli bezpecne v multivlaknovom prostredi, pri 
+        teste metody geoIP by sa mala counter jednej crawlURI inkrementovat iba
+        raz, ale mne sa inkrementoval 2 krat, takze asi nejake vlakno prepisalo 
+        hodnotu skor ako skoncila analyza crawlURI. Tj. premysliet ako by sa mal
+        counter spravat, ci vytvorit jedneho pre vsetky vlakna alebo vytvarat
+        instancie pre kazde vlakno jednu.
+        -pri cz crawlURI vsetky jej outlinks nastavit na priznak "archive"
+    - outObjects uchovava linky a candidateURI sa vytvaraju az potom..
+    </posledne>
+    <her_modifikacie>
+        V heritrixe, verzia 2 /projects/her/heritrix-1.12.1, som modifikoval
+        nasledujuce triedy, ktore potom budem musiet vytvorit vlastne, aby 
+        nemenili postup prace heritrixu. Tieto budu dedit z povodnych a pretazim
+        metody, ktore potrebujem. Tie sa potom budu pouzivat v sklizni mimo cz.
+        Zmeny su oznacene komentarmi, "modified by ivlcek".
+        -ARCWriterProcessor.innerProcess() - doesn't archive dns records
+        -LinkScopper.innerProcess() - putting the key object "cz_link" to crawl
+        pictures and other sources refered from caUri
+    </her_modifikacie>
+    
+</root>

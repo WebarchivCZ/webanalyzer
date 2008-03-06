@@ -1,0 +1,56 @@
+    <popis>
+        Popis integracie do Heritrixu:
+        V heritrixe mam DecidingRule nazvany IsCzechDecidingRule, ktory dostava
+        na vstupe URL (to je zahodena url zo sklizne 2007). Nasledne zavola
+        hlavnu metodu mojho modulu, nazvanu isCzech(URL analyzovanaURL) : boolean,
+        ktora vrati true ak je stranka ceska, inak vrati false. To znamena ze
+        cela analyza(crawlovanie, vyhodnocovanie) tejto jednej URL 
+        sa odohrava v mojom module. Potom IsCzechDecidingRule dostane dalsiu
+        url zahodenu zo sklizne 2007 a opet spusti celu analyzu na tejto novej
+        url.
+        
+        Popis cinnosti modulu:
+        Vstup: 
+        - AnalyzovanaURL, o ktorej chceme zistit ci je ceska (to je ta zahodena zo sklizne 2007)
+        - MaxUrlsToCrawl je cislo, ktore udava kolko maximalne odkazov najdenych od AnalyzedURL sa ma zcrawlovat.
+        Priklad:
+        Zadam analyzovanu URL www.atlas.sk, MaxUrlsToCrawl nastavim na 1000. 
+        Zacne sa crawlovanie... 
+        (stahuju sa najdene odkazy z www.atlas.sk, analyzuje sa text, hladaju sa cz slova atd..., pripocitavaju sa body analyzovanej URL za kazde najdene cz slovo, cz IP, atd.). 
+        Crawlovanie sa skonci iba v 2 pripadoch.
+        1. www.atlas.sk  nazbiera urcity pocet bodov, potrebnych pre cesku stranku. Tj. analyzovana URL sa vyhodnoti ako ceska.
+        2. zcrawlovalo sa uz 1000 stranok (MaxUrlsToCrawl), ale potrebny pocet bodov sa este nenazbieral. To znamena ze stranku vyhodnotime ako NEcesku.
+        Po skonceni analyzy tejto URL sa vykona reset mojho modulu (zrusia sa objekty, vyprazdnia sa kolekcie). 
+        Tj. Heap space JVM sa vyprazdni. Po resetovani je modul pripraveny na 
+        analyzu novej url predanej z IsCzechDecidingRule.
+        
+        Problem JVM Heap Space:
+        Pri nastaveni MaxUrlsToCrawl > 10000 sa moze stat ze prudko narastu 
+        kolekcie a zoznamy => Heap Space sa zaplni a nastane Runtime vynimka
+        java.Heap.OutOfMemory.
+        Myslim ze toto nieje take zavazne, nepredpokladam ze budeme nastavovat
+        MaxUrlToCrawl na viac ako 100. Pri analyzovani do takeho hlbokeho zanorenia
+        to uz nema zmysel, lebo odkazy su s velkou pravdepodobnostou mimo 
+        analyzovanejUrl a nemaju s nou uz nic spolocne a preto nas ani 
+        nezaujimaju.
+        
+        Problem efektivnosti:
+        Postup je neefektivny v pripade ked budu dve AnalyzovaneUrl zo sklizne 2007 pribuzne.
+        To znamena ze budem dva krat stahovat napr. 500 odkazov, ktore su pre 
+        obe analyzovane URL spolocne. 
+        Riesenie ktore ma napada.
+        Aby som zabranil stahovaniu tej istej URL dva alebo aj viac krat, tak si 
+        nutne potrebujem v nejakom ulozisti pametat, ktore url som uz stiahol.
+        Kedze ale nutne potrebujem aj hodnotenie tejto stranky (pocet bodov, 
+        ktore jej moj modul pricital) musim si pri kazdej stiahnutej url navyse
+        pametat jej pocet pridelenych bodov. Toto je nevyhnutne spravit ci uz
+        v mojom module alebo v Heritrixe, pretoze Heritrix si pameta len URL
+        ktore uz stiahol. Mozno keby sa dalo prinutit Heritrix aby si pametal aj
+        tie body ku kazdej stiahnutej URL. Ak by to slo, tak by som mohol svoj
+        modul dekomponovat na mensie casti a zaintegrovat ich jednotlivo do 
+        Heritrixu. Ale to je asi nezmysel, prestudujem 
+        doc k heritrixu. Skor si myslim ze by bolo lepsie ukladat url a k nim 
+        body do DB.
+        Kazdopadne to treba este doriesit.
+        
+    </popis>
