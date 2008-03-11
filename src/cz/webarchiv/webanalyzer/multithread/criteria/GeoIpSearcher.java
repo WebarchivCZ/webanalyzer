@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  *
  * @author praso
  */
-public class GeoIpSearcher extends AStatisticsSearcher {
+public class GeoIpSearcher extends AStatisticsSearcher implements ISearcher {
     
     private static final Logger log4j = Logger.getLogger(GeoIpSearcher.class);
     private static final GeoIPManager GEO_IP_MANAGER = 
@@ -84,6 +84,8 @@ public class GeoIpSearcher extends AStatisticsSearcher {
             search(link, geoIpSearcherCountryCode, geoIpSearcherPoint);
         }
     }
+    
+
 
 //    public PointsCounter getPointsCounter() {
 //        return pointsCounter;

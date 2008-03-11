@@ -29,7 +29,8 @@ public class MakeTestCrawlURI {
             "právě proto tu teď musím psát takové blbosti" +
             "emaily : email@email.sk praso@alive.cz nexo@askdjflskdf.com" +
             ",oddelene@oddelene.cz a tak a tedko telefonne cisla: " +
-            "+421 774 920 666 alebo +420 902 438 336    ";
+            "+421 774 920 666 alebo +420 902 438 336 " +
+            "html elements: html <lang=sk/><lang='cs' a lang= sk : lang=cs;";
 
     public SimpleTestCrawlURI createEmptyCrawlURI() {
         try {

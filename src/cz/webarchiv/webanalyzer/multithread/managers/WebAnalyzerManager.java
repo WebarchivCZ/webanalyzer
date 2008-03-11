@@ -2,9 +2,12 @@
  * Manager for Webanalyzer, that inicializes all needed Managers to
  * connect to Databases or files.
  */
-
 package cz.webarchiv.webanalyzer.multithread.managers;
 
+import cz.webarchiv.webanalyzer.multithread.WebAnalyzerProperties;
+import cz.webarchiv.webanalyzer.multithread.analyzer.util.AnalyzerConstants;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -12,12 +15,13 @@ import org.apache.log4j.Logger;
  * @author praso
  */
 public class WebAnalyzerManager {
-    
+
     private static final Logger log4j = Logger.getLogger(
             WebAnalyzerManager.class);
-
     private static final WebAnalyzerManager INSTANCE = new WebAnalyzerManager();
-    
+    // todo collection of managers to init
+    private List<IManager> managers = new ArrayList<IManager>();
+
     /**
      * Returns instance of this singleton.
      * @return intance of singleton
@@ -25,35 +29,44 @@ public class WebAnalyzerManager {
     public static WebAnalyzerManager getInstance() {
         return INSTANCE;
     }
-    
+
     /**
      * Private constructor.
-     */ 
+     */
     private WebAnalyzerManager() {
-        // empty
+    // empty
     }
-    
+
     /**
      * Inicializes all needed managers.
      */
     public void initializeManagers() throws Exception {
         log4j.debug("initializeManagers");
-        GeoIPManager.getInstance().
-                initGeoIPManager();
-        DictionaryIndexManager.getInstance().
-                initDictionaryIndexManager();
-        DictionaryManager.getInstance().
-                initDictionaryManager();
+        for (Integer searcher : WebAnalyzerProperties.getInstance().getSearchersToUse()) {
+            switch (searcher.intValue()) {
+                case (AnalyzerConstants.Searchers.GEO_IP_SEARCHER):
+                    managers.add(GeoIPManager.getInstance());
+                    GeoIPManager.getInstance().init();
+                    log4j.debug("initializeManagers created geoIPManager");
+                    break;
+                case (AnalyzerConstants.Searchers.DICTIONARY_SEARCHER):
+                    managers.add(DictionaryIndexManager.getInstance());
+                    managers.add(DictionaryManager.getInstance());
+                    DictionaryIndexManager.getInstance().init();
+                    DictionaryManager.getInstance().init();
+                    log4j.debug("initlializeManagers created dictionaryManagers");
+                    break;
+            }
+        }
     }
-    
+
     /**
      * Closes all managers.
      */
     public void closeManagers() throws Exception {
         log4j.debug("closeManagers");
-        GeoIPManager.getInstance().
-                closeGeoIPManager();
-        DictionaryManager.getInstance().
-                closeDictionaryManager();
+        for (IManager manager : managers) {
+            manager.close();
+        }
     }
 }

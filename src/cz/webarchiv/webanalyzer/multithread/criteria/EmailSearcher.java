@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  *
  * @author praso
  */
-public class EmailSearcher extends AStatisticsSearcher {
+public class EmailSearcher extends AStatisticsSearcher implements ISearcher {
 
     private static final Logger log4j = Logger.getLogger(EmailSearcher.class);
     private final String emailDefaultRegexp = 
@@ -43,7 +43,7 @@ public class EmailSearcher extends AStatisticsSearcher {
             this.emailDefaultPattern = Pattern.compile(
                     emailDefaultRegexp, Pattern.CASE_INSENSITIVE);
         } catch (PatternSyntaxException pse) {
-            log4j.error("constructor, syntax error in regexp=" +
+            log4j.fatal("constructor, syntax error in regexp=" +
                     emailSearcherRegexp);
             throw new RuntimeException("create EmailSearcher instance", pse);
         }
@@ -70,11 +70,10 @@ public class EmailSearcher extends AStatisticsSearcher {
         while (matcherDefault.find()) {
             foundDefaultEmail = matcherDefault.group();
             allElements++;
-            Matcher matcher = emailPattern.matcher(foundDefaultEmail);
-            if (matcher.find()) {
+            if (emailPattern.matcher(foundDefaultEmail).find()) {
                 pointsCounter.increment(emailSearcherPoint);
                 validElements++;
-                log4j.info("search found email=" + foundDefaultEmail);
+                log4j.debug("search found email=" + foundDefaultEmail);
             }
         }
     }

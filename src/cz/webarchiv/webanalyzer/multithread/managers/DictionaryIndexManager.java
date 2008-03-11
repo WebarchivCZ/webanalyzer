@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
  *
  * @author Ivan Vlcek
  */
-public class DictionaryIndexManager {
+public class DictionaryIndexManager implements IManager {
     
     private static final Logger log4j =
             Logger.getLogger(DictionaryIndexManager.class);
@@ -82,7 +82,7 @@ public class DictionaryIndexManager {
      *
      * @param language      jazyk, ktorym sa dotvori cesta k spravnemu indexu
      */
-    public void initDictionaryIndexManager() throws Exception {
+    public void init() throws Exception {
         log4j.debug("initiliaze language=" + language);
         try {
             File index = new File("_anal/dictionaries/" + language +
@@ -99,9 +99,17 @@ public class DictionaryIndexManager {
             inputStreamReader.close();
             inputStream.close();
         } catch (IOException ioe) {
-            log4j.error("initialize lanuage=" + language, ioe.getCause());
+            log4j.fatal("initialize lanuage=" + language, ioe.getCause());
             throw new IOException(ioe);
         }
+    }
+    
+    /**
+     * Metoda ktora zatvori manager.
+     */
+    public void close() throws Exception {
+        // do nothing, manager is closed immediately after initialization
+        // all resources are stored in memory
     }
     
     /**

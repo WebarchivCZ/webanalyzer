@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  * @author praso
  */
-public class DictionaryManager {
+public class DictionaryManager implements IManager {
 
     private static final Logger log4j =
             Logger.getLogger(DictionaryManager.class);
@@ -47,7 +47,7 @@ public class DictionaryManager {
      * Method that initializes all needed files and stream, usually stored in
      * _anal direcotry.
      */
-    public void initDictionaryManager() throws Exception {
+    public void init() throws Exception {
         try {
             log4j.debug("initDicitionaryManager");
             File dictFile = new File("_anal/dictionaries/" + language +
@@ -62,10 +62,10 @@ public class DictionaryManager {
             }
             bufferedReader.mark(fileLengthInBytes);
         } catch (FileNotFoundException fnfe) {
-            log4j.error("initDictionaryManager language=" + language, fnfe.getCause());
+            log4j.fatal("initDictionaryManager language=" + language, fnfe.getCause());
             throw new FileNotFoundException("initDictionaryManager, file not found");
         } catch (IOException ioe) {
-            log4j.error("initDictionaryManager language=" + language, ioe.getCause());
+            log4j.fatal("initDictionaryManager language=" + language, ioe.getCause());
             throw new IOException("initDictionaryManager I/O exception");
         }
     }
@@ -73,7 +73,7 @@ public class DictionaryManager {
     /**
      * Method, that closes all used files and streams.
      */
-    public void closeDictionaryManager() throws Exception {
+    public void close() throws Exception {
         try {
             log4j.debug("closeDictionaryManager");
             bufferedReader.close();

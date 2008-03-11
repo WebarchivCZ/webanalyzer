@@ -41,8 +41,6 @@ public class WebAnalyzer {
      * Inicializuje potrebne objekty.
      */
     public void initialize() throws Exception {
-        
-        // load properties 
         PropertiesReader.getInstance().loadPropertiesReader();
         WebAnalyzerManager.getInstance().initializeManagers();
     }
@@ -51,8 +49,8 @@ public class WebAnalyzer {
      * Uzavrie pouzite streamy a subory.
      */
     public void close() throws Exception {
-        
         WebAnalyzerManager.getInstance().closeManagers();
+        WebAnalyzerProperties.getInstance().clearSearchers();
     }
     
     /**

@@ -22,7 +22,8 @@ import org.apache.log4j.Logger;
  *
  * @author Ivan Vlcek
  */
-public class DictionarySearcher extends AStatisticsSearcher {
+public class DictionarySearcher extends AStatisticsSearcher 
+        implements ISearcher {
 
     private static final Logger log4j =
             Logger.getLogger(DictionarySearcher.class);
@@ -83,7 +84,7 @@ public class DictionarySearcher extends AStatisticsSearcher {
     public void search(String word) {
         if (searchWord(word) != NOT_FOUND) {
             // todo nastavit logy na info, tie ktore netreba logovat vzdy
-            log4j.info("found word=" + word);
+            log4j.debug("found word=" + word);
             pointsCounter.increment(dictionarySearcherPoint);
             validElements++;
         }

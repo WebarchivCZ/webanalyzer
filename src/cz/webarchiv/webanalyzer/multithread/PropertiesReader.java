@@ -27,16 +27,25 @@ public class PropertiesReader {
             new PropertiesReader();
     // properties for webanalyzer from properties file
     private final String PROPERTIES_PATH = "_anal/webanalyzer.properties";
-    private final String GEOIPSEARHCER_COUNTRYCODE = "webanalyzer.geoipsearcher.countrycode";
-    private final String GEOIPSEARCHER_POINT = "webanalyzer.geoipsearcher.point";
-    private final String DICTIONARY_MANAGER_LANGUAGE = "webanalyzer.dictionary.language";
-    private final String DICTIONARY_SEARCHER_POINT = "webanalyzer.dictionarysearcher.point";
+    private final String GEOIPSEARHCER_COUNTRYCODE = "webanalyzer.searcher.geoip.countrycode";
+    private final String GEOIPSEARCHER_POINT = "webanalyzer.searcher.geoip.point";
+    private final String GEOIPSEARCHER_USE = "webanalyzer.searcher.geoip.use";
+    private final String DICTIONARY_MANAGER_LANGUAGE = "webanalyzer.manager.dictionary.language";
+    private final String DICTIONARY_SEARCHER_POINT = "webanalyzer.searcher.dictionary.point";
+    private final String DICTIONARY_SEARCHER_USE = "webanalyzer.searcher.dictionary.use";
     private final String URL_ANALYZER_MIN_POINTS_TO_VALID = "webanalyzer.urlanalyzer.min.valid.points";
     private final String URL_ANALYZER_DEPTH_TO_ARCHIVE = "webanalyzer.urlanalyzer.depth.toarchive";
-    private final String EMAILSEARCHER_REGEXP = "webanalyzer.emailsearcher.regexp";
-    private final String EMAILSEARCHER_POINT = "webanalyzer.emailsearcher.point";
-    private final String PHONESEARCHER_REGEXP = "webanalyzer.phonesearcher.regexp";
-    private final String PHONESEARCHER_POINT = "webanalyzer.phonesearcher.point";
+    private final String EMAILSEARCHER_REGEXP = "webanalyzer.searcher.email.regexp";
+    private final String EMAILSEARCHER_POINT = "webanalyzer.searcher.email.point";
+    private final String EMAILSEARCHER_USE = "webanalyzer.searcher.email.use";
+    private final String PHONESEARCHER_REGEXP = "webanalyzer.searcher.phone.regexp";
+    private final String PHONESEARCHER_POINT = "webanalyzer.searcher.phone.point";
+    private final String PHONESEARCHER_USE = "webanalyzer.searcher.phone.use";
+    private final String HTMLLANGSEARCHER_REGEXP = "webanalyzer.searcher.htmllang.regexp";
+    private final String HTMLLANGSEARCHER_POINT = "webanalyzer.searcher.htmllang.point";
+    private final String HTMLLANGSEARCHER_USE = "webanalyzer.searcher.htmllang.use";
+    // todo domysliet
+    // array of searchers to use in analyze
 
     public static PropertiesReader getInstance() {
         return INSTANCE;
@@ -85,6 +94,10 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setGeoIpSearcherPoint(
                     validateInt(properties.getProperty(GEOIPSEARCHER_POINT),
                     GEOIPSEARCHER_POINT, 0, 10));
+            WEB_ANALYZER_PROPERTIES.insertSearcher(
+                    validateInt(properties.getProperty(GEOIPSEARCHER_USE), 
+                    GEOIPSEARCHER_USE, 0, 1), 
+                    AnalyzerConstants.Searchers.GEO_IP_SEARCHER);
 
             // dictionarysearcher properties
             WEB_ANALYZER_PROPERTIES.setDictionaryManagerLanguage(
@@ -95,6 +108,10 @@ public class PropertiesReader {
                     validateInt(properties.getProperty(
                     DICTIONARY_SEARCHER_POINT),
                     DICTIONARY_SEARCHER_POINT, 0, 10));
+            WEB_ANALYZER_PROPERTIES.insertSearcher(
+                    validateInt(properties.getProperty(DICTIONARY_SEARCHER_USE),
+                    DICTIONARY_SEARCHER_USE, 0, 1),
+                    AnalyzerConstants.Searchers.DICTIONARY_SEARCHER);
 
             // emailsearcher properties
             WEB_ANALYZER_PROPERTIES.setEmailSearcherRegexp(
@@ -105,6 +122,10 @@ public class PropertiesReader {
                     validateInt(properties.getProperty(
                     EMAILSEARCHER_POINT),
                     EMAILSEARCHER_POINT, 0, 10));
+            WEB_ANALYZER_PROPERTIES.insertSearcher(
+                    validateInt(properties.getProperty(EMAILSEARCHER_USE), 
+                    EMAILSEARCHER_USE, 0, 1), 
+                    AnalyzerConstants.Searchers.EMAIL_SEARCHER);
             
             // pohnesearcher properties
             WEB_ANALYZER_PROPERTIES.setPhoneSearcherRegexp(
@@ -115,11 +136,29 @@ public class PropertiesReader {
                     validateInt(properties.getProperty(
                     PHONESEARCHER_POINT), 
                     PHONESEARCHER_POINT, 0, 10));
+            WEB_ANALYZER_PROPERTIES.insertSearcher(
+                    validateInt(properties.getProperty(PHONESEARCHER_USE), 
+                    PHONESEARCHER_USE, 0, 1), 
+                    AnalyzerConstants.Searchers.PHONE_SEARCHER);
+            
+            // htmllangseacher properies
+            WEB_ANALYZER_PROPERTIES.setHtmlLangSearcherRegexp(
+                    validateRegexp(properties.getProperty(
+                    HTMLLANGSEARCHER_REGEXP),
+                    HTMLLANGSEARCHER_POINT));
+            WEB_ANALYZER_PROPERTIES.setHtmlLangSearcherPoint(
+                    validateInt(properties.getProperty(
+                    HTMLLANGSEARCHER_POINT),
+                    HTMLLANGSEARCHER_POINT, 0, 10));
+            WEB_ANALYZER_PROPERTIES.insertSearcher(
+                    validateInt(properties.getProperty(HTMLLANGSEARCHER_USE), 
+                    HTMLLANGSEARCHER_USE, 0, 1), 
+                    AnalyzerConstants.Searchers.HTML_LANG_SEARCHER);
 
             // log properties from properties file
-            log4j.debug(this.toString());
+            log4j.info(this.toString());
         } catch (IOException ioe) {
-            log4j.error("loadProperiesReader, can't load properties file=" +
+            log4j.fatal("loadProperiesReader, can't load properties file=" +
                     PROPERTIES_PATH);
         }
         return WEB_ANALYZER_PROPERTIES;
@@ -137,21 +176,21 @@ public class PropertiesReader {
     private static int validateInt(String intNumber, String property,
             int minValue, int maxValue) {
         if (intNumber == null) {
-            log4j.error("validateInt intNumber is null, property=" + property);
+            log4j.fatal("validateInt intNumber is null, property=" + property);
             System.exit(0);
         }
         int number = 0;
         try {
             number = Integer.parseInt(intNumber);
         } catch (NumberFormatException nfe) {
-            log4j.error("validateInt intNumber is in bas format, intNumber=" +
-                    intNumber);
+            log4j.fatal("validateInt intNumber is in bad format, intNumber=" +
+                    intNumber + " property=" + property);
             System.exit(0);
         }
         if (!((number >= minValue) && (number <= maxValue))) {
-            log4j.error("validateInt number=" + number + " doesn't fetch " +
+            log4j.fatal("validateInt number=" + number + " doesn't fetch " +
                     "minValue=" + minValue + " maxValue=" +
-                    maxValue);
+                    maxValue + " property=" + property);
             System.exit(0);
         }
         return number;
@@ -169,21 +208,21 @@ public class PropertiesReader {
     private static long validateLong(String longNumber, String property,
             long minValue, long maxValue) {
         if (longNumber == null) {
-            log4j.error("validateLong longNumber is null, property=" + property);
+            log4j.fatal("validateLong longNumber is null, property=" + property);
             System.exit(0);
         }
         long number = 0;
         try {
             number = Long.parseLong(longNumber);
         } catch (NumberFormatException nfe) {
-            log4j.error("validateLong longNumber is in bas format, longNumber=" +
-                    longNumber);
+            log4j.fatal("validateLong longNumber is in bad format, longNumber=" +
+                    longNumber + ", property=" + property);
             System.exit(0);
         }
         if (!((number >= minValue) && (number <= maxValue))) {
-            log4j.error("validateLong number=" + number + " doesn't fetch " +
+            log4j.fatal("validateLong number=" + number + " doesn't fetch " +
                     "minValue=" + minValue + " maxValue=" +
-                    maxValue);
+                    maxValue + ", property=" + property);
             System.exit(0);
         }
         return number;
@@ -199,12 +238,12 @@ public class PropertiesReader {
     private static String validateRegexp(String regexp, String property) {
         try {
             Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
-            return regexp;
         } catch (PatternSyntaxException pse) {
-            log4j.error("validateRegexp for property=" + property +
+            log4j.fatal("validateRegexp for property=" + property +
                     ", regexp=" + regexp, pse);
-            throw new RuntimeException(pse);
+            System.exit(0);
         }
+        return regexp;
     }
 
     /**
@@ -215,15 +254,16 @@ public class PropertiesReader {
     private static String validateString(String inputString, String property,
             int minLength, int maxLength) {
         if (inputString == null) {
-            log4j.error("ValidateString inputString for property=" + property +
+            log4j.fatal("ValidateString inputString for property=" + property +
                     " is null");
             System.exit(0);
         }
         inputString = inputString.toLowerCase();
         if (inputString.length() < minLength || inputString.length() > maxLength) {
-            log4j.error("ValidateString inputString's length=" +
+            log4j.fatal("ValidateString inputString's length=" +
                     inputString.length() + " doesn't fetch minValue=" +
-                    minLength + " maxValume=" + maxLength);
+                    minLength + " maxValume=" + maxLength + ", property=" +
+                    property);
             System.exit(0);
         }
         return inputString;
@@ -233,7 +273,7 @@ public class PropertiesReader {
             String property, Set<String> availableCollection) {
         inputString = inputString.toLowerCase();
         if (!availableCollection.contains(inputString)) {
-            log4j.error("validateAvailableCollection for property=" +
+            log4j.fatal("validateAvailableCollection for property=" +
                     property + ", input=" + inputString);
             System.exit(0);
         }
@@ -263,6 +303,10 @@ public class PropertiesReader {
                 WEB_ANALYZER_PROPERTIES.getDepthToArchive() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         // geoipsearcher properties
+        result.append(GEOIPSEARCHER_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.containsSearcher(
+                AnalyzerConstants.Searchers.GEO_IP_SEARCHER) + 
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(GEOIPSEARHCER_COUNTRYCODE + "=" +
                 WEB_ANALYZER_PROPERTIES.getGeoIpSearcherCountryCode() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
@@ -270,11 +314,20 @@ public class PropertiesReader {
                 WEB_ANALYZER_PROPERTIES.getGeoIpSearcherPoint() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         // dictionary properties
+        result.append(DICTIONARY_SEARCHER_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.containsSearcher(
+                AnalyzerConstants.Searchers.DICTIONARY_SEARCHER) + 
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(DICTIONARY_MANAGER_LANGUAGE + "=" +
                 WEB_ANALYZER_PROPERTIES.getDictionaryManagerLanguage() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(DICTIONARY_SEARCHER_POINT + "=" +
                 WEB_ANALYZER_PROPERTIES.getDictionarySearcherPoint() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        // email properties
+        result.append(EMAILSEARCHER_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.containsSearcher(
+                AnalyzerConstants.Searchers.EMAIL_SEARCHER) + 
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(EMAILSEARCHER_REGEXP + "=" +
                 WEB_ANALYZER_PROPERTIES.getEmailSearcherRegexp() +
@@ -282,11 +335,27 @@ public class PropertiesReader {
         result.append(EMAILSEARCHER_POINT + "=" +
                 WEB_ANALYZER_PROPERTIES.getEmailSearcherPoint() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        // phone properties
+        result.append(PHONESEARCHER_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.containsSearcher(
+                AnalyzerConstants.Searchers.PHONE_SEARCHER) + 
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(PHONESEARCHER_REGEXP + "=" +
                 WEB_ANALYZER_PROPERTIES.getPhoneSearcherRegexp() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append(PHONESEARCHER_POINT + "=" +
                 WEB_ANALYZER_PROPERTIES.getPhoneSearcherPoint() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        // lang properties
+        result.append(HTMLLANGSEARCHER_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.containsSearcher(
+                AnalyzerConstants.Searchers.HTML_LANG_SEARCHER) + 
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(HTMLLANGSEARCHER_REGEXP + "=" +
+                WEB_ANALYZER_PROPERTIES.getHtmlLangSearcherRegexp() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(HTMLLANGSEARCHER_POINT + "=" + 
+                WEB_ANALYZER_PROPERTIES.getHtmlLangSearcherPoint() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         result.append("}");
         return result.toString();

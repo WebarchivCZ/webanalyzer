@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  * @author praso
  */
-public class PhoneSearcher extends AStatisticsSearcher {
+public class PhoneSearcher extends AStatisticsSearcher implements ISearcher {
 
     private static final Logger log4j = Logger.getLogger(PhoneSearcher.class);
     private PointsCounter pointsCounter;
@@ -43,7 +43,7 @@ public class PhoneSearcher extends AStatisticsSearcher {
                     Pattern.compile(phoneSearcherDefaultRegexp);
             this.phonePattern = Pattern.compile(phoneSearcherRegexp);
         } catch (PatternSyntaxException pse) {
-            log4j.error("constructor syntac error regexp=" + 
+            log4j.fatal("constructor syntac error regexp=" + 
                     phoneSearcherRegexp, pse);
             throw new RuntimeException(pse);
         }
@@ -69,11 +69,10 @@ public class PhoneSearcher extends AStatisticsSearcher {
         while (matcherDefault.find()) {
             foundDefaultPhone = matcherDefault.group();
             allElements++;
-            Matcher matcher = phonePattern.matcher(foundDefaultPhone);
-            if (matcher.find()) {
+            if (phonePattern.matcher(foundDefaultPhone).find()) {
                 pointsCounter.increment(phoneSearcherPoint);
                 validElements++;
-                log4j.info("search found phone=" + foundDefaultPhone);
+                log4j.debug("search found phone=" + foundDefaultPhone);
             }
         }
     }

@@ -14,10 +14,15 @@ import cz.webarchiv.webanalyzer.multithread.analyzer.util.AnalyzerConstants;
 import cz.webarchiv.webanalyzer.multithread.criteria.DictionarySearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.EmailSearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.GeoIpSearcher;
+import cz.webarchiv.webanalyzer.multithread.criteria.HtmlLangSearcher;
+import cz.webarchiv.webanalyzer.multithread.criteria.ISearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.PhoneSearcher;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -28,11 +33,15 @@ import org.apache.log4j.Logger;
 public class UrlAnalyzer {
 
     private static final Logger log4j = Logger.getLogger(UrlAnalyzer.class);
+    // searchers used by urlAnalyzer stored in a list
+    List<ISearcher> searchers = new ArrayList<ISearcher>();
     // searchers used by urlAnalyzer
+    // todo odstranit
     private GeoIpSearcher geoIpSearcher;
     private DictionarySearcher dictionarySearcher;
     private EmailSearcher emailSearcher;
     private PhoneSearcher phoneSearcher;
+    private HtmlLangSearcher htmlLangSearcher;
     // other variables
     private PointsCounter pointsCounter;
     private long minPointsToValid = WebAnalyzerProperties.getInstance().
@@ -42,11 +51,42 @@ public class UrlAnalyzer {
      * Public construtor.
      */
     public UrlAnalyzer() {
+//        this.pointsCounter = new PointsCounter();
+//        this.geoIpSearcher = new GeoIpSearcher(pointsCounter);
+//        this.dictionarySearcher = new DictionarySearcher(pointsCounter);
+//        this.emailSearcher = new EmailSearcher(pointsCounter);
+//        this.phoneSearcher = new PhoneSearcher(pointsCounter);
+//        this.htmlLangSearcher = new HtmlLangSearcher(pointsCounter);
+        initialize(WebAnalyzerProperties.getInstance().getSearchersToUse());
+    }
+
+    private void initialize(Collection<Integer> searchersToUse) {
         this.pointsCounter = new PointsCounter();
-        this.geoIpSearcher = new GeoIpSearcher(pointsCounter);
-        this.dictionarySearcher = new DictionarySearcher(pointsCounter);
-        this.emailSearcher = new EmailSearcher(pointsCounter);
-        this.phoneSearcher = new PhoneSearcher(pointsCounter);
+        for (Integer searcher : searchersToUse) {
+            switch (searcher.intValue()) {
+                case (AnalyzerConstants.Searchers.GEO_IP_SEARCHER):
+                    searchers.add(new GeoIpSearcher(pointsCounter));
+                    log4j.trace("initialize created goeIpSearcher");
+                    break;
+                case (AnalyzerConstants.Searchers.DICTIONARY_SEARCHER):
+                    // todo predtym inicializovat dict manager
+                    searchers.add(new DictionarySearcher(pointsCounter));
+                    log4j.trace("initlialize created dictionarySearcher");
+                    break;
+                case (AnalyzerConstants.Searchers.EMAIL_SEARCHER):
+                    searchers.add(new EmailSearcher(pointsCounter));
+                    log4j.trace("initialize created emailSearcher");
+                    break;
+                case (AnalyzerConstants.Searchers.PHONE_SEARCHER):
+                    searchers.add(new PhoneSearcher(pointsCounter));
+                    log4j.trace("initialize created phoneSearcher");
+                    break;
+                case (AnalyzerConstants.Searchers.HTML_LANG_SEARCHER):
+                    searchers.add(new HtmlLangSearcher(pointsCounter));
+                    log4j.trace("initialize created htmlLangSearcher");
+                    break;
+            }
+        }
     }
 
     /**
@@ -55,15 +95,19 @@ public class UrlAnalyzer {
      * defined by properties file.
      */
     public boolean analyze(String url, String content, Set links) {
-        log4j.debug("analyze url=" + url);
+        log4j.info("analyze url=" + url);
         ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links);
         // start all searchers
-        geoIpSearcher.search(curi);
-        dictionarySearcher.search(curi);
-        emailSearcher.search(curi);
-        phoneSearcher.search(curi);
+//        geoIpSearcher.search(curi);
+//        dictionarySearcher.search(curi);
+//        emailSearcher.search(curi);
+//        phoneSearcher.search(curi);
+//        htmlLangSearcher.search(curi);
+        for (ISearcher searcher : searchers) {
+            searcher.search(curi);
+        }
         // log statistics
-        log4j.debug(this.getStatistics(curi));
+        log4j.info(this.getStatistics(curi));
         return this.getValid();
     }
 
@@ -78,10 +122,14 @@ public class UrlAnalyzer {
                 "Statistics for url=" + curi.getUrlName() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         // searchers
-        stringBuilder.append(geoIpSearcher.toString());
-        stringBuilder.append(dictionarySearcher.toString());
-        stringBuilder.append(emailSearcher.toString());
-        stringBuilder.append(phoneSearcher.toString());
+//        stringBuilder.append(geoIpSearcher.toString());
+//        stringBuilder.append(dictionarySearcher.toString());
+//        stringBuilder.append(emailSearcher.toString());
+//        stringBuilder.append(phoneSearcher.toString());
+//        stringBuilder.append(htmlLangSearcher.toString());
+        for (ISearcher searcher : searchers) {
+            stringBuilder.append(searcher.toString());
+        }
 
         stringBuilder.append("Reached Points=" + pointsCounter.getPoints() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);

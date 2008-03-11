@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  *
  * @author praso
  */
-public class GeoIPManager {
+public class GeoIPManager implements IManager {
 
     private static final Logger log4j = Logger.getLogger(GeoIPManager.class);
     private static final GeoIPManager INSTANCE = new GeoIPManager();
@@ -40,7 +40,7 @@ public class GeoIPManager {
     /**
      * Initialize GeoIPManager
      */
-    public void initGeoIPManager() {
+    public void init() throws Exception {
         try {
             log4j.debug("initGeoIPManager");
             String dbFilePath = "_anal/geoip/GeoIP.dat";
@@ -48,7 +48,7 @@ public class GeoIPManager {
             lookupService = new LookupService(
                     dbFile, LookupService.GEOIP_MEMORY_CACHE);
         } catch (IOException ioe) {
-            log4j.error("initGeoIPManager", ioe.getCause());
+            log4j.fatal("initGeoIPManager", ioe.getCause());
             throw new RuntimeException(
                     "error when inicializing LookupService for GeoIPManager",
                     ioe.getCause());
@@ -58,7 +58,7 @@ public class GeoIPManager {
     /**
      * Close GeoIPManager
      */
-    public void closeGeoIPManager() {
+    public void close() throws Exception {
         lookupService.close();
     }
 
