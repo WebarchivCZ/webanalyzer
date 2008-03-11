@@ -70,7 +70,7 @@ public class ProcessedCrawlURI {
         return "urlName=" + urlName +
                 "\nurlOutlinks.size=" + outlinks.size() +
                 "\nurlContent.length=" + content.length() +
-                "\nurlContenType" + contentType;
+                "\nurlContenType=" + contentType;
     }
 
     public Set<String> getOutlinks() {

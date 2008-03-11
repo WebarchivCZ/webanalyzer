@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <!-- A1 is set to be a ConsoleAppender -->
+    <appender name="A1" class="org.apache.log4j.ConsoleAppender">
+        <!-- A1 uses PatternLayout -->
+        <layout class="org.apache.log4j.PatternLayout"> 
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %c - %m%n"/> 
+        </layout> 
+    </appender> 
+    <!-- A2 is set to be a FileAppender, logs warnings and errors -->
+    <appender name="A2" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="file" value="log/log4j.log"/>
+        <param name="MaxFileSize" value="1000KB"/>
+        <!-- Keep one backup file -->
+        <param name="MaxBackupIndex" value="5"/>
+        <layout class="org.apache.log4j.PatternLayout"> 
+            <param name="ConversionPattern" value="%p %t %c - %m%n"/> 
+        </layout> 
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="WARN" />
+        </filter>
+    </appender> 
+    <!-- A3 is set to log statistics of URI -->
+    <appender name="A3" class="org.apache.log4j.FileAppender">
+        <param name="File" value="log/log4j_stat.log"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %-5p %c - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO" />
+            <param name="LevelMax" value="INFO" />
+        </filter>
+    </appender>  
+    <root> 
+        <!-- Set root logger level to DEBUG and its only appender to A1 -->
+        <priority value ="debug" /> 
+        <appender-ref ref="A1" /> 
+        <appender-ref ref="A2" /> 
+        <appender-ref ref="A3" /> 
+    </root>
+</log4j:configuration>
