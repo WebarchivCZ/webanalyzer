@@ -83,7 +83,6 @@ public class DictionarySearcher extends AStatisticsSearcher
      */
     public void search(String word) {
         if (searchWord(word) != NOT_FOUND) {
-            // todo nastavit logy na info, tie ktore netreba logovat vzdy
             log4j.debug("found word=" + word);
             pointsCounter.increment(dictionarySearcherPoint);
             validElements++;

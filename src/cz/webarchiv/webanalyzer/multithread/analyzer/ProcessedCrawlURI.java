@@ -62,10 +62,15 @@ public class ProcessedCrawlURI {
         this.content = content;
     }
 
+    /**
+     * Return text representation of the object ProcessedCrawlURI
+     * @return text representation
+     */
     public String toString() {
         return "urlName=" + urlName +
-                ", urlOutlinks.size=" + outlinks.size() +
-                ", urlContent.length=" + content.length();
+                "\n urlOutlinks.size=" + outlinks.size() +
+                "\n urlContent.length=" + content.length() +
+                "\n urlContenType" + contentType;
     }
 
     public Set<String> getOutlinks() {

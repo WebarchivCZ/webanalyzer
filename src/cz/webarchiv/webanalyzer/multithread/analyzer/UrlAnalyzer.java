@@ -95,7 +95,7 @@ public class UrlAnalyzer {
      * defined by properties file.
      */
     public boolean analyze(String url, String content, Set links) {
-        log4j.info("analyze url=" + url);
+        log4j.debug("analyze url=" + url);
         ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links);
         // start all searchers
 //        geoIpSearcher.search(curi);
@@ -119,8 +119,8 @@ public class UrlAnalyzer {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR +
-                "Statistics for url=" + curi.getUrlName() +
-                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+                curi.toString() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);                
         // searchers
 //        stringBuilder.append(geoIpSearcher.toString());
 //        stringBuilder.append(dictionarySearcher.toString());
