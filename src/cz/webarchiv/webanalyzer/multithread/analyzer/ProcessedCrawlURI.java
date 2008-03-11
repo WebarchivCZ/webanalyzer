@@ -68,9 +68,9 @@ public class ProcessedCrawlURI {
      */
     public String toString() {
         return "urlName=" + urlName +
-                "\n urlOutlinks.size=" + outlinks.size() +
-                "\n urlContent.length=" + content.length() +
-                "\n urlContenType" + contentType;
+                "\nurlOutlinks.size=" + outlinks.size() +
+                "\nurlContent.length=" + content.length() +
+                "\nurlContenType" + contentType;
     }
 
     public Set<String> getOutlinks() {
