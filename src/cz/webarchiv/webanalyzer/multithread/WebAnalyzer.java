@@ -59,12 +59,15 @@ public class WebAnalyzer {
      * @param urlName, nazov URL
      * @param urlContent, textovy obsah URL
      * @param urlOutlinks, odkazy najdene v obsahu URL
+     * @param contentType, predpokladany contentType danej URL
      * @return true prave ked je URL validna podla nadefinovanych properties, 
      * dosiahla potrebny pocet bodov.
      */
-    public boolean run(String urlName, String urlContent, Set urlOutlinks) {
+    public boolean run(String urlName, String urlContent, Set<String> urlOutlinks,
+            String contentType) {
         // todo otestovat ci nehat jednu metodu alebo volat UrlAnalyzer osobitne
-        return (new UrlAnalyzer()).analyze(urlName, urlContent, urlOutlinks);
+        return (new UrlAnalyzer()).analyze(urlName, urlContent, urlOutlinks,
+                contentType);
     }
     
     /**

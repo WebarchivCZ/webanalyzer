@@ -17,6 +17,7 @@ import cz.webarchiv.webanalyzer.multithread.criteria.GeoIpSearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.HtmlLangSearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.ISearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.PhoneSearcher;
+import cz.webarchiv.webanalyzer.multithread.mime.Content;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,9 +95,15 @@ public class UrlAnalyzer {
      * In the end it decides whether the Url is czech or is not. Border is
      * defined by properties file.
      */
-    public boolean analyze(String url, String content, Set links) {
+    public boolean analyze(String url, String content, Set<String> links,
+            String contentType) {
         log4j.debug("analyze url=" + url);
-        ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links);
+        ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links,
+                contentType);
+        if (!isContetTypeText(curi)) {
+            log4j.info("analyze, not text contentType curi=" + curi.toString());
+            return false;
+        }
         // start all searchers
 //        geoIpSearcher.search(curi);
 //        dictionarySearcher.search(curi);
@@ -120,7 +127,7 @@ public class UrlAnalyzer {
         stringBuilder.append(
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR +
                 curi.toString() +
-                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);                
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         // searchers
 //        stringBuilder.append(geoIpSearcher.toString());
 //        stringBuilder.append(dictionarySearcher.toString());
@@ -153,5 +160,23 @@ public class UrlAnalyzer {
      */
     public PointsCounter getPointsCounter() {
         return pointsCounter;
+        
+    }
+
+    /**
+     * Returns true if contentType of the processedCrawlURI is text
+     * @param processedCrawlURI
+     * @return true if contentType of processedCrawlURI is text
+     */
+    private boolean isContetTypeText(ProcessedCrawlURI curi) {
+        // todo skontrolovat variantu getBytes(charset)
+        curi.setContentType((new Content()).getContentType(
+                curi.getContentType(), curi.getUrlName(),
+                curi.getContent().getBytes()));
+        if (curi.getContentType() != null && 
+                curi.getContentType().indexOf("text") > -1) {
+            return true;
+        }
+        return false;
     }
 }

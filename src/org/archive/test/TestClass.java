@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -408,6 +411,23 @@ public class TestClass {
         
     }
     
+    /**
+     * Metoda, na otestovanie mime type Detector.
+     * @param args
+     * @throws java.io.IOException
+     */
+    public static void mimeDetector() throws IOException {
+        try {
+            String[] pole = {""};
+//            eu.medsea.util.MimeUtil.main(pole);
+            URL url = new URL("http://praso.webzdarma.cz/index.html");
+            File f = new File(url.toURI());
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TestClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     public static void main(String[] args) throws IOException  {
 //        testIPAddress();
 //        testURLEncoding()
@@ -420,8 +440,9 @@ public class TestClass {
 //        downloadPageByBaos("http://mapy-pruvodce.cz/banner_click.php?idbanneru=126&amp;idbannerplocha=");
 //        externalFormOfURL();
 //        getSpecifiedText("bla");
-        regexp();
+//        regexp();
 //        formatOutlinks();
+        mimeDetector();
     }
     
 }

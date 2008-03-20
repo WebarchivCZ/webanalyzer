@@ -35,7 +35,7 @@ public class MakeTestCrawlURI {
     public SimpleTestCrawlURI createEmptyCrawlURI() {
         try {
             SimpleTestCrawlURI curi = new SimpleTestCrawlURI();
-            curi.setUrl(new URL("http://seznam.cz"));
+            curi.setUrl(new URL("http://praso.webzdarma.cz/gitara1.ogg"));
             curi.setContent(text);
             curi.setOutLinks(new HashSet());
             return curi;

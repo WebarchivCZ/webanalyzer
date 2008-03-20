@@ -590,5 +590,8 @@ http://java.sun.com/j2ee/1.4/docs/tutorial/doc/
         -LinkScopper.innerProcess() - putting the key object "cz_link" to crawl
         pictures and other sources refered from caUri
     </her_modifikacie>
+    <bc_praca>
+        MimeType Detector. Rozdelenie na Searcher
+    </bc_praca>
     
 </root>

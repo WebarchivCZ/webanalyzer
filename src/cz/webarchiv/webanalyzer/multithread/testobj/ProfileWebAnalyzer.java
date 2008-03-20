@@ -28,7 +28,7 @@ public class ProfileWebAnalyzer {
         SimpleTestCrawlURI curi = maker.createEmptyCrawlURI("http://seznam.cz");
         UrlAnalyzer analyzer = new UrlAnalyzer();
         analyzer.analyze(curi.getUrl().toString(),
-                curi.getContent(), curi.getOutLinks());
+                curi.getContent(), curi.getOutLinks(), null);
 
         log4j.debug("reached points=" +
                 analyzer.getPointsCounter().getPoints());

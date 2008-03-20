@@ -25,10 +25,11 @@ public class ProcessedCrawlURI {
     }
 
     public ProcessedCrawlURI(String urlName,
-            String content, Set<String> outlinks) {
+            String content, Set<String> outlinks, String contentType) {
         this.setUrlName(urlName);
         this.setContent(content);
         this.setOutlinks(outlinks);
+        this.setContentType(contentType);
     }
 
     public URL getUrl() {

@@ -46,7 +46,7 @@ public class SimpleTestThread extends Thread {
     private void processCuri(SimpleTestCrawlURI curi) {
         // skus vez Webanalyzer
         WebAnalyzer.getInstance().run(curi.getUrl().toString(), 
-                curi.getContent(), curi.getOutLinks());
+                curi.getContent(), curi.getOutLinks(), null);
         // create new UrlAnalyzer
 //        UrlAnalyzer urlAnalyzer = new UrlAnalyzer();
 //        analyzers.add(urlAnalyzer);
