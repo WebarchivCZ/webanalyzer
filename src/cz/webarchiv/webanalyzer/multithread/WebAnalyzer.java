@@ -8,6 +8,7 @@ package cz.webarchiv.webanalyzer.multithread;
 
 import cz.webarchiv.webanalyzer.multithread.analyzer.UrlAnalyzer;
 import cz.webarchiv.webanalyzer.multithread.managers.WebAnalyzerManager;
+import cz.webarchiv.webanalyzer.multithread.mime.Content;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -77,4 +78,11 @@ public class WebAnalyzer {
     public int getDepthToArchive() {
         return WebAnalyzerProperties.getInstance().getDepthToArchive();
     }
+    
+    public boolean isContetTypeText(String url)
+    {
+        String resultType = (new Content()).getContentType(null, url, null);
+        return resultType != null && resultType.indexOf("text") > -1;
+    }
+    
 }

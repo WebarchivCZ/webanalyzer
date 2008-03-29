@@ -10,6 +10,7 @@
 
 <root>
     <author>Ivan Vlcek</author>
+    <svn>svn://raptor.webarchiv.cz/webanalyzer user:ivan passwd:ivanivan</svn>
     <classes>
         <class>
             <name>Crawler</name>

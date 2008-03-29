@@ -106,7 +106,7 @@ public class UrlAnalyzer {
         }
         // start all searchers
 //        geoIpSearcher.search(curi);
-//        dictionarySearcher.search(curi);
+//        dictionarySearcher.search(curi);z
 //        emailSearcher.search(curi);
 //        phoneSearcher.search(curi);
 //        htmlLangSearcher.search(curi);

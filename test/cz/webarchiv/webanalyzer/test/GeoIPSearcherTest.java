@@ -54,7 +54,7 @@ public class GeoIPSearcherTest extends TestCase {
         String content = "";
         Set links = new HashSet();
 
-        urlAnalyzer.analyze(url, content, links);
+        urlAnalyzer.analyze(url, content, links, null);
 
         assertEquals(1, urlAnalyzer.getPointsCounter().getPoints());
     }

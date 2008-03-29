@@ -15,7 +15,7 @@ public class Content {
     private String contentType;
 
     public Content() {
-        this.mimeTypeMagic = true;
+        this.mimeTypeMagic = false;
         this.mimeTypes = MimeTypes.get("_anal/mime-types.xml");
     }
 
