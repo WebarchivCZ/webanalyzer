@@ -79,6 +79,11 @@ public class WebAnalyzer {
         return WebAnalyzerProperties.getInstance().getDepthToArchive();
     }
     
+    /**
+     * Zisti content type url podla nazvu url, presne podla jej koncovky
+     * @param url
+     * @return true only if url has text contentType
+     */
     public boolean isContetTypeText(String url)
     {
         String resultType = (new Content()).getContentType(null, url, null);

@@ -36,13 +36,6 @@ public class UrlAnalyzer {
     private static final Logger log4j = Logger.getLogger(UrlAnalyzer.class);
     // searchers used by urlAnalyzer stored in a list
     List<ISearcher> searchers = new ArrayList<ISearcher>();
-    // searchers used by urlAnalyzer
-    // todo odstranit
-    private GeoIpSearcher geoIpSearcher;
-    private DictionarySearcher dictionarySearcher;
-    private EmailSearcher emailSearcher;
-    private PhoneSearcher phoneSearcher;
-    private HtmlLangSearcher htmlLangSearcher;
     // other variables
     private PointsCounter pointsCounter;
     private long minPointsToValid = WebAnalyzerProperties.getInstance().
@@ -52,12 +45,6 @@ public class UrlAnalyzer {
      * Public construtor.
      */
     public UrlAnalyzer() {
-//        this.pointsCounter = new PointsCounter();
-//        this.geoIpSearcher = new GeoIpSearcher(pointsCounter);
-//        this.dictionarySearcher = new DictionarySearcher(pointsCounter);
-//        this.emailSearcher = new EmailSearcher(pointsCounter);
-//        this.phoneSearcher = new PhoneSearcher(pointsCounter);
-//        this.htmlLangSearcher = new HtmlLangSearcher(pointsCounter);
         initialize(WebAnalyzerProperties.getInstance().getSearchersToUse());
     }
 
@@ -100,16 +87,8 @@ public class UrlAnalyzer {
         log4j.debug("analyze url=" + url);
         ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links,
                 contentType);
-        if (!isContetTypeText(curi)) {
-            log4j.info("analyze, not text contentType curi=" + curi.toString());
-            return false;
-        }
+        // get ContentType is called by webAnalyzer
         // start all searchers
-//        geoIpSearcher.search(curi);
-//        dictionarySearcher.search(curi);z
-//        emailSearcher.search(curi);
-//        phoneSearcher.search(curi);
-//        htmlLangSearcher.search(curi);
         for (ISearcher searcher : searchers) {
             searcher.search(curi);
         }
@@ -129,11 +108,6 @@ public class UrlAnalyzer {
                 curi.toString() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
         // searchers
-//        stringBuilder.append(geoIpSearcher.toString());
-//        stringBuilder.append(dictionarySearcher.toString());
-//        stringBuilder.append(emailSearcher.toString());
-//        stringBuilder.append(phoneSearcher.toString());
-//        stringBuilder.append(htmlLangSearcher.toString());
         for (ISearcher searcher : searchers) {
             stringBuilder.append(searcher.toString());
         }

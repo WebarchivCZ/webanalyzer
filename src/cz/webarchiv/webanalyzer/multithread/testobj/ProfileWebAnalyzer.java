@@ -50,6 +50,7 @@ public class ProfileWebAnalyzer {
                 SimpleTestCrawlURI curi = maker.createEmptyCrawlURI();
                 curi.setOutLinks(maker.createTestURIs());
                 // create a thread
+                log4j.debug("url is contentType=" + WebAnalyzer.getInstance().isContetTypeText(curi.getUrl().toString()));
                 SimpleTestThread toe = new SimpleTestThread();
                 toe.setSimpleTestCrawlURI(curi);
                 toe.setAnalyzers(analyzers);
