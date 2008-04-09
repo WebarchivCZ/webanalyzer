@@ -105,12 +105,7 @@
         </para>
         <para>
             V Českej Republike existuje projekt nazvaný WebArchív, ktorý sa zaoberá 
-            archiváciou a zprístupnením českého webu. Je to digitálny archív "českých"
-            webových zdrojov, ktoré sú tu zhromažďované za účelom ich dlhodobého uchovávania.
-            Ochranu a uchovávanie týchto dokumentov zaisťuje od roku 2000 Národná knižnica 
-            ČR v spoluprácií s Moravskou zemskou knižnicou a Ústavom výpočtovej techniky
-            Masarykovej univerzity. Pri archivácií webu sa používajú softwérové nástroje
-            vyvinuté organizáciou Internet Archive.
+            archiváciou a zprístupnením českého webu. 
             Jediné rozhodovacie kritérium pre identifikovanie českého webu funguje
             na základe domény, ktorú obsahuje každá URL. Tým je zaručené, že všetky
             URL s českou doménou budú archivované. Existujú však stránky, ktoré
@@ -141,64 +136,136 @@
             Heritrix doplním neskôr.
         </para>
     </chapter>
+    
     <chapter>
         <title>Projekt WebArchiv</title>
         <para>
-            todo sklizen WA, zpristupnenie, naviazanie zo skliznecz na sklizen mimocz
-            todo poziadavky na moju bc.
+            Hlavnou úlohou projektu je archivácia a sprístupnenie českého webu.
+            WebArchiv je v podstate digitálny archív "českých"
+            webových zdrojov, ktoré sú tu zhromažďované za účelom ich dlhodobého uchovávania.
+            Ochranu a uchovávanie týchto dokumentov zaisťuje od roku 2000 Národná knižnica 
+            ČR v spoluprácií s Moravskou zemskou knižnicou a Ústavom výpočtovej techniky
+            Masarykovej univerzity. Pri archivácií webu sa používajú softwérové nástroje
+            vyvinuté organizáciou Internet Archive<citation>01</citation>.
         </para>
-        <para>Zrýchľovanie života sa neminulo ani vybaveniam domácností,
-            automobilom a ďalším každodenne používaným systémom. Pre človeka je
-            najprirodzenejšie a najrýchlejšie komunikovať pomocou reči a preto sa
-            ovládanie domácich elektrospotrebičov, mobilných telefónov, navigačných
-            systémov, elektroniky a ďalších zariadení presúva z ovládacích tlačidiel
-            a diaľkových ovládačov na ovládanie hlasom. Integráciu „reči“ do zariadení
-        zabezpečujú dialógové systémy <citation>01</citation>.</para>
-        <para>Dialógové systémy sa tiež dotkli spôsobu komunikácie obchodných
-            spoločností so zákazníkom. V kombinácii s telefóniou vytvárajú hlasové
-            portály. Medzi hlasové portály patria zákaznícke linky spoločností
-            orientovaných na zákazníka, kontrola správ elektronickej pošty cez
-            telefón, sledovanie zásielok, informácie o dopravných spojeniach
-        a ďalšie.</para>
-        <para>Komunikácia prostredníctvom hlasového portálu najčastejšie prebieha
-            tak, že používateľ (zákazník) zatelefonuje na telefónne číslo hlasového
-            portálu a systém pre telefóniu prijme jeho hovor a automaticky prepojí
-            používateľa do dialógového systému. Dialógový systém používateľovi umožní
-            výber z ponuky vyslovením kľúčového slova (napríklad názvu položky ponuky)
-            alebo prostredníctvom stlačenia tlačidla používateľom (tónovou voľbou –
+        
+        <sect1>
+            <title>Archivácie WebArchivu</title>
+            <para>
+                Ideálnym cieľom projektu by bolo archivovať všetky české zdroje, 
+                ktoré kedy boli na Internete umiestnené. Z technických dôvodov to
+                však nieje možné a preto WebArchiv používa osvedčené techniky, ktoré
+                sa k tomuto ideálnemu cieľu približujú. V súčasnosti WebArchiv
+                používa tri základné spôsoby archivácie.
+            </para>
             <indexterm>
-                <primary>DTMF</primary>
-            </indexterm>DTMF). Na základe svojho výberu je používateľ presmerovaný
-            do ďalšej časti hlasového portálu, kde môže nasledovať ďalšia ponuka,
-            informácie prečítané pomocou syntézy reči alebo prehraním nahrávky, alebo
-        živým operátorom.</para>
-        <para>Dialógové systémy sa skladajú z dvoch základných častí – časti
-            spracúvajúcej príkazy používateľa a druhej časti, ktorá interpretuje
-        informácie používateľovi <citation>02</citation>.</para>
-        <para>Príkazy používateľa sú spracovávané buď detekciou stlačenia tlačidla
-            používateľom alebo rozoznávaním reči. Detekcia stlačenia tlačidla tónovej
-            voľby (<indexterm>
-                <primary>DTMF</primary>
-            </indexterm>DTMF) je závislá na zariadeniach telefónie. V prípade, že je
-            tónová voľba podporovaná zariadením používateľa a infraštruktúrou siete
-            telefónie, je samotné rozoznanie stlačeného tlačidla dialógovým systémom
-            nenáročné. Rozoznávanie reči je náročnejšia činnosť, ktorá vyžaduje
-            špecifikácie jazykovej gramatiky a sémantiky daného jazyka, v ktorom má
-        byť reč rozpoznávaná.</para>
-        <para>Interpretácia informácií používateľovi môže byť, okrem prepojenia na
-            živého operátora, realizovaná buď prehrávaním zvukových nahrávok alebo
-            syntézou reči. Prehrávanie zvukových nahrávok je vhodné v prípade, že sa
-            jedná o statické informácie, ako napríklad položky ponuky, informácie
-            o produktoch, navigačné informácie, hlásenia stavu a podobné. Syntéza reči
-            je vhodná na interpretáciu informácií, ktoré sa rýchlo menia v čase, ako
-            napríklad správy elektronickej pošty a aktuálne informácie o stave účtov
-        a podobné.</para>
-        <para>Na začiatku práce bude predstavený značkovací jazyk VoiceXML a
-            technológie súvisiace s nasadením dialógových aplikácií VoiceXML. Ďalšia
-            kapitola predstaví, porovná a zhodnotí vybrané interpretery aplikácií
-            VoiceXML. Vytvorenú dialógovú aplikáciu VoiceXML predstaví piata
-        kapitola.</para>
+                <primary>Plošné sklizne</primary>
+            </indexterm>
+            <para><emphasis role="bold">Plošné sklizne</emphasis>
+                Cieľom tohoto prístupu je archivácia čo najväčšieho počtu domácich 
+                webových zdrojov na základe parametrov definovaných v aplikovanom SW,
+                teda vyžadujúce minimum ďalšej intelektuálnej práce. Hlavným parametrom
+                pre archiváciu českého webu je národná doména<citation>02</citation>.
+            </para>
+            <indexterm>
+                <primary>Výberový prístup</primary>
+            </indexterm>
+            <para><emphasis role="bold">Výberový prístup</emphasis>
+                Pravidlá výberu dokumentov registrovaných v národnej bibliografii
+                zahrňujú:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>Územie</emphasis> - všetky dokumenty (zdroje)
+                        publikované na území Českej republiky.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>Jazyk</emphasis> - všetky zdroje v čestine (
+                        bez ohľadu na miesto vydania)
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>Autorstvo</emphasis> - všetky zdroje českých
+                        autorov (bez ohľadu na miesto vydania)
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>Predmet/obsah</emphasis> - všetky zdroje, 
+                        ktorých obsah sa týka Českej republiky alebo českého národa (bez 
+                        ohľadu na miesto vydania)<citation>02</citation>.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <indexterm>
+                <primary>Tematické zbierky</primary>
+            </indexterm>
+            <para><emphasis role="bold">Tematické zbierky</emphasis>
+                Tematické zbierky sú monotematické súbory webových dokumentov. V rámci
+                tematických sklizní sledujeme predovšetkým také deje, ktoré doprevádzaja
+                celospoločenská debata a je u nich teda predpoklad, že zaujmú 
+                významejšie miesto z hľadiska dejín Českej republiky 
+                (napr. voľby, povodne)<citation>02</citation>. 
+            </para>
+        </sect1>
+        
+        <sect1>
+            <title>Plošná sklizeň národnej domény</title>
+            <para>
+                popis adamovej plosnej sklizne
+            </para>
+            <sect2>
+                <title>Úvod do Heritrixu</title>
+                <para>
+                    popis heritrix
+                </para>
+            </sect2>
+        </sect1>
+        
+        <sect1>
+            <title>Zprístupnenie archívu</title>
+            <para>
+                popis indexácie, zprístupnenia
+            </para>
+            <sect2>
+                <title>Wayback Machine</title>
+                <para>
+                    popis wayback
+                </para>
+            </sect2>
+        </sect1>
+        
+        <sect1>
+            <title>Naviazanie plošnej sklizne mimo národnú doménu</title>
+            <para>
+                popis požiadavkov, postupu naviazania
+            </para>
+            <sect2>
+                <title>Úvod WebAnalyzer</title>
+                <para>
+                    popis webanalyzer stručne
+                </para>
+            </sect2>
+        </sect1>
     </chapter>
+    
+    <chapter>
+        <title>Heritrix</title>
+        <para>
+            strucny uvod, prednosti heritrixu oproti ostatnym crawlerom
+        </para>
+        <sect1>
+            <title>uvod, moduly, workflow</title>
+            <para>
+                popsisat
+            </para>
+        </sect1>
+    </chapter>
+    
     <chapter>
         <title>VoiceXML</title>
         <para>VoiceXML je značkovací jazyk určený na popis interaktívnych dialógov
@@ -1304,21 +1371,34 @@
             <biblioentry>
                 <abbrev>01</abbrev>
                 <author>
-                    <surname>Valenta, Michal</surname>
+                    <surname>WebArchiv</surname>
                 </author>
-                <title>Dialogová hra ve VoiceXML [bakalářská práce]</title>
-                <address>Masarykova univerzita, Fakulta informatiky</address>
-                <pubdate>2002</pubdate>
+                <title>WebArchiv - archiv českého webu [online]</title>
+                <publisher>
+                    <publishername>WebArchiv</publishername>
+                </publisher>
+                <pubdate>09.04.2008</pubdate>
+                <releaseinfo>
+                    <ulink url="http://www.webarchiv.cz">
+                        http://www.webarchiv.cz
+                    </ulink>
+                </releaseinfo>            
             </biblioentry>
             <biblioentry>
                 <abbrev>02</abbrev>
                 <author>
-                    <firstname>Pavel</firstname>
-                    <surname>Cenek</surname>
+                    <surname>WebArchiv</surname>
                 </author>
-                <title>Návrh formalních dialogových systémů [diplomová práce]</title>
-                <address>Masarykova univerzita, Fakulta informatiky</address>
-                <pubdate>2000</pubdate>
+                <title>Kritéria výběru webových zdrojů [online]</title>
+                <publisher>
+                    <publishername>WebArchiv</publishername>
+                </publisher>
+                <pubdate>09.04.2008</pubdate>
+                <releaseinfo>
+                    <ulink url="http://www.webarchiv.cz/kriteria">
+                        http://www.webarchiv.cz/kriteria
+                    </ulink>
+                </releaseinfo>            
             </biblioentry>
             <biblioentry>
                 <abbrev>03</abbrev>
