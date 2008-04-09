@@ -216,12 +216,32 @@
         <sect1>
             <title>Plošná sklizeň národnej domény</title>
             <para>
-                popis adamovej plosnej sklizne
+                WebArchiv vykonáva plošnú sklizeň národnej domény pomocou
+                softvérových nástrojov, webových pavúkov (crawler - angl.), 
+                ktoré sú na túto činnosť stavané. Webové pavúky dokážu 
+                automaticky prechádzať celý Web, stránku po stránke.
+                Medzi najpopulárnejšie patrí systém Heritrix, Httrack a 
+                Nedlib Harvester. 
+            </para>
+            <para>
+                Webové pavúky začínajú parsovaním zvolenej webovej stránky,
+                ktoré sú v tejto problematike známe pod názvom semienka. 
+                Semienka sú zdrojové URI (unified resource identifier), z 
+                ktorých celý proces začína. Pri parsovaní webový pavúk hľadá 
+                hypertextové odkazy, ktoré sú na tejto stránke umiestené a 
+                odkazujú na ďalšie stránky. Pavúk následne parsuje nájdené 
+                stránky, aby našiel nové odkazy. Celý proces sa rekurzívne
+                opakuje, pokiaľ už nebudú žiadne odkazy, ktoré by sa spracovali.
+                Webový pavúk posiela HTTP požiadavky na dokumenty, umiestnené na
+                serveroch. Postup je rovnaký ako keď užívateľ kliká na odkazy vo
+                svojom webovom prehliadači. Webový pavúk však dokáže tento 
+                proces automatizovať.
             </para>
             <sect2>
                 <title>Úvod do Heritrixu</title>
                 <para>
-                    popis heritrix
+                    popis heritrix, modularny, modul na archivaciu cz. url, 
+                    ostatne stranky su odhodene
                 </para>
             </sect2>
         </sect1>
@@ -242,7 +262,9 @@
         <sect1>
             <title>Naviazanie plošnej sklizne mimo národnú doménu</title>
             <para>
-                popis požiadavkov, postupu naviazania
+                popis požiadavkov, postupu naviazania, adam loguje rejetcted uri
+                postup spracovania dlheho logu, asi po castiach, ale musi byt 
+                zachovana konzistencia, nejake sety seedov
             </para>
             <sect2>
                 <title>Úvod WebAnalyzer</title>
