@@ -334,6 +334,35 @@
         <sect1>
             <title>Nástup sklizne mimo národnú doménu</title>
             <para>
+                Sklizeň mimo .cz by mala naviazať na celoplošnú sklizeň 
+                českých webových zdrojov. Pri sklizni národnej domény sa archivujú
+                všetky české stránky, ktoré prejdú procesom Heritrixu. Všetky
+                odkazy, ktoré sa na spracovávaných stránkach nájdu sa filtrujú
+                na základe domény. Odkazy s českou doménou sú ďalej zahrnuté do
+                kolekcie URL adries čakajúcich na spracovanie, zatiaľ čo ostané
+                odkazy vedúce do iných domén sú odhodené.
+            </para>
+            <para>
+                Tieto odhodené odkazy mimo doménu .cz však môžu byť hodnotným 
+                materiálom pri nástupe sklizne mimo .cz. Existuje možnosť, že
+                odkazy mimo doménu .cz, ktoré sa nachádzajú na českej stránke 
+                môžu odkazovať na iné relevanté, bohemikálne stránky, ktorých 
+                doména už nieje česká. Preto je výhodné skúmať tieto odhodené
+                odkazy zo stránok s českou doménou ako prvé. Heritrix sa dá
+                nakonfigurovať, aby tieto odhodené odkazy z českých stránok 
+                logoval do osobitného súboru. Tento súbor po skončení sklizne 
+                .cz bude plný hodnotných odkazov, ktoré môžeme predať Heritrixu
+                na vstupe vo forme semienok pri následnej sklizni mimo .cz.
+            </para>
+            <para>
+                Po skončení <emphasis>sklizne_cz_2007</emphasis> Heritrix
+                vygeneroval súbol <emphasis>outScope.log</emphasis>, ktorého
+                veľkosť je 16 GB. Na každom riadku sa nachádzajú logovacie 
+                informácie a potom URL, ktorá sa použije ako semienko pre 
+                sklizeň mimo .cz. Z technických problémov nieje možné predhodiť
+                Heritrixu 16 GB dlhý zoznam semienok a preto je nutné tento 
+                zoznam rozdeliť na viac kolekcií, ktoré sa postupne spracujú.
+                todo 
                 popis požiadavkov, postupu naviazania, adam loguje rejetcted uri
                 postup spracovania dlheho logu, asi po castiach, ale musi byt 
                 zachovana konzistencia, nejake sety seedov
