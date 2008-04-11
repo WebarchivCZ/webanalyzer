@@ -430,7 +430,7 @@
                 <title>Prehľad Heritrixu</title>
                 <mediaobject>
                     <imageobject>
-                        <imagedata fileref="VoiceXMLArch.png" />
+                        <imagedata fileref="crawler_overview1.png" />
                     </imageobject>
                 </mediaobject>
             </figure>            
@@ -495,7 +495,7 @@
                 <title>Architektúra nasadenia aplikácie VoiceXML</title>
                 <mediaobject>
                     <imageobject>
-                        <imagedata fileref="VoiceXMLArch.png" />
+                        <imagedata fileref="crawler_overview1.png" />
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -935,7 +935,7 @@
                     <title>Architektúra JVoiceXML</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="JVoiceXMLArch.png" />
+                            <imagedata fileref="crawler_overview1.png" />
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -1032,7 +1032,7 @@
                     <title xreflabel="AsteriskArch.png">Architektúra Asterisku</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="AsteriskArch.png" />
+                            <imagedata fileref="crawler_overview1.png" />
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -1213,7 +1213,7 @@
                     <title>Architektúra VoiceGlue</title>
                     <mediaobject>
                         <imageobject>
-                            <imagedata fileref="VoiceGlueArch.png" />
+                            <imagedata fileref="crawler_overview1.png" />
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -1494,7 +1494,7 @@
                 <title>Mapa aplikácie VoiceXML</title>
                 <mediaobject>
                     <imageobject>
-                        <imagedata fileref="ApplicationMap.png" />
+                        <imagedata fileref="crawler_overview1.png" />
                     </imageobject>
                 </mediaobject>
             </figure>
