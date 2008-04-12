@@ -456,7 +456,7 @@
                 ktoré sú na ňom umiestnené. Po tom ako je URI zpracovaná je 
                 predaná opäť objektu Frontier spolu so všetkými objavenými 
                 odkazmi URI, ktoré by mal Frontier naplánovať na ďalšie 
-                spracovanie.
+                spracovanie<citation>03</citation>.
             </para>
             <para>
                 It is the Frontier which keeps the state of the crawl. 
@@ -485,7 +485,7 @@
                 Trieda Frontier implementuje rozhranie Frontier a môže byť nahradená
                 hocijakou inou triedou Frontier, ktorá bude toto rozhranie implementovať.
                 Je nutné spomenúť, že naprogramovanie triedy Frontier nie je triviálna
-                záležitosť.
+                záležitosť<citation>03</citation>.
             </para>
             <para>
                 Objekt Frontier sa spolieha na správanie prinajmenej nasledújucich 
@@ -497,7 +497,7 @@
                 výsoký je záujem o danú URI. Podľa toho LinksScoper nastaví prioritu
                 pre danú URI, na základe ktorej sa vykonáva zoradenie URI adries 
                 čakajúcich na spracovanie v objekte Frontier. Toto zoradenie už vykonáva 
-                pomocou objektu FrontierScheduler.
+                pomocou objektu FrontierScheduler<citation>03</citation>.
                 
             </para>
         </sect1>
@@ -508,7 +508,7 @@
                 spracovávaná svojím vlastným vláknom nazvaným ToeThread. Objekt 
                 ToeThread žiada objekt Frontier o novú URI a následne ju posiela cez
                 všetky procesory. Po spracovaní URI posledným procesorom si ToeThread
-                pýta ďalšiu URI.
+                pýta ďalšiu URI<citation>03</citation>.
             </para>
         </sect1>
         <sect1>
@@ -532,9 +532,6 @@
                 The task performed by the different processing chains are as follows:
                 Postup spracovania URI jednotlivými procesorovými reťazcami:
             </para>
-            
-            
-            
             <sect2>
                 <title>Pre-fetch processing chain</title>
                 <para>
@@ -542,28 +539,28 @@
                     spracovaná. Je tu zahrnutá kontrola, či sú všetky predpoklady 
                     splnené (DNS-vyhľadávanie, kontrola súboru robots.txt, autentifikácia).
                     Je tiež možné úplne zablokovať spracovanie URI adries, ktoré neprešli
-                    kontrolou.
+                    kontrolou<citation>03</citation>.
                 </para>
                 <itemizedlist>
                     <listitem>
-                <para>
-                    Webové pavúky a iné roboty sú programy, ktoré dokážu automaticky
-                    prechádzať webové stránky. Vyhľadávače ako Google ich používajú na 
-                    indexovanie celého obsahu internetu, spammery ich používajú na 
-                    vyhľadávanie e-mailov a okrem toho majú mnoho ďalších využití.
-                </para>
-                <para>
-                    Vlastníci webových stránok používajú textový súbor nazvaný robots.txt, aby prostredníctvom
-                    neho predali inštrukcie o ich stránkach webovým robotom (The Robots Exclusion Protocol).
-                    Vždy keď chce webový robot navštíviť URL webovej stránky, najprv hľadá tento súbor
-                    robots.txt. Napríklad pri návšteve URL http://www.seznam.cz sa robot pokúša získať
-                    súbor z URL http://www.seznam.cz/robots.txt. V tomto súbore
-                    môže byť zapísané, že by robot nemal navštevovať žiadne stránky z 
-                    danej domény. Existuje však mnoho robotov, ktoré tento súbor
-                    a jeho inštrukcie ignorujú <citation>04</citation>.
-                    todo moznost doplnit
-                </para>
-                </listitem>
+                        <para>
+                            Webové pavúky a iné roboty sú programy, ktoré dokážu automaticky
+                            prechádzať webové stránky. Vyhľadávače ako Google ich používajú na 
+                            indexovanie celého obsahu internetu, spammery ich používajú na 
+                            vyhľadávanie e-mailov a okrem toho majú mnoho ďalších využití.
+                        </para>
+                        <para>
+                            Vlastníci webových stránok používajú textový súbor nazvaný robots.txt, aby prostredníctvom
+                            neho predali inštrukcie o ich stránkach webovým robotom (The Robots Exclusion Protocol).
+                            Vždy keď chce webový robot navštíviť URL webovej stránky, najprv hľadá tento súbor
+                            robots.txt. Napríklad pri návšteve URL http://www.seznam.cz sa robot pokúša získať
+                            súbor z URL http://www.seznam.cz/robots.txt. V tomto súbore
+                            môže byť zapísané, že by robot nemal navštevovať žiadne stránky z 
+                            danej domény. Existuje však mnoho robotov, ktoré tento súbor
+                            a jeho inštrukcie ignorujú <citation>04</citation>.
+                            todo moznost doplnit
+                        </para>
+                    </listitem>
                 </itemizedlist>
                 <para>
                     V reťazi Pre-fetch processing chain by mali byť zahrnuté tieto
@@ -583,7 +580,8 @@
                             zmení limity oblasti záujmu, niesú tým zasiahnuté URI
                             zaradené do objektu Frontier. Skontrolovaním oblasti 
                             záujmu znovu v tomto bode, sa môžte ubezpečiť, že iba URI
-                            adresy, ktoré patria do oblasti záujmu budú spracované.
+                            adresy, ktoré patria do oblasti záujmu budú spracované
+                            <citation>03</citation>.
                         </para>
                     </listitem>
                     <listitem>
@@ -591,7 +589,8 @@
                             <emphasis>procesor PreconditionEnforcer</emphasis> -
                             Zabezpečuje, že všetky predpoklady pre spracovanie URI
                             sú splnené. Konkrétne zahrňuje overenie, že DNS a 
-                            robots.txt boli získané pre danú URI adresu.
+                            robots.txt boli získané pre danú URI adresu
+                            <citation>03</citation>.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -601,7 +600,8 @@
                 <para>
                     Procesory v tejto reťazi sú zodpovedné pre získanie dát zo 
                     vzdialeného serveru. Mal by tu byť jeden procesor pre každý 
-                    protokol, ktorý Heritrix podporuje, ako napríklad FetchHTTP.
+                    protokol, ktorý Heritrix podporuje, ako napríklad FetchHTTP
+                    <citation>03</citation>.
                 </para>
             </sect2>
             <sect2>
@@ -609,7 +609,7 @@
                 <para>
                     V tomto bode je obsah dokumentu odkazovaného prostredníctvom
                     URI prístupný a niekoľko procesorov sa bude snažiť získať
-                    z tohoto obsahu nové odkazy.
+                    z tohoto obsahu nové odkazy<citation>03</citation>.
                 </para>
             </sect2>
             <sect2>
@@ -618,7 +618,7 @@
                     Táto reťaz je zodpovedná za zapisovanie dát do archívnych 
                     súborov. Heritrix obsahuje procesor ARCWriterProcessor, ktorý
                     zapisuje dáta do formátu ARC. Nové procesory by mohli vyť 
-                    naprogramované, aby podpodorvali aj iné formáty.
+                    naprogramované, aby podpodorvali aj iné formáty<citation>03</citation>.
                 </para>
             </sect2>
             <sect2>
@@ -628,7 +628,7 @@
                     bolo predtým rozhodnuté iným procesorom, že táto URI sa nebude
                     spracovávať. Reťaz Post-processing chain musí obsahovať
                     nasledujúce procesory (alebo obdobné moduly vykonávajúce 
-                    podobné operácie).
+                    podobné operácie)<citation>03</citation>.
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -636,7 +636,7 @@
                             <emphasis>procesor CrawlStateUpdater</emphasis> - 
                             Aktualizuje informácie o každom hoste, ktoré sa možu uplatniť
                             pri ďalšom spojení na server. Konkrétne robots.txt a informácie
-                            o IP adresách.
+                            o IP adresách<citation>03</citation>.
                         </para>
                     </listitem>
                     <listitem>
@@ -646,7 +646,7 @@
                             obsahu s oblasťou záujmu. Všetky odkazy, ktoré nepatria 
                             do oblasti záujmu (napr. oblasť záujmu môže byť doména .cz), 
                             ktorú sme si zvolili sú vyradené. Môžeme povoliť logovanie
-                            všetkých vyradených odkazov.
+                            všetkých vyradených odkazov<citation>03</citation>.
                         </para>
                     </listitem>
                     <listitem>
@@ -654,12 +654,78 @@
                             <emphasis>procesor FrontierScheduler</emphasis> -
                             Rozplánuje všetky URI adresy nájdene v aktuálne spracovávanej
                             URI do objektu Frontier, tak aby sa postupne spracovali podľa
-                            stupňa dôležitosti.
+                            stupňa dôležitosti<citation>03</citation>.
                         </para>
                     </listitem>
                 </itemizedlist>
             </sect2>
         </sect1>
+        <sect1>
+            <title>Triedy URI v Heritrixe</title>
+            <para>
+                URI adresy sú v Heritrixe reprezentované niekoľkými triedami. Základný
+                stavebný blok predstavuje org.archive.datamodel.UURI, ktorý dedí
+                triedu org.apache.commons.httpclient.URI. "UURI" je výraz pre "Usable URI"
+                použiteľná URI. Ak je UURI adresa úspešne vytvorená, tak to znamená
+                že pôvodná URI adresa spĺňa všetky podmienky a nejedná sa o žiadnu
+                podvrhnutú URI adresu, ktorá by mohla neskôr v procese spracovania
+                vytvárať konflikty. UURI taktiež poskytuje mnohé metody na prístup k
+                rôznym častiam URI adresy<citation>05</citation>.
+            </para>
+            <para>
+                Dve triedy, ktoré obaľujú triedu UURI v Heritrixe sú:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>CandidateURI</emphasis> -
+                        Je to URI, ktorá je objavená počas behu procesu a môže 
+                        byť zahrnutá do kolekcie URI čakajúcich na spracovanie, 
+                        čím sa zmení z objektu CandidateURI na objekt CrawlURI.
+                        Obsahuje hlavne atributy potrebné na analýzu, či
+                        CandidateURI patrí do oblasti záujmu. Táto trieda obaľuje
+                        instanciu UURI<citation>05</citation>.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>CrawlURI</emphasis> -
+                        Reprezentuje kandidátnu URI a uchováva stav, ktorý sa
+                        mení počas procesu spracovania procesormi. CrawlURI je 
+                        potomok triedy CandidateURI. Samotná instancia je 
+                        vytvorená v momente, keď sa vyberie z objektu Frontier 
+                        a predá sa procesorom na spracovanie<citation>05</citation>.
+                    </para>
+                </listitem>
+            </itemizedlist>
+          <sect2>
+              <title>Zoznam atributov objektu CrawlURI</title>
+              <para>
+                  Objekt CrawlURI poskytuje zoznam atributov, ktorý je použitý
+                  na uchovanie ľubovoľných informácií o URI počas procesu jej 
+                  spracovnia. Pri písaní nových procesorov, určite využijete
+                  tento zoznam atributov. Zoznam atributov je zoznam párov kľúč a
+                  hodnota, ktoré sú prístupné prostredníctvom klasických get/set 
+                  metod. Kľúčové hodnoty sú pozbierané z rozhrania 
+                  CoreAttributeConstants, ktoré implementujú všetky procesory.
+                  Ak chcete použiť iné kľúče ako tie, ktoré sú obsiahnuté v tomto
+                  rozhraní budete musieť pridať spravovanie týchto atributov do
+                  nejakého vlastného modulu<citation>05</citation>.
+              </para>
+            </sect2>
+         <sect2>
+              <title>Nahrávacie toky - The recorder streams</title>
+              <para>
+                  Heritrix by nebol moc užitočný, keby neposkytoval prístup k 
+                  HTTP požiadavku a odpovedi. Pre tento účel objekt CrawlURI má
+                  metodu nazvanú getHTTPRecorder(). Rekordér je referencovaný
+                  v objekte CrawlURI a tým prístupný pre všetky procesory, ktoré
+                  s CrawlURI pracujú. Postup ako využit rekordér je popísaný 
+                  v ďalšej kapitole "Ako napísať Processor"<citation>05</citation>.
+              </para>
+            </sect2>            
+        </sect1>
+        
     </chapter>
     
     <chapter>
@@ -1828,16 +1894,15 @@
             <biblioentry>
                 <abbrev>05</abbrev>
                 <author>
-                    <firstname>Kenneth G.</firstname>
-                    <surname>Rehor</surname>
+                    <surname>Internet Archive</surname>
                 </author>
-                <title>What is VoiceXML? [online]</title>
+                <title>Some notes on the URI classes [online]</title>
                 <publisher>
-                    <publishername>VoiceXML Forum</publishername>
+                    <publishername>Internet Archive</publishername>
                 </publisher>
-                <pubdate>2001</pubdate>
+                <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.voicexmlreview.org/Jan2001/features/Jan2001_what_is_voicexml.html">http://www.voicexmlreview.org/Jan2001/features/Jan2001_what_is_voicexml.html</ulink></releaseinfo>
+                    url="http://crawler.archive.org/articles/developer_manual/uri.html">http://crawler.archive.org/articles/developer_manual/uri.html</ulink></releaseinfo>
             </biblioentry>
             <biblioentry>
                 <abbrev>06</abbrev>
