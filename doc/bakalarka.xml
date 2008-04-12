@@ -279,11 +279,10 @@
                             <varlistentry>
                                 <term>
                                     <filename>
-                                        [prefix]-[12-digit-timestamp]-[series#-padded-to-5-digits]-[crawler-hostname].arc.gz
                                     </filename>
                                 </term>
                                 <listitem>
-                                    <para></para>
+                                    <para>[prefix]-[12-digit-timestamp]-[series#-padded-to-5-digits]-[crawler-hostname].arc.gz</para>
                                 </listitem>
                             </varlistentry>
                         </variablelist>    
@@ -395,13 +394,14 @@
             aktuálne potrebujete. Pri každom module je jeho stručný popis, aby
             bolo jasné na akú úlohu daný modul slúži.
         </para>
-        Po konfigurácií modulov ostáva posledný krok. Vytvorený "job" sa 
-        zaradí do čakajúcich "jobs" a stačí ho už len spustiť. Webové 
-        rozhranie ukazuje aktuálne informácie o spustenom "job", medzi ktoré
-        patrí počet aktuálne pracujúcich vláken, spotrebovaná pamäť, počet a 
-        veľkosť dokumentov, ktoré sa zpracovali a mnoho ďalších, ktoré sú
-        dostupné priamo v rozhraní.
         <para>
+            Po konfigurácií modulov ostáva posledný krok. Vytvorený "job" sa 
+            zaradí do čakajúcich "jobs" a stačí ho už len spustiť. Webové 
+            rozhranie ukazuje aktuálne informácie o spustenom "job", medzi ktoré
+            patrí počet aktuálne pracujúcich vláken, spotrebovaná pamäť, počet a 
+            veľkosť dokumentov, ktoré sa zpracovali a mnoho ďalších, ktoré sú
+            dostupné priamo v rozhraní.
+        </para>
         
         <sect1>
             <title>Prehľad Heritrixu</title>
@@ -424,7 +424,6 @@
                 prídavných modulov je defaultne pridaná k Heritrxu, ale ak 
                 potrebujete iný modul, môžete si ho naprogramovať 
                 <citation>03</citation>.
-                picture
             </para>
             <figure>
                 <title>Prehľad Heritrixu</title>
@@ -434,6 +433,232 @@
                     </imageobject>
                 </mediaobject>
             </figure>            
+        </sect1>
+        <sect1>
+            <title>Objekt CrawlController</title>
+            <para>
+                CrawlController obsahuje všetky triedy, ktoré spolupracujú pri 
+                vykonávaní plazenia po stránkach. Poskytuje rozhranie pre 
+                činnosť plazenia a spúšťa "hlavné vlákno" (angl."master thread"),
+                ktoré prideľuje URI adresy z objektu Frontier jednotlivým 
+                vláknam ToeThread. CrawlController predstavuje globálny kontext
+                celého procesu plazenia a všetky subkomponenty k sebe zvyčajne 
+                pristupujú a komunikujú cez CrawlController 
+                <citation>03</citation>.
+            </para>
+        </sect1>
+        <sect1>
+            <title>Objekt Frontier</title>
+            <para>
+                Objetk Frontier je zodpovedný za rozdávanie následovnej URI, ktorá
+                má byť zpracovaná. Má zapezpečovať zdvorilosť, ktorá zaisťuje, že
+                žiadny webový server bude príliš zaťažovaný prechádzaním stránok, 
+                ktoré sú na ňom umiestnené. Po tom ako je URI zpracovaná je 
+                predaná opäť objektu Frontier spolu so všetkými objavenými 
+                odkazmi URI, ktoré by mal Frontier naplánovať na ďalšie 
+                spracovanie.
+            </para>
+            <para>
+                It is the Frontier which keeps the state of the crawl. 
+                This includes, but is not limited to:
+                Frontier je ten objekt, ktorý udržuje stav procesu prechádzania
+                stránok. Stav zahŕňa hlavne tieto položky:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>URI adresy, ktoré boli obajvené</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>URI adresy, ktoré sa aktuálne spracúvajú</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>URI adresy, ktoré boli spracované</emphasis>
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                Trieda Frontier implementuje rozhranie Frontier a môže byť nahradená
+                hocijakou inou triedou Frontier, ktorá bude toto rozhranie implementovať.
+                Je nutné spomenúť, že naprogramovanie triedy Frontier nie je triviálna
+                záležitosť.
+            </para>
+            <para>
+                Objekt Frontier sa spolieha na správanie prinajmenej nasledújucich 
+                externých procesorov: PreconditionEnforcer, LinksScoper a
+                FrontierScheduler (nižšie bude o procesoroch popísané viac).
+                Procesor PreconditionEnforcer zabezpečuje, že dns(vysvetlivka) a robots
+                (vysvetlivka) sú skontrolované pred tým než sa vykoná "download" stránky.
+                LinksScoper testuje či je daná URI v oblasti záujmu a ak áno, tak aký
+                výsoký je záujem o danú URI. Podľa toho LinksScoper nastaví prioritu
+                pre danú URI, na základe ktorej sa vykonáva zoradenie URI adries 
+                čakajúcich na spracovanie v objekte Frontier. Toto zoradenie už vykonáva 
+                pomocou objektu FrontierScheduler.
+                
+            </para>
+        </sect1>
+        <sect1>
+            <title>Objekt ToeThread</title>
+            <para>
+                Webový pavúk Heritrix je multivláknová aplikácia. Každá URI je 
+                spracovávaná svojím vlastným vláknom nazvaným ToeThread. Objekt 
+                ToeThread žiada objekt Frontier o novú URI a následne ju posiela cez
+                všetky procesory. Po spracovaní URI posledným procesorom si ToeThread
+                pýta ďalšiu URI.
+            </para>
+        </sect1>
+        <sect1>
+            <title>Objekt Processor</title>
+            <para>
+                Procesory sú zoskupené do procesorových reťazcov. Každá reťaz vykonáva s
+                URI nejaký proces. Keď objekt Processor skončí s URI ToeThread pošle URI
+                do nasledujúceho procesoru, pokiaľ URI nie je spracovaná všetkými 
+                procesormi. Procesor má možnosť povedať URI, aby preskočila do konkrétnej
+                reťaze daších procesorov. Rovnako ak Processor vyhodí fatálnu chybu, tak
+                URI automaticky skočí do poslednej reťaze nazvanej Post-processing chain.
+                Postup spracovania URI jednotlivými procesorovými reťazcami:
+                <figure>
+                    <title>Reťazec procesorov</title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="processing_steps.png" />
+                        </imageobject>
+                    </mediaobject>
+                </figure>    
+                The task performed by the different processing chains are as follows:
+                Postup spracovania URI jednotlivými procesorovými reťazcami:
+            </para>
+            
+            
+            
+            <sect2>
+                <title>Pre-fetch processing chain</title>
+                <para>
+                    Prvá reťaz procesorov je zodpovedná za vyšetrovanie, či URI môže byť
+                    spracovaná. Je tu zahrnutá kontrola, či sú všetky predpoklady 
+                    splnené (DNS-vyhľadávanie, kontrola súboru robots.txt, autentifikácia).
+                    Je tiež možné úplne zablokovať spracovanie URI adries, ktoré neprešli
+                    kontrolou.
+                </para>
+                <itemizedlist>
+                    <listitem>
+                <para>
+                    Webové pavúky a iné roboty sú programy, ktoré dokážu automaticky
+                    prechádzať webové stránky. Vyhľadávače ako Google ich používajú na 
+                    indexovanie celého obsahu internetu, spammery ich používajú na 
+                    vyhľadávanie e-mailov a okrem toho majú mnoho ďalších využití.
+                </para>
+                <para>
+                    Vlastníci webových stránok používajú textový súbor nazvaný robots.txt, aby prostredníctvom
+                    neho predali inštrukcie o ich stránkach webovým robotom (The Robots Exclusion Protocol).
+                    Vždy keď chce webový robot navštíviť URL webovej stránky, najprv hľadá tento súbor
+                    robots.txt. Napríklad pri návšteve URL http://www.seznam.cz sa robot pokúša získať
+                    súbor z URL http://www.seznam.cz/robots.txt. V tomto súbore
+                    môže byť zapísané, že by robot nemal navštevovať žiadne stránky z 
+                    danej domény. Existuje však mnoho robotov, ktoré tento súbor
+                    a jeho inštrukcie ignorujú <citation>04</citation>.
+                    todo moznost doplnit
+                </para>
+                </listitem>
+                </itemizedlist>
+                <para>
+                    V reťazi Pre-fetch processing chain by mali byť zahrnuté tieto
+                    procesory (alebo náhradné moduly, ktoré vykonávajú podobné operácie):
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>procesor Preselector</emphasis> - 
+                            Posledná kontrola, či by URI mala byť skutočne spracovaná.
+                            Môže napríklad znovu skontrolovať, či URI patrí do oblasti
+                            záujmu. Je to užitočné ak sa zmenia pravidlá oblasti záujmu
+                            v priebehu procesu samotného plazenia po webových stránkach.
+                            Kontrola či URI patrí do oblasti záujmu je zvyčajne 
+                            vykonávaná objektom LinksScoper, predtým než sú nové URI
+                            pridané do objektu Frotnier, aby boli spracované. Ak užívateľ
+                            zmení limity oblasti záujmu, niesú tým zasiahnuté URI
+                            zaradené do objektu Frontier. Skontrolovaním oblasti 
+                            záujmu znovu v tomto bode, sa môžte ubezpečiť, že iba URI
+                            adresy, ktoré patria do oblasti záujmu budú spracované.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>procesor PreconditionEnforcer</emphasis> -
+                            Zabezpečuje, že všetky predpoklady pre spracovanie URI
+                            sú splnené. Konkrétne zahrňuje overenie, že DNS a 
+                            robots.txt boli získané pre danú URI adresu.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </sect2>
+            <sect2>
+                <title>Fetch processing chain</title>
+                <para>
+                    Procesory v tejto reťazi sú zodpovedné pre získanie dát zo 
+                    vzdialeného serveru. Mal by tu byť jeden procesor pre každý 
+                    protokol, ktorý Heritrix podporuje, ako napríklad FetchHTTP.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Extractor processing chain</title>
+                <para>
+                    V tomto bode je obsah dokumentu odkazovaného prostredníctvom
+                    URI prístupný a niekoľko procesorov sa bude snažiť získať
+                    z tohoto obsahu nové odkazy.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Write/index processing chain</title>
+                <para>
+                    Táto reťaz je zodpovedná za zapisovanie dát do archívnych 
+                    súborov. Heritrix obsahuje procesor ARCWriterProcessor, ktorý
+                    zapisuje dáta do formátu ARC. Nové procesory by mohli vyť 
+                    naprogramované, aby podpodorvali aj iné formáty.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Post-processing chain</title>
+                <para>
+                    URI adresa vždy prechádza cez túto reťaz procesorov aj keď
+                    bolo predtým rozhodnuté iným procesorom, že táto URI sa nebude
+                    spracovávať. Reťaz Post-processing chain musí obsahovať
+                    nasledujúce procesory (alebo obdobné moduly vykonávajúce 
+                    podobné operácie).
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>procesor CrawlStateUpdater</emphasis> - 
+                            Aktualizuje informácie o každom hoste, ktoré sa možu uplatniť
+                            pri ďalšom spojení na server. Konkrétne robots.txt a informácie
+                            o IP adresách.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>procesor LinksScoper</emphasis> -
+                            Kontroluje všetky odkazy extraktované z aktuálneho získaného
+                            obsahu s oblasťou záujmu. Všetky odkazy, ktoré nepatria 
+                            do oblasti záujmu (napr. oblasť záujmu môže byť doména .cz), 
+                            ktorú sme si zvolili sú vyradené. Môžeme povoliť logovanie
+                            všetkých vyradených odkazov.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>procesor FrontierScheduler</emphasis> -
+                            Rozplánuje všetky URI adresy nájdene v aktuálne spracovávanej
+                            URI do objektu Frontier, tak aby sa postupne spracovali podľa
+                            stupňa dôležitosti.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </sect2>
         </sect1>
     </chapter>
     
@@ -1590,16 +1815,15 @@
             <biblioentry>
                 <abbrev>04</abbrev>
                 <author>
-                    <firstname>Pavel</firstname>
-                    <surname>Cenek</surname>
+                    <surname>robotstxt.org</surname>
                 </author>
-                <title>Elvira - a VoiceXML Platform for Research [online]</title>
+                <title>About /robots.txt [online]</title>
                 <publisher>
-                    <publishername>VoiceXML Forum</publishername>
+                    <publishername>robotstxt.org</publishername>
                 </publisher>
-                <pubdate>2003</pubdate>
+                <pubdate>01.04.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.voicexmlreview.org/Mar2003/features/Mar2003_Elvira1.html">http://www.voicexmlreview.org/Mar2003/features/Mar2003_Elvira1.html</ulink></releaseinfo>
+                    url="http://www.robotstxt.org/robotstxt.html">http://www.robotstxt.org/robotstxt.html</ulink></releaseinfo>
             </biblioentry>
             <biblioentry>
                 <abbrev>05</abbrev>
