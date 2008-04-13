@@ -698,32 +698,458 @@
                     </para>
                 </listitem>
             </itemizedlist>
-          <sect2>
-              <title>Zoznam atributov objektu CrawlURI</title>
-              <para>
-                  Objekt CrawlURI poskytuje zoznam atributov, ktorý je použitý
-                  na uchovanie ľubovoľných informácií o URI počas procesu jej 
-                  spracovnia. Pri písaní nových procesorov, určite využijete
-                  tento zoznam atributov. Zoznam atributov je zoznam párov kľúč a
-                  hodnota, ktoré sú prístupné prostredníctvom klasických get/set 
-                  metod. Kľúčové hodnoty sú pozbierané z rozhrania 
-                  CoreAttributeConstants, ktoré implementujú všetky procesory.
-                  Ak chcete použiť iné kľúče ako tie, ktoré sú obsiahnuté v tomto
-                  rozhraní budete musieť pridať spravovanie týchto atributov do
-                  nejakého vlastného modulu<citation>05</citation>.
-              </para>
+            <sect2>
+                <title>Zoznam atributov objektu CrawlURI</title>
+                <para>
+                    Objekt CrawlURI poskytuje zoznam atributov, ktorý je použitý
+                    na uchovanie ľubovoľných informácií o URI počas procesu jej 
+                    spracovnia. Pri písaní nových procesorov, určite využijete
+                    tento zoznam atributov. Zoznam atributov je zoznam párov kľúč a
+                    hodnota, ktoré sú prístupné prostredníctvom klasických get/set 
+                    metod. Kľúčové hodnoty sú pozbierané z rozhrania 
+                    CoreAttributeConstants, ktoré implementujú všetky procesory.
+                    Ak chcete použiť iné kľúče ako tie, ktoré sú obsiahnuté v tomto
+                    rozhraní budete musieť pridať spravovanie týchto atributov do
+                    nejakého vlastného modulu<citation>05</citation>.
+                </para>
             </sect2>
-         <sect2>
-              <title>Nahrávacie toky - The recorder streams</title>
-              <para>
-                  Heritrix by nebol moc užitočný, keby neposkytoval prístup k 
-                  HTTP požiadavku a odpovedi. Pre tento účel objekt CrawlURI má
-                  metodu nazvanú getHTTPRecorder(). Rekordér je referencovaný
-                  v objekte CrawlURI a tým prístupný pre všetky procesory, ktoré
-                  s CrawlURI pracujú. Postup ako využit rekordér je popísaný 
-                  v ďalšej kapitole "Ako napísať Processor"<citation>05</citation>.
-              </para>
+            <sect2>
+                <title>Nahrávacie toky - The recorder streams</title>
+                <para>
+                    Heritrix by nebol moc užitočný, keby neposkytoval prístup k 
+                    HTTP požiadavku a odpovedi. Pre tento účel objekt CrawlURI má
+                    metodu nazvanú getHTTPRecorder(). Rekordér je referencovaný
+                    v objekte CrawlURI a tým prístupný pre všetky procesory, ktoré
+                    s CrawlURI pracujú. Postup ako využit rekordér je popísaný 
+                    v ďalšej kapitole "Ako napísať Processor"<citation>05</citation>.
+                </para>
             </sect2>            
+        </sect1>
+        <sect1>
+            <title>ComplexType hierarchy</title>
+            <para>
+                Všetky konfigurovateľné moduly v Heritrixe dedia triedu ComplexType
+                alebo jeden z jeho potomkov. Trieda ComplexType je zodpovedná
+                za uchovávanie definíci konfigurovateľných atribútov daného modulu.
+                Aktuálne hodnoty sú uložené v instancii objektu DataConteiner.
+                Objekt DataContainer nie je nikdy prístupný z užívateľského kódu.
+                Namiesto toho užívateľ pristupuje k týmto atributom cez metódy
+                v objekte ComplexType. Tieto atribúty sú prístupné rôznymi spôsobmi, 
+                podľa toho či k ním pristupujeme z užívateľského rozhrania alebo
+                z vnútra bežiaceho procesu<citation>06</citation>.
+            </para>
+            <para>
+                Keď je atribút pristupovaný z URI (čítanie alebo zapisovanie), musíte
+                sa uistiť, že editujete atribút v správnom kontexte. Na dosiahnutie
+                tohoto existujú metódy getLocalAttribute(CrawlerSettings settings, String name) a
+                setAttribute(CrawlerSettings settings, Attribute attribute), ktoré
+                berú nastavovací objekt "settings" ako parameter. Tieto metódy 
+                pracujú iba na dodanom objekte settings.  Navyše metódy
+                getAttribute(name) a setAttribute(Attribute attribute) sú tu tiež, 
+                aby sa zachovala špecifikácia Java JMX. Posledné dve metódy
+                pracujú vždy s globálnym objektom settings<citation>06</citation>.
+            </para>
+            <para>
+                Získanie atribútu uprostred procesu plazenie po webových stránkach
+                je rôzne v tom, že vždy chcete získať hodnotu aj keď nieje v jeho 
+                kontexte. V moduloch je vždy prístupný objekt CrawlURI, ktorý
+                môže slúžiť na zaistenie toho správneho kontextu. Metóda
+                getAttribute(String name, CrawlURI uri) by mala byť použitá, aby 
+                sa zaistilo že je vybraný správny kontext<citation>06</citation>.
+            </para>
+            <para>
+                Každý z atribútov má definovaný typ. Povolené typy sú podtriedy
+                triedy Type. Tri základné typy:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>SimpleType - jednoduchý typ</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>ListType - typ zoznam</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>ComplexType -  komplexný typ</emphasis>
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect2>
+                <title>SimpleType -  Jednoduchý typ</title>
+                <para>
+                    SimpleType je hlavne pre reprezentovanie Java wraperov pre 
+                    primitívne Java typy. Navyše tiež obaľuje typ java.util.Date a
+                    špeciálny typ Heritrixu nazvaný TextField<citation>06</citation>.
+                </para>
+            </sect2>
+            <sect2>
+                <title>ListType - typ zoznam</title>
+                <para>
+                    ListType je ďalej dedený vo viacerých verziach pre obalené
+                    primitívne Java typy (DoubleList, FloatList, IntegerList, LongList, 
+                    StringList). Zoznam uchováva hodnoty v rovnakom poradí, v akom
+                    boli pridané. Ak atribút typu ListType je preťažený, tak jeho
+                    kompletný zoznam hodnôt je nahradený preťažujúcim levelom
+                    <citation>06</citation>.
+                </para>
+            </sect2>
+            <sect2>
+                <title>ComplexType - komplexný typ</title>
+                <para>
+                    Komplexný typ je mapa párov meno/hodnota. Hodnoty môžu byť
+                    hocijakého typu vrátane nových komplexných typov. Trieda 
+                    ComplexType je definovaná abstraktná trieda a môžte použiť
+                    jednu z podtried MapType alebo ModuleType. Typ MapType povoľuje
+                    pridávanie nových párov meno/hodnota počas behu programu, 
+                    zatiaľ čo ModuleType podporuje iba pridávanie párov meno/hodnota
+                    v čase vytvárania modulu<citation>06</citation>.
+                </para>
+            </sect2>
+        </sect1>
+        <sect1>
+            <title>Common needs for all configurable modules</title>
+            <para>
+                Ako už bolo spomenuté, všetky konfigurovateľné moduly v Heritrxe
+                dedia triedy ComplexType (alebo jeden z jeho potomkov). Ak chcete
+                napísať vlastný modul, mali by ste dediť z triedy ModuleType, ktorá
+                je potomkom triedy ComplexType. Trieda ModuleType bola zamýšľaná
+                na to, aby bola rodičom každého modulu v Heririxe<citation>07</citation>.
+            </para>
+            <sect2>
+                <title>Definícia modulu</title>
+                <para>
+                    Heritrix vie ako pracovať s komplexným typom a ako získať potrebné
+                    informácie zadané prostredníctvom užívateľského rozhrania.
+                    Aby to Heritrix vedel spracovať, nový modul musí splňovať 
+                    pár pravidel<citation>07</citation>:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Modul by mal vždy implementovať konštruktor, očakávajúci
+                            práve jeden argument - argument name (meno).
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Všetky atribúty, ktoré chcete aby boli konfigurovateľné, 
+                            by mali byť definované v konštruktore daného modulu.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <sect3>
+                    <title>Povinný jedno argumentový konštruktor</title>
+                    <para>
+                        Všetky moduly potrebujú mať konštruktor prijímajúci práve jeden 
+                        argument typu java.lang.String. Reťazec je použitý na 
+                        identifikovanie modulu. V prípade, že nový modul je 
+                        rovnakého typu ako existujúci modul, ktorý sa môže vyskytovať 
+                        v Heritrixe práve jeden krát, musí sa meno nového modulu 
+                        zhodovať s menom existujúceho modulu. To je presne prípad
+                        modulu Frontier, ktorý je v procese plazenia po webových 
+                        stránkach použitý práve raz. Rozhranie Frontier, ktoré
+                        musie implementovať všetky triey Frontier má statickú
+                        premennú<citation>07</citation>:
+                    </para>
+                    <programlisting><![CDATA[
+                    public static final String ATTR_NAME = "frontier";
+                    ]]></programlisting>
+                    <para>
+                        which implementations of the Frontier use instead of the string 
+                        argument submitted to the constructor. Here is the part of the 
+                        default Frontiers' constructor that shows how this should be done.
+                        ktorú implemetácie Frontier používajú namiesto reťazcového
+                        argumentu predloženého konštruktoru. Časť kódu konštruktoru
+                        triedy Frontier<citation>07</citation>:
+                    </para>
+                    <programlisting><![CDATA[
+public Frontier(String name) {
+    //The 'name' of all frontiers should be the same (Frontier.ATTR_NAME)
+    //therefore we'll ignore the supplied parameter. 
+    super(Frontier.ATTR_NAME, "HostQueuesFrontier. Maintains the internal" +
+        " state of the crawl. It dictates the order in which URIs" +
+        " will be scheduled. \nThis frontier is mostly a breadth-first" +
+        " frontier, which refrains from emitting more than one" +
+        " CrawlURI of the same \'key\' (host) at once, and respects" +
+        " minimum-delay and delay-factor specifications for" +
+        " politeness.");
+                    ]]></programlisting>
+                    <para>
+                        Ako je ukázané v tomto príklade, konštruktor musí volať
+                        nadradené konštruktor. Tento príklad tiež ukazuje ako nastaviť
+                        popis modulu. Popis modulu je použiťý uživateľským rozhraním
+                        na spravádzanie užívateľa v konfigurovaní procesu plazenia 
+                        webovách stránok<citation>07</citation>.
+                    </para>
+                </sect3>
+                <sect3>
+                    <title>Definovanie atribútov</title>
+                    <para>
+                        Atribúty v module, ktoré chcete aby boli konfigurovateľné
+                        musia byť definované v konštruktore modulu. Pre tento účel 
+                        objekt ComplexType má metodu addElementToDefinition(Type type).
+                        Argument predaný tejto metóde je definícia atribútu. Trieda
+                        Type je nadtriedou všetkých definícií atribútov povolených pre
+                        triedy ModuleType. Trieda Type implementuje všetky konfiguračné
+                        metódy spoločné pre všetky typy, ktoré definujú atribút v 
+                        module. Metoda addElementToDefinition vracia Type, tak aby
+                        bolo jednoduché upresňovať konfiguráciu typu. Pozrime sa na
+                        implementáciu definície atribútov (príklad z modulu Ftonier)
+                        <citation>07</citation>:
+                    </para>
+                    <programlisting><![CDATA[
+public final static String ATTR_MAX_OVERALL_BANDWIDTH_USAGE =
+        "total-bandwidth-usage-KB-sec";
+private final static Integer DEFAULT_MAX_OVERALL_BANDWIDTH_USAGE =
+        new Integer(0);
+...
+
+Type t;
+t = addElementToDefinition(
+    new SimpleType(ATTR_MAX_OVERALL_BANDWIDTH_USAGE,
+    "The maximum average bandwidth the crawler is allowed to use. " +
+    "The actual readspeed is not affected by this setting, it only " +
+    "holds back new URIs from being processed when the bandwidth " +
+    "usage has been to high.\n0 means no bandwidth limitation.",
+    DEFAULT_MAX_OVERALL_BANDWIDTH_USAGE));
+t.setOverrideable(false);
+                    ]]></programlisting>  
+                    <para>
+                        Tu pridávame definíciu atribútu typu SimpleType (čo je 
+                        podtrieda triedy Type). Konštruktor triedy SimpleType 
+                        berie tri argumenty: meno, popis a defaultnú hodnotu.
+                        Zvyčajne sú meno a defaultná hodnota definované ako konštanty, 
+                        ale nieje to povinné<citation>07</citation>.
+                    </para>
+                </sect3>
+            </sect2>
+            <sect2>
+                <title>Pristupovanie k atribútom</title>
+                <para>
+                    Vo väčšine prípadov, keď modul potrebuje pristupovať k jeho
+                    vlastným atributom, objekt CrawlURI je prístupný. Správna cesta
+                    ako sa uistiť, že všetky povýšenia a rafinovanosti sú uvážené, 
+                    je použiť metódu getAttribute(String name, CrawlURI), pri 
+                    získavaní atribútov. Niekedy môže byť kontext definovaný inými
+                    objektmi než CrawlURI, potom je nutné použiť metódu
+                    getAttribute(Object context, String name) na získanie hodnoty.
+                    Táto metoda sa snaží zistiť, či kontext je objekt nejakého typu
+                    URI alebo typu settings. Ak nemôže nájsť nič užitočné, tak je
+                    použitý globálne nastavenie je použité ako kontext. Ak však 
+                    aj tak nemáte žiadny kontext, čo môže byť prípad v nejakom 
+                    inicializačnom kóde, je možné použiť metódu 
+                    getAttribute(String name)<citation>07</citation>.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Zostavenie jednoduchého modulu</title>
+                <para>
+                    Zo získaných znalostí už môžme zostaviť prvý jednoduchý modul, 
+                    ktorý síce nerobí nič užitočné, ale ukazuje niektoré zo 
+                    zmienených spôsobov<citation>07</citation>.
+                </para>
+                <programlisting><![CDATA[
+package myModule;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.management.AttributeNotFoundException;
+import org.archive.crawler.settings.MapType;
+import org.archive.crawler.settings.ModuleType;
+import org.archive.crawler.settings.RegularExpressionConstraint;
+import org.archive.crawler.settings.SimpleType;
+import org.archive.crawler.settings.Type;
+
+public class Foo extends ModuleType {
+  private static Logger logger = Logger.getLogger("myModule.Foo");      // 1.pozn.
+
+  public Foo(String name) {
+    Type mySimpleType1 = new SimpleType(
+                "name1", "Description1", new Integer(10));              // 2.pozn.
+    addElementToDefinition(mySimpleType1);
+
+    Type mySimpleType2 = new SimpleType(
+                "name2", "Description2", "defaultValue");
+    addElementToDefinition(mySimpleType2);
+    mySimpleType2.addConstraint(new RegularExpressionConstraint(        // 3.pozn.
+                ".*Val.*", Level.WARNING,
+                "This field must contain 'Val' as part of the string."));
+
+    Type myMapType = new MapType("name3", "Description3", String.class);     // 4.pozn.
+    addElementToDefinition(myMapType);
+  }
+
+  public void getMyTypeValue(CrawlURI curi) {
+    try {
+      int maxBandwidthKB = ((Integer) getAttribute("name1", curi)).intValue();      // 5.pozn.
+    } catch (AttributeNotFoundException e) {
+      logger.warning(e.getMessage());
+    }
+  }
+
+  public void playWithMap(CrawlURI curi) {
+    try {
+      MapType myMapType = (MapType) getAttribute("name3", curi);
+      myMapType.addElement(
+              null, new SimpleType("name", "Description", "defaultValue"));         // 6.pozn.
+      myMapType.setAttribute(new Attribute("name", "newValue"));                    // 7.pozn.    
+    } catch (Exception e) {
+      logger.warning(e.getMessage());
+    }
+  }
+}
+                ]]></programlisting>
+                <para>
+                    Tento príklad ukazuje niekoľko vecí:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis>1.poznámka</emphasis> - 
+                            Jedna vec, ktorú sme zatiaľ nezmienili je všeobecné 
+                            logovanie chýb v Heritrixe. Heritrix používa štandardné
+                            logovanie Java 1.4 logging. Zvykom je inicializovať
+                            logovanie s menom aktuálnej triedy<citation>07</citation>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>2.poznámka</emphasis> - 
+                            Na tomto mieste difinujeme a pridávame SimpleType, ktorý
+                            berie Integer ako argument a nastavuje ho na východziu
+                            hodnotu 10<citation>07</citation>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>3.poznámka</emphasis> -
+                            Je tiež možné pridávať obmedzenia na jednotlivé hodnoty.
+                            Všetky hodnoty z polí zobrazených na užívatľskom rozhraní
+                            sú typu java.lang.String. Tento field kladie požiadavku
+                            aby reťazec obsahoval 'Val' ako časť reťazca. Obmedzenia
+                            majú tiež určitý level a popis. Popis je použitý v 
+                            užívateľskom rozhraní, aby dal užívateľovi jasné vysvetlenie, 
+                            ak predaná hodnota nespĺňa obmedzenia. Používajú sa 
+                            tri úrovne<citation>07</citation>.
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>Level.INFO</emphasis> -
+                                    Hondoty sú prijaté ak keď nespĺňajú požadované 
+                                    obmedzenia. Toto sa používa, keď nechcete zakázať
+                                    hodnotu, ale chcete varovať užívateľa, že zadaná 
+                                    hodnota vyzerá byť mimo rozumnú hranicu<citation>07</citation>.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Level.WARNING</emphasis> -
+                                    Hodnota musí byť spĺňať obmedzenia platnej hodnoty
+                                    pre "crawl job", ale je legálna v progiloch aj keď
+                                    tieto obmedzenia nespĺňa. Toto je užitočné, pri 
+                                    zadávaní hodnôt do profilu, ktorý si môže užívateľ
+                                    meniť pre každý "crawl job" odvodený z profilu<citation>07</citation>.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Level.SEVERE</emphasis> -
+                                    Hodnota akéhokoľvek druhu nie je povolená, ak 
+                                    nespĺňa požiadavky obmedzenia<citation>07</citation>.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>4.poznámka</emphasis>
+                            Tento riadok definuje MapType povoľujúci iba reťazce String ako hodnoty<citation>07</citation>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>5.poznámka</emphasis>
+                            Prkíklad ako čítať atribút<citation>07</citation>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>6.poznámka</emphasis>
+                            Tu pridávame nový element do objektu MapType. Tento element je 
+                            platný pre túto mapu, pretože jeho východzia hodnota je reťazec String<citation>07</citation>.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis>7.poznámka</emphasis>
+                            Teraz zmeníme hodnotu novo pridaného atribútu.
+                            JMX vyžaduje aby nová hodnota bola zabalená do objektu
+                            typu Attribute, ktorá nesie zároveň meno aj novú hodnotu
+                            pre atribút<citation>07</citation>.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <sect3>
+                    <title>Poznámky k pridávaniu modulu do Heritrixu</title>
+                    <para>
+                        Aby bol nový modul rozpoznaný Heritrixom, je nutné sa o 
+                        ňom zmieniť vo vhodnom konfiguračnom súbore (cesta src/conf/modules).
+                        Ak je nový pridávaný modul Processor, musíte sa o ňom 
+                        zmieniť v súbore Procesors.opions. Tento súbor sa pri
+                        zostavovaní aplikácke pridá do knižnice heritrixu Heritrix.jar<citation>07</citation>.
+                    </para>
+                    <para>
+                        Ak pri pridávaní nového modulu používate nejakú 
+                        knižnicu, je nevyhnutné aby bola zmienená v konfiguračných
+                        súboroch Heritrixu, ktoré používa zostavovací nástroj Maven 1.
+                        Rovnako ak celý nový modul zabalíte 
+                        do knižnice jar, stačí ju pridať do adresára 
+                        $HERITRIX_HOME/lib a zapísať nový modul do konkrétneho
+                        konfiguračného súboru v adresári /src/conf/modules.
+                    </para>
+                </sect3>
+            </sect2>
+        </sect1>
+        <sect1>
+            <title>Napísanie modulu Frontier</title>
+            <para>
+                Ako bolo spomenuté, Frontier je prídavný modul, ktorý je zodpovedný
+                za rozhodnutie, ktorá URI bude spracovaná ako nasledujúca a kedy.
+                Frontier je taktiež zodpovedný za urdžovanie celkového vnútorného stavu
+                procesu plazenia po webových stránkach a je vhodným miestom 
+                pre vytváranie reportov a logovanie aktuálneho stavu. Frontier je
+                jeden z najzložitejších modulov, preto je lepšie pred jeho modifikovaním
+                premyslieť všetky ostatné alternatívy, ktoré by sa vyhli úpravam v
+                module Frontier.
+            </para>
+            <para>
+                All Frontiers must implement the Frontier interface. Most Frontiers
+                will also implement the FetchStatusCodes because these codes are used
+                to determine what to do with a URI after it has returned from the processing cycle.
+            </para>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="frontier1.png"/>
+                </imageobject>
+            </mediaobject>
+            <para>
+                The most important methods in the Frontier interface are:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>next(int timeout)</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>schedule(CandidateURI caURI)</emphasis>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>finished(CrawlURI cURI)</emphasis>
+                    </para>
+                </listitem>
+            </itemizedlist>
         </sect1>
         
     </chapter>
@@ -1907,30 +2333,28 @@
             <biblioentry>
                 <abbrev>06</abbrev>
                 <author>
-                    <surname>W3C</surname>
+                    <surname>Internet Archive</surname>
                 </author>
-                <title>Voice Extensible Markup Language (VoiceXML) Version 2.0
-                [online]</title>
+                <title>Settings [online]</title>
                 <publisher>
-                    <publishername>W3C</publishername>
+                    <publishername>Internet Archive</publishername>
                 </publisher>
-                <pubdate>16.3.2004</pubdate>
+                <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.w3.org/TR/2004/REC-voicexml20-20040316/">http://www.w3.org/TR/2004/REC-voicexml20-20040316/</ulink></releaseinfo>
+                    url="http://crawler.archive.org/articles/developer_manual/settings.html">http://crawler.archive.org/articles/developer_manual/settings.html</ulink></releaseinfo>
             </biblioentry>
             <biblioentry>
                 <abbrev>07</abbrev>
                 <author>
-                    <surname>W3C</surname>
+                    <surname>Internet Archive</surname>
                 </author>
-                <title>Voice Extensible Markup Language (VoiceXML) 2.1
-                [online]</title>
+                <title>Common needs for all configurable modules [online]</title>
                 <publisher>
-                    <publishername>W3C</publishername>
+                    <publishername>Internet Archive</publishername>
                 </publisher>
-                <pubdate>19.6.2007</pubdate>
+                <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.w3.org/TR/2007/REC-voicexml21-20070619/">http://www.w3.org/TR/2007/REC-voicexml21-20070619/</ulink></releaseinfo>
+                    url="http://crawler.archive.org/articles/developer_manual/chap_modules_common.html">http://crawler.archive.org/articles/developer_manual/chap_modules_common.html</ulink></releaseinfo>
             </biblioentry>
             <biblioentry>
                 <abbrev>08</abbrev>
