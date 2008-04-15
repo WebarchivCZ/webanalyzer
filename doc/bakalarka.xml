@@ -1221,17 +1221,17 @@ public class Foo extends ModuleType {
                 Informácia, ktorá určuje z ktorej URI bola aktuálna URI objavená, by
                 mala byť braná do úvahy, zatiaľ čo dočasné informácie ako robots.txt alebo
                 história pokusov spracovať rovnakú URI by sa nemali uvažovať. Tieto
-                časovo náročné rozhodnutia by sa mali uskutočňovať v inom kroku.
+                časovo náročné rozhodnutia by sa mali uskutočňovať v inom mieste
+                výpočtu.
             </para>
             <para>
-                All Scopes should subclass the CrawlScope class. Instead of overriding the innerAccepts method 
-                as you would do if you created a filter, the CrawlScope class implements this and instead offers 
-                several other methods that should be overriden instead. These methods acts as different type of 
-                filters that the URI will be checked against. In addition the CrawlScope class offers a list of 
-                exclude filters which can be set on every scope. If the URI is accepted (matches the test) by any 
-                of the filters in the exclude list, it will be considered being out of scope. The implementation 
-                of the innerAccepts method in the CrawlSope is as follows:
-                Všetky triedy Scope by mali dediť triedu CrawlScope. 
+                Všetky triedy Scope by mali dediť triedu CrawlScope. Namiesto preťaženia metódy
+                innerAccepts(), čo sa robí pri písaní modulu Filter, trieda CrawlScope túto
+                metodu implementuje, a preto poskytuje niekoľko iných metód, ktoré môžu byť
+                preťažené. Trieda CrawlScope poskytuje zoznam vylučujúcich filtrov, ktoré môžu
+                byť nastavené pre každý scope. Ak hocijaký z vylučovacích filtrov zachytí
+                URI, tak URI bude považovaná za "out of scope". Implementácia metody
+                innerAccpets() môže vyzerať takto:
             </para>
             <programlisting><![CDATA[
 protected final boolean innerAccepts(Object o) {
@@ -1240,55 +1240,54 @@ protected final boolean innerAccepts(Object o) {
 }                
             ]]></programlisting>
             <para>
-                The result is that the checked URI is considered being inside the crawl's scope if it is a seed or 
-                is accepted by any of the focusAccepts, additionalFocusAccepts or transitiveAccepts, unless it is 
-                matched by any of the exclude filters.
+                Výsledok je, že skontrolovaná URI je považovaná za "in scope", ak je semienko alebo
+                je akceptovaná niektorým z focusAccpets, additionalAccepts alebo transitiveAccepts, 
+                pokiaľ nieje vylúčená niektorým z vylučovacích filtrov.
             </para>
             <para>
-                When writing your own scope the methods you might want to override are:
+                Pri písaní vlastného scope, by ste mohli preťažiť hlavne tieto metódy:
             </para>
             <itemizedlist>
                 <listitem>
                     <para>
-                        focusAccepts(Object) the focus filter should rule things in by prima facia/regexp-pattern analysis.
-                        The typical variants of the focus filter are:
+                        <emphasis>focusAccepts(Object)</emphasis> -
+                        focus filter by mohol predstavovať prvotnú analýzu pomocou regulárnych výrazov.
+                        Typické varianty focus filtra sú:
                     </para>
                     <itemizedlist>
                         <listitem>
                             <para>
-                                broad: accept all
+                                <emphasis>broad:</emphasis> prijať všetko
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                domain: accept if on same 'domain' (for some definition) as seeds
+                                <emphasis>domain:</emphasis> prijať ak je na rovnakej doméne ako semienko
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                host: accept if on exact host as seeds
+                                <emphasis>host:</emphasis> prijať ak je na rovnakom hoste ako semienko
                             </para>
                         </listitem>
                         <listitem>
                             <para>
-                                path: accept if on same host and a shared path-prefix as seeds
+                                <emphasis>path:</emphasis> prijať ak je na rovnakom hoste a má zhodný prefix ako semienko
                             </para>
                         </listitem>                        
                     </itemizedlist>
                     <para>
-                        Heritrix ships with scopes that implement each of these variants.
-                        An implementation of a new scope might thus be subclassing one of these scopes.
+                        Implementácia nových scope by mohla dediť niektoré z týchto scope.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        additionalFocusAccepts(Object)
+                        <emphasis>additionalFocusAccepts(Object)</emphasis>
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        transitiveAccepts(Object) the transitive filter rule extra 
-                        items in by dynamic path analysis (for example, off site embedded images).
+                        <emphasis>transitiveAccepts(Object)</emphasis> - 
                     </para>
                 </listitem>
             </itemizedlist>      
@@ -1296,7 +1295,110 @@ protected final boolean innerAccepts(Object o) {
         <sect1>
             <title>Napísanie modulu Processor</title>
             <para>
+                All processors extend org.archive.crawler.framework.Processor. In fact that is a complete class and could be used as a valid processor, only it doesn't actually do anything.
             </para>
+            <para>
+                Extending classes need to override the innerProcess(CrawlURI) method on it to add custom behavior. This method will be invoked for each URI being processed and this is therfore where a processor can affect it.
+            </para>
+            <para>
+                Basically the innerProcess method uses the CrawlURI that is passed to it as a parameter (see Section 11.1, “Accessing and updating the CrawlURI”) and the underlying HttpRecorder (managed by the ToeThread) (see Section 11.2, “The HttpRecorder”) to perform whatever actions are needed.
+            </para>
+            <para>
+                Fetchers read the CrawlURI, fetch the relevant document and write to the HttpRecorder. Extractors read the HttpRecorder and add the discovered URIs to the CrawlURIs list of discovered URIs etc. Not all processors need to make use of the HttpRecorder.
+            </para>
+            <para>
+                Several other methods can also be optionally overriden for special needs:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>initialTasks()</emphasis>
+                        This method will be called after the crawl is set up, but before any URIs are crawled.
+                        
+                        Basically it is a place to write initialization code that only needs to be run once at the start of a crawl.
+                        
+                        Example: The FetchHTTP processor uses this method to load the cookies file specified in the configuration among other things.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>finalTasks()</emphasis>
+                        This method will be called after the last URI has been processed that will be processed. That is at the very end of a crawl (assuming that the crawl terminates normally).
+                        
+                        Basically a place to write finalization code.
+                        
+                        Example: The FetchHTTP processor uses it to save cookies gathered during the crawl to a specified file.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>report()</emphasis>
+                        This method returns a string that contains a human readable report on the status and/or progress of the processor. This report is accessible via the WUI and is also written to file at the end of a crawl.
+                        
+                        Generally, a processor would include the number of URIs that they've handled, the number of links extracted (for link extractors) or any other abitrary information of relevance to that processor.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <sect2>
+                <title>Accessing and updating the CrawlURI</title>
+                <para>
+                    The CrawlURI contains quite a bit of data. For an exhaustive look refer to its Javadoc.
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>getAlist()</emphasis>
+                            This method returns the CrawlURI's 'AList'.
+                            
+The AList is basically a hash map. It is used instead of the Java HashMap or Hashtable because it is more efficient (especially when it comes to serializing it). It also has typed methods for adding and getting strings, longs, dates etc.
+
+Keys to values and objects placed in it are defined in the CoreAttributeConstants.
+
+It is of course possible to add any arbitrary entry to it but that requires writing both the module that sets the value and the one that reads it. This may in fact be desirable in many cases, but where the keys defined in CoreAttributeConstants suffice and fit we strongly recommend using them.
+
+The following is a quick overview of the most used CoreAttributeConstants:                            
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>A_CONTENT_TYPE</emphasis>
+                                    Extracted MIME type of fetched content; should be set immediately by fetching module if possible (rather than waiting for a later analyzer)
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>LINK COLLECTIONS</emphasis>
+                                    There are several Java Collection containing URIs extracted from different sources. Each link is a Link containing the extracted URI. The URI can be relative. The LinksScoper will read this list and convert Links inscope to CandidateURIs for adding to the Frontier by FrontierScheduler.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>setHttpRecorder(HttpRecorder)</emphasis>
+                            Set the HttpRecorder that contains the fetched document. This is generally done by the fetching processor.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>getHttpRecorder()</emphasis>
+                            A method to get at the fetched document. See Section 11.2, “The HttpRecorder” for more.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>getContentSize()</emphasis>
+                            If a document has been fetched, this method will return its size in bytes.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            <emphasis>getContentType()</emphasis>
+                            The content (mime) type of the fetched document.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </sect2>
         </sect1>
         
     </chapter>
