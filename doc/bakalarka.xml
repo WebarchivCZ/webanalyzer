@@ -1094,7 +1094,8 @@ public class Foo extends ModuleType {
                         ňom zmieniť vo vhodnom konfiguračnom súbore (cesta src/conf/modules).
                         Ak je nový pridávaný modul Processor, musíte sa o ňom 
                         zmieniť v súbore Procesors.opions. Tento súbor sa pri
-                        zostavovaní aplikácke pridá do knižnice heritrixu Heritrix.jar<citation>07</citation>.
+                        zostavovaní aplikácke pridá do knižnice heritrixu Heritrix.jar
+                        <citation>07</citation>.
                     </para>
                     <para>
                         Ak pri pridávaní nového modulu používate nejakú 
@@ -1118,12 +1119,13 @@ public class Foo extends ModuleType {
                 pre vytváranie reportov a logovanie aktuálneho stavu. Frontier je
                 jeden z najzložitejších modulov, preto je lepšie pred jeho modifikovaním
                 premyslieť všetky ostatné alternatívy, ktoré by sa vyhli úpravam v
-                module Frontier.
+                module Frontier<citation>08</citation>.
             </para>
             <para>
                 All Frontiers must implement the Frontier interface. Most Frontiers
                 will also implement the FetchStatusCodes because these codes are used
-                to determine what to do with a URI after it has returned from the processing cycle.
+                to determine what to do with a URI after it has returned from the 
+                processing cycle<citation>08</citation>.
             </para>
             <mediaobject>
                 <imageobject>
@@ -1136,20 +1138,165 @@ public class Foo extends ModuleType {
             <itemizedlist>
                 <listitem>
                     <para>
-                        <emphasis>next(int timeout)</emphasis>
+                        <emphasis>next(int timeout)</emphasis> -
+                        Metóda next je volaná objektom ToeThread, ktorý predstavuje vlákno, ktoré
+                        má vždy pridelenú práve jednu URI s ktorou pracuje. Pri volaní sa najprv
+                        skontroluje či sú nejaké URI čakajúce na spracovanie. Metóda taktiež 
+                        zaisťuje aby boli najprv spracované nevyhnutné URI, pred ostatnými radovými
+                        čakajúcimi URI. To umožňuje, že sa najprv spracujú DNS záznamy a súbory
+                        robots.txt, predtým než sa z konkrétneho hostu získajú nejaké dáta.
+                        Následne sa vybraná URI reprezentovaná objetkom CandidateURI sa premení na
+                        objekt CrawlURI, vhodný na spracovanie procesormi<citation>08</citation>.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <emphasis>schedule(CandidateURI caURI)</emphasis>
+                        <emphasis>schedule(CandidateURI caURI)</emphasis> -
+                        Keď je URI spracovaná reťazou procesorov, tak končí v objekte LinksScoper.
+                        Všetky URI by tu mali skončiť, aj keď nespĺňali predpoklady na to 
+                        aby boli spracované alebo činnosti získanie dát z hostu, extrakcia odkazov, či
+                        zapisovanie do arcu boli odložené.
+                        LinksScoper iteruje cez všetky nové URI adresy, nájdené v 
+                        kontexte danej CrawlURI a ak vyhovujú požiadavkom skúmanej 
+                        oblasti, tak ich prekonvertuje z objektov Link na CandidateURI.
+                        Neskôr v reťazi postprocessor chain, FrontierScheduler ich 
+                        pridá do objetku Frontier, volaním metody schedule(CandidateURI).
+                        Metóda schedule pred pridávaním CandidateURI kontroluje, či už nebola
+                        daná URI pridaná predtým, čím sa dosiahne toho, že každá URI 
+                        bude spracovávaná iba raz. Ak bola URI označnená nejakým procesorom ako
+                        URI, ktorá potrebuje okamžité spracovanie, tak sa pridá do 
+                        fronty prednostných URI<citation>08</citation>.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <emphasis>finished(CrawlURI cURI)</emphasis>
+                        <emphasis>finished(CrawlURI cURI)</emphasis> -
+                        Až všetky procesory skončia, vrátane FrontierScheduler, tak 
+                        vlákno ToeThread volá metodu finished(CrawlURI) objektu Frontier, s 
+                        parametrom CrawlURI, ktorá práve prešla celým procesom.
+                        Ak sa URI úspešne spracovala, tak sa aktulizujú štatistiky a volá
+                        sa metóda stripToMinimal(), ktorá odstráni všetky nepotrebné dáta 
+                        zozbierané pri spracovávaní danej CrawlURI.
+                        Ak URI bolo odložená, pretože zatiaľ nespĺňala nejaké podmienky, tak sa 
+                        znovu naplánuje na neskoršie spracovanie (napr. veľké zaťaženie
+                        urťitého serveru, URI sa naplánuje na neskoršie spracovanie aby
+                        Heritrix nezaťažoval server). V metóde sa nakoniec kontroluje
+                        stav URI, ktorý jej nastavujú procesory. Ak URI má niektorý
+                        zo stavov, ktorý nespĺňa nami definované požiadavky alebo 
+                        prekračuje iné stanovené limity, tak sa spracovanie tejto URI
+                        označi za zlyhané a tento stav sa poznačí do logu a URI 
+                        sa zabudne<citation>08</citation>.
                     </para>
                 </listitem>
             </itemizedlist>
+        </sect1>
+        <sect1>
+            <title>Napísanie modulu Filter</title>
+            <para>
+                Filtery sú objekty, ktoré vezmú CrawlURI a určia, či spĺňa kritéria filtru.
+                Ak áno vrátia logickú hodnotu true inak false<citation>09</citation>.
+            </para>
+            <para>
+                Filter môže byť použitý na viacerých miestach v procese plazenia webových stránok.
+                Najväčšie využitie filterov je v objektoch Scope, ale sú tiež použité v procesoroch, aby
+                vyfiltrovali nehodiace sa URI. To znamená, že hocijaká URI, ktorá 
+                neprejde filtrom v danom procesore tento procesor preskočí. To môže 
+                byť užitočné pri zabránení extrahovaní odkazov z dokumentov, ktoré
+                pochádzajú zo špecifickej oblasti webových stránok 
+                (napr. vulgárne, pornografické stránky)<citation>09</citation>.
+            </para>
+            <para>
+                Všetky filtre by mali dediť triedy Filter. Vytvorenie filtra je záležitosť
+                implementovanie jednej metódy innerAccepts(Object). Pri vytvorení
+                filtra je nutné sa o ňom zmieniť v súbore src/conf/modules/Filter.options, 
+                aby ho Heritrix bol schopný rozoznať<citation>09</citation>.
+            </para>
+        </sect1>
+        <sect1>
+            <title>Napísanie modulu Scope</title>
+            <para>
+                Instancia objektu CrawlScope definuje, ktoré URI sú v rámci nášho záujmu.
+                Je to v podstate filter, ktorý sa pozerá na maximálne množstvo informácií o 
+                danej URI, aby určil, či má byť naplánovaná na spracovanie alebo nie.
+                Informácia, ktorá určuje z ktorej URI bola aktuálna URI objavená, by
+                mala byť braná do úvahy, zatiaľ čo dočasné informácie ako robots.txt alebo
+                história pokusov spracovať rovnakú URI by sa nemali uvažovať. Tieto
+                časovo náročné rozhodnutia by sa mali uskutočňovať v inom kroku.
+            </para>
+            <para>
+                All Scopes should subclass the CrawlScope class. Instead of overriding the innerAccepts method 
+                as you would do if you created a filter, the CrawlScope class implements this and instead offers 
+                several other methods that should be overriden instead. These methods acts as different type of 
+                filters that the URI will be checked against. In addition the CrawlScope class offers a list of 
+                exclude filters which can be set on every scope. If the URI is accepted (matches the test) by any 
+                of the filters in the exclude list, it will be considered being out of scope. The implementation 
+                of the innerAccepts method in the CrawlSope is as follows:
+                Všetky triedy Scope by mali dediť triedu CrawlScope. 
+            </para>
+            <programlisting><![CDATA[
+protected final boolean innerAccepts(Object o) {
+    return ((isSeed(o) || focusAccepts(o)) || additionalFocusAccepts(o) ||
+            transitiveAccepts(o)) && !excludeAccepts(o);
+}                
+            ]]></programlisting>
+            <para>
+                The result is that the checked URI is considered being inside the crawl's scope if it is a seed or 
+                is accepted by any of the focusAccepts, additionalFocusAccepts or transitiveAccepts, unless it is 
+                matched by any of the exclude filters.
+            </para>
+            <para>
+                When writing your own scope the methods you might want to override are:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        focusAccepts(Object) the focus filter should rule things in by prima facia/regexp-pattern analysis.
+                        The typical variants of the focus filter are:
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                broad: accept all
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                domain: accept if on same 'domain' (for some definition) as seeds
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                host: accept if on exact host as seeds
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                path: accept if on same host and a shared path-prefix as seeds
+                            </para>
+                        </listitem>                        
+                    </itemizedlist>
+                    <para>
+                        Heritrix ships with scopes that implement each of these variants.
+                        An implementation of a new scope might thus be subclassing one of these scopes.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        additionalFocusAccepts(Object)
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        transitiveAccepts(Object) the transitive filter rule extra 
+                        items in by dynamic path analysis (for example, off site embedded images).
+                    </para>
+                </listitem>
+            </itemizedlist>      
+        </sect1>
+        <sect1>
+            <title>Napísanie modulu Processor</title>
+            <para>
+            </para>
         </sect1>
         
     </chapter>
@@ -2359,30 +2506,29 @@ public class Foo extends ModuleType {
             <biblioentry>
                 <abbrev>08</abbrev>
                 <author>
-                    <surname>W3C</surname>
+                    <surname>Internet Archive</surname>
                 </author>
-                <title>Voice Browser Call Control: CCXML Version 1.0 [online]</title>
+                <title>Writing Frontier [online]</title>
                 <publisher>
-                    <publishername>W3C</publishername>
+                    <publishername>Internet Archive</publishername>
                 </publisher>
-                <pubdate>19.1.2007</pubdate>
+                <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.w3.org/TR/2007/WD-ccxml-20070119/">http://www.w3.org/TR/2007/WD-ccxml-20070119/</ulink></releaseinfo>
-            </biblioentry>
+                    url="http://crawler.archive.org/articles/developer_manual/frontier.html">http://crawler.archive.org/articles/developer_manual/frontier.html</ulink></releaseinfo>
+            </biblioentry>            
             <biblioentry>
                 <abbrev>09</abbrev>
                 <author>
-                    <surname>W3C</surname>
+                    <surname>Internet Archive</surname>
                 </author>
-                <title>State Chart XML (SCXML): State Machine Notation for Control
-                Abstraction [online]</title>
+                <title>Writing Filter [online]</title>
                 <publisher>
-                    <publishername>W3C</publishername>
+                    <publishername>Internet Archive</publishername>
                 </publisher>
-                <pubdate>21.2.2007</pubdate>
+                <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
-                    url="http://www.w3.org/TR/2007/WD-scxml-20070221/">http://www.w3.org/TR/2007/WD-scxml-20070221/</ulink></releaseinfo>
-            </biblioentry>
+                    url="http://crawler.archive.org/articles/developer_manual/writefilter.html">http://crawler.archive.org/articles/developer_manual/writefilter.html</ulink></releaseinfo>
+            </biblioentry>            
             <biblioentry>
                 <abbrev>10</abbrev>
                 <author>
