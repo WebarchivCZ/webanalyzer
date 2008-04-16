@@ -1295,68 +1295,84 @@ protected final boolean innerAccepts(Object o) {
         <sect1>
             <title>Napísanie modulu Processor</title>
             <para>
-                All processors extend org.archive.crawler.framework.Processor. In fact that is a complete class and could be used as a valid processor, only it doesn't actually do anything.
+                Všetky procesory rozširujú triedu org.archive.framework.Processor. 
+                Je to vlastne kompletná trieda a môže byť použitá ako validný procesor,
+                ale v skutočnosti nič nerobí.
             </para>
             <para>
-                Extending classes need to override the innerProcess(CrawlURI) method on it to add custom behavior. This method will be invoked for each URI being processed and this is therfore where a processor can affect it.
+                Rozširujúce triedy musia prepísať metódu innerProcess(CrawlURI) aby 
+                pridali potrebnú funkcionalitu. Toto je metóda, ktorá je zavolaná 
+                nad každou URI ktorá sa spracováva.
             </para>
             <para>
-                Basically the innerProcess method uses the CrawlURI that is passed to it as a parameter (see Section 11.1, “Accessing and updating the CrawlURI”) and the underlying HttpRecorder (managed by the ToeThread) (see Section 11.2, “The HttpRecorder”) to perform whatever actions are needed.
+                Metóda innerProcess používa objekt CrawlURI, ktorý je predaný ako parameter
+                a objekt HttpRecorder, ktorý je zabalený v objekte CrawlURI.
             </para>
             <para>
-                Fetchers read the CrawlURI, fetch the relevant document and write to the HttpRecorder. Extractors read the HttpRecorder and add the discovered URIs to the CrawlURIs list of discovered URIs etc. Not all processors need to make use of the HttpRecorder.
+                Objekty Fetcher (FetchHTTP, FetchFTP, ...) získajú relevantný dokument
+                a zapíšu jeho obsah do objektu HttpRecorder. Objekty Extractor 
+                (HTMLExtractor, CSSExtractor, ...) čítajú objekt HttpRecorder a 
+                pridávajú objevené odkazy do zoznamu odkazov nájdených na danej CrawlURI.
+                Nie všetky procesory musia používať objekt HttpRecorder.
             </para>
             <para>
-                Several other methods can also be optionally overriden for special needs:
+                Niekoľko iných metód môže byť prepísaných na špeciálne účely:
             </para>
             <itemizedlist>
                 <listitem>
                     <para>
                         <emphasis>initialTasks()</emphasis>
-                        This method will be called after the crawl is set up, but before any URIs are crawled.
-                        
-                        Basically it is a place to write initialization code that only needs to be run once at the start of a crawl.
-                        
-                        Example: The FetchHTTP processor uses this method to load the cookies file specified in the configuration among other things.
+                        Táto metóda bude volaná až bude nastavený celý proces plazenia, ale predtým než
+                        bude nejaká URI spracovaná. Je to vlasnte inicializačný kód, ktorý
+                        musí byť spustený práve jeden krát pri štarte plazenia webu.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
                         <emphasis>finalTasks()</emphasis>
-                        This method will be called after the last URI has been processed that will be processed. That is at the very end of a crawl (assuming that the crawl terminates normally).
-                        
-                        Basically a place to write finalization code.
-                        
-                        Example: The FetchHTTP processor uses it to save cookies gathered during the crawl to a specified file.
+                        Táto metóda bude zavolaná po tom ako bude spracovaná posledná URI.
+                        Je to na samom konci plazenia webu a znamená to, že proces 
+                        je normálne ukončený. V podstate je to miesto, kde sa môže
+                        napísať finalizačný kód.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
                         <emphasis>report()</emphasis>
-                        This method returns a string that contains a human readable report on the status and/or progress of the processor. This report is accessible via the WUI and is also written to file at the end of a crawl.
-                        
-                        Generally, a processor would include the number of URIs that they've handled, the number of links extracted (for link extractors) or any other abitrary information of relevance to that processor.
+                        Táto metóda vracia reťazec, ktorý obsahuje ľudsky čitateľnú správu o
+                        stave alebo progrese procesu plazenia webu. Táto správa je 
+                        prístupná cez webové uživateľské rozhranie. Procesor by 
+                        mohol informovať o počte CrawlURI, ktoré spracoval alebo
+                        počte odkazov, ktoré objavil (procesor Extractor) alebo
+                        hocijaké iné relevantné informácie daného procesoru.
                     </para>
                 </listitem>
             </itemizedlist>
             <sect2>
-                <title>Accessing and updating the CrawlURI</title>
+                <title>Pristupovanie a aktualizovanie CrawlURI</title>
                 <para>
-                    The CrawlURI contains quite a bit of data. For an exhaustive look refer to its Javadoc.
+                    Objekt CrawlURI obsahuje celkom veľa dát.
                 </para>
                 <itemizedlist>
                     <listitem>
                         <para>
                             <emphasis>getAlist()</emphasis>
-                            This method returns the CrawlURI's 'AList'.
-                            
-The AList is basically a hash map. It is used instead of the Java HashMap or Hashtable because it is more efficient (especially when it comes to serializing it). It also has typed methods for adding and getting strings, longs, dates etc.
-
+                            Táto metóda vracia objekt "AList" danej CrawlURI.
+                            <para>
+The AList is basically a hash map. It is used instead of the Java HashMap or Hashtable because it is more efficient 
+(especially when it comes to serializing it). It also has typed methods for adding and getting strings, longs, dates etc.
+</para>
+<para>
 Keys to values and objects placed in it are defined in the CoreAttributeConstants.
-
-It is of course possible to add any arbitrary entry to it but that requires writing both the module that sets the value and the one that reads it. This may in fact be desirable in many cases, but where the keys defined in CoreAttributeConstants suffice and fit we strongly recommend using them.
-
-The following is a quick overview of the most used CoreAttributeConstants:                            
+</para>
+<para>    
+It is of course possible to add any arbitrary entry to it but that requires writing both the module that sets the 
+value and the one that reads it. This may in fact be desirable in many cases, but where the keys defined in 
+CoreAttributeConstants suffice and fit we strongly recommend using them.
+</para>
+<para>
+The following is a quick overview of the most used CoreAttributeConstants:     
+                        
                         </para>
                         <itemizedlist>
                             <listitem>
