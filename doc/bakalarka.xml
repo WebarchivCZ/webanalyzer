@@ -1359,32 +1359,26 @@ protected final boolean innerAccepts(Object o) {
                             <emphasis>getAlist()</emphasis>
                             Táto metóda vracia objekt "AList" danej CrawlURI.
                             <para>
-The AList is basically a hash map. It is used instead of the Java HashMap or Hashtable because it is more efficient 
-(especially when it comes to serializing it). It also has typed methods for adding and getting strings, longs, dates etc.
+AList je v podstate hash mapa. Je použitá namiesto Java HashMap pretože je efektívnejšia, hlavne pri
+serializácií. Kľúče k hodnotám a objektom umiestnené v AList sú definované v CoreAttributeConstants.
 </para>
 <para>
-Keys to values and objects placed in it are defined in the CoreAttributeConstants.
-</para>
-<para>    
-It is of course possible to add any arbitrary entry to it but that requires writing both the module that sets the 
-value and the one that reads it. This may in fact be desirable in many cases, but where the keys defined in 
-CoreAttributeConstants suffice and fit we strongly recommend using them.
-</para>
-<para>
-The following is a quick overview of the most used CoreAttributeConstants:     
-                        
+Prehlľad najpoužívanejších CoreAttributeConstants:
                         </para>
                         <itemizedlist>
                             <listitem>
                                 <para>
                                     <emphasis>A_CONTENT_TYPE</emphasis>
-                                    Extracted MIME type of fetched content; should be set immediately by fetching module if possible (rather than waiting for a later analyzer)
+                                    Extraktovaný MIME type stiahnutého obsahu. Mal by byť nastavený ihneď s fetch modulom (FetchHTTP).
                                 </para>
                             </listitem>
                             <listitem>
                                 <para>
                                     <emphasis>LINK COLLECTIONS</emphasis>
-                                    There are several Java Collection containing URIs extracted from different sources. Each link is a Link containing the extracted URI. The URI can be relative. The LinksScoper will read this list and convert Links inscope to CandidateURIs for adding to the Frontier by FrontierScheduler.
+                                    Tu sú viaceré kolekcie Java Collection obsahujúce extraktované URI z rôznych zdrojov. Každý odkaz je 
+                                    Link obsahujúci extraktovanú URI. URI môže byť relatívna. Modul LinksScoper bude čítať tento list
+                                    a konvertovať objekty, ktoré sú "in scope" Link na objekty CandidateURI, aby boli pridané do modulu
+                                    Frontier pomocou FrontierScheduler.
                                 </para>
                             </listitem>
                         </itemizedlist>
@@ -1392,25 +1386,25 @@ The following is a quick overview of the most used CoreAttributeConstants:
                     <listitem>
                         <para>
                             <emphasis>setHttpRecorder(HttpRecorder)</emphasis>
-                            Set the HttpRecorder that contains the fetched document. This is generally done by the fetching processor.
+                            Nastavuje HttpRecorder, ktorý obsahuje stiahnutý obsah. Zvyčajne to vykonáva fetching processor.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
                             <emphasis>getHttpRecorder()</emphasis>
-                            A method to get at the fetched document. See Section 11.2, “The HttpRecorder” for more.
+                            Metóda, ktorá získa stiahnutý obsah.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
                             <emphasis>getContentSize()</emphasis>
-                            If a document has been fetched, this method will return its size in bytes.
+                            Ak bol dokument úspešne stiahnutý, táto metóda vráti jeho dĺžku v bytoch.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
                             <emphasis>getContentType()</emphasis>
-                            The content (mime) type of the fetched document.
+                            Mime type stiahnutého obsahu.
                         </para>
                     </listitem>
                 </itemizedlist>
