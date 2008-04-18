@@ -1356,14 +1356,14 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para>
-                            <emphasis>getAlist()</emphasis>
-                            Táto metóda vracia objekt "AList" danej CrawlURI.
-                            <para>
-AList je v podstate hash mapa. Je použitá namiesto Java HashMap pretože je efektívnejšia, hlavne pri
-serializácií. Kľúče k hodnotám a objektom umiestnené v AList sú definované v CoreAttributeConstants.
-</para>
-<para>
-Prehlľad najpoužívanejších CoreAttributeConstants:
+                        <emphasis>getAlist()</emphasis>
+                        Táto metóda vracia objekt "AList" danej CrawlURI.
+                        <para>
+                            AList je v podstate hash mapa. Je použitá namiesto Java HashMap pretože je efektívnejšia, hlavne pri
+                            serializácií. Kľúče k hodnotám a objektom umiestnené v AList sú definované v CoreAttributeConstants.
+                        </para>
+                        <para>
+                            Prehlľad najpoužívanejších CoreAttributeConstants:
                         </para>
                         <itemizedlist>
                             <listitem>
@@ -1409,8 +1409,34 @@ Prehlľad najpoužívanejších CoreAttributeConstants:
                     </listitem>
                 </itemizedlist>
             </sect2>
+            <sect2>
+                <title>HttpRecorder</title>
+                <para>
+                    HttpRecorder je pripojený ku každej CrawlURI, ktorá bola úspešne stiahnutá pomocou FetchHTTP procesoru.
+                    Procesory, ktoré sa zaujímajú o textový obsah stiahnutej CrawlURI môžu k nej pristupovať pomcou
+                    metódy getReplayCharSequence(), ktorá vracia objekt java.langCharSequence, ktorý sa dá
+                    normálne čítať.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Poznámky k písaniu modulu Processor</title>
+                <para>
+                    Pre každý procesor je vytvorená iba jedna instancia počas celého
+                    procesu plazenia po webe. Keďže je Heritrix multivláknová aplikácia, 
+                    tak musí byť procesor napísaný správne aby nedochádzalo ku konfliktom.
+                </para>
+            </sect2>
         </sect1>
-        
+    </chapter>
+    <chapter>
+        <title>Návrh a Integrácia</title>
+        <sect1>
+            <title>Integracia</title>
+            <para>
+                co je potrebne pre webanalyzer, 
+                preco processor a nie iny modul.
+            </para>
+        </sect1>
     </chapter>
     
     <chapter>
