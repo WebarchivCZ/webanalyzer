@@ -1358,6 +1358,7 @@ protected final boolean innerAccepts(Object o) {
                         <para>
                         <emphasis>getAlist()</emphasis>
                         Táto metóda vracia objekt "AList" danej CrawlURI.
+                        </para>
                         <para>
                             AList je v podstate hash mapa. Je použitá namiesto Java HashMap pretože je efektívnejšia, hlavne pri
                             serializácií. Kľúče k hodnotám a objektom umiestnené v AList sú definované v CoreAttributeConstants.
@@ -1433,10 +1434,115 @@ protected final boolean innerAccepts(Object o) {
         <sect1>
             <title>Integracia</title>
             <para>
-                co je potrebne pre webanalyzer, 
-                preco processor a nie iny modul.
+                Podľa popisu funkčnosti Heritrixu je nutné vhodne integrovať systém WebAnalyzer, tak
+                aby sme dosiahli požadovaných výsledkov. Modul WebAnalyzer musí každopádne
+                spracovávať každú URI, ktorá prejde procesom plazenia webu. Preto je 
+                potrebné integrovať WebAnalyzer do niektorého z modulov.
+                Prvá predstava bola navrhnút a naimplementovať modul WebAnalyzer, vo forme
+                knižnice .jar, ktorá bude poskytovať definované rozhranie, s ktorým 
+                bude niektorý z modulov spolupracovať a používať jeho služby.
+                WebAnalyzer by mal jednoducho vziať na vstupe URI, o ktorej na základe
+                svojich funkcií a definovaných požiadavkov určí, či je bohemikálna alebo nie.
+                Najoptimálnejsí výstup systému WebAnalyzer pre danú URI je
+                logická hodnota, ktorá signalizuje, či spracovávaná URI je 
+                bohemikálna alebo nie. Teraz ostávalo zistiť, ktorý modul bude
+                ten najvhodnejší pre integráciu s WebAnalyzerom. 
+            </para>
+            <para>
+                WebAnalyzer by mal pri spracovávaní URI dostať na vstup 
+                konkrétnu URI a čo najviac informácií, ktoré Heritrix pri 
+                jej spracovávaní získal.
+            </para>
+            <para>
+                Integrácia s modulom Frontier neprichádza do úvahy, pretože
+                Frontier má prístup k URI, práve na samom začiatku spracovania
+                alebo na úplnom konci. Ani jedna z ponúkaných možností nie je
+                vyhovujúca. 
+                Pred samotným spracovaním URI Heritrix pozná 
+                minimum informácií, medzi ktoré patrí názov samotnej URI, názov
+                URI na ktorej bola aktuálna URI objavená a nejaké informácie o 
+                servery, na ktorom sa URI nachádza. V tomto stave nemáme prístupný
+                dokonca ani textový obsah, ktorý získajú až procesory FetchHTTP.
+                Naopak na úplnom konci spracovania Heritrix zistil o URI maximálne 
+                množstvo informácií, ktoré by mohli byť pre WebAnalyzer hodnotné.
+                Keby sme nasadili WebAnalyzer v tomto stave a analyzovali, 
+                bohemikálnosť URI, tak by sme prišli o možnosť archivovať bohemikálne URI.
+                Archivácia sa totiž vykonáva procesorom ARCWriter, ktorý vstupuje
+                do činnosti skôr ako skončí URI v objekte Frontier.
+                Ani jedna z týchto možností, ktoré poskytuje Frontier nie je
+                vyhovujúca.
+            </para>
+            <para>
+                Z predchádzajúcich úvah vyplýva, že ak chceme využiť funkcionalitu
+                archivovania, ktorú Heritrix ponúka, musíme WebAnalyzer umiestniť niekde
+                pred týmto procesorom, ktorý archivuje spracovávané URI. 
+            </para>
+            <para>
+                Následne sa ponúka možnosť integrovať WebAnalyzer do modulu Filter, ktorý pri
+                spracovávaní každej URI určuje, či spĺňa definované kritéria alebo nie. Filter
+                môže byť použitý na viacerých miestach procesu spracovania URI, takže by nebol 
+                problém umiestniť ho tesne pred modul archivovania a pomocou WebAnalyzeru
+                určit, či je aktuálna URI bohemikálna alebo nie. Podľa tohoto rozhodnutia by 
+                ju potom mohol následujúci procesor archivovať. Pokus sa však ukázal, že
+                ani filter nie je vhodným modulom. WebAnalyzer pri analyzovaní používa viacero
+                projektov a knižníc, s ktorými spolupracuje. Funkcionalita týchto podsýstemov
+                WebAnalyzeru vyžaduje, aby bol WebAnalyzer pred samotným spustením
+                nainicializovaný. Tým pádom je nutné vždy pred jeho používaním zavolať jeho 
+                metodu initializeWebAnalyzer(), ktorá zabezpečí, že sa otvoria a nainicializujú
+                všetky spojenia k externým súborom, databázam a indexom, ktoré WebAnalyzer používa.
+                Taktiež je nutné pri skončení používania zavolať metodu closeWebAnalyzer(), ktorá
+                tieto spojenia opäť uzavrie. To znamená, že v čase keď začna filter pracovať, 
+                WebAnalyzer už musí byť nainicializovaný. Bola tu možnosť inicializovať WebAnalyzer
+                v čase vytvárania objektu Frontier, ale nakoniec sa to ukázalo zbytočne zložité.
+            </para>
+            <para>
+                Ďalšia možnosť bola integrácia s modulom Scope. Modul Scope rozhoduje, ktorá
+                URI je "in scope" a ktorá nie, je to v podstate obdoba modulu filter.
+                Scope sám o sebe poskytoval 
+                metódy, initialize() a finalize(), ktoré sa dali preťažiť a mohol by sa v nich
+                inicializovať a zatvárať objekt WebAnalyzer. Taktiež umiestnenie modulu pred
+                procesorom na archiváciu vyhovovalo. Scope sa zdal vyhovujúcim ale na základe 
+                toho, že Internet Archive mal v pláne modul scope úplne preorganizovať a 
+                zrefaktorovať v ďalšej verzii Heritrixu, tak sme skúsili ešte inú možnosť.
+            </para>
+            <para>
+                Poslednou a konečnou možnosťou bola integrácia do modulu Processor. Ktorá sa 
+                ukázala byť najviac vyhovujúcou. Procesor sa vyskytuje v niekoľkých vartiantách
+                ako sme spomenuli v sekcii Processor todo odkaz. Heritrix definuje niekoľko 
+                reťazí proceserov. Pre WebAnalyzer je bolo najvýhodnejšie umiestniť procesor 
+                do reťaze Extractor processing chain. Prvé dve reťaze Pre-fetch processing chain
+                a Fetch processing chain neboli vyhovujúce pretože v tom čase ešte nemáme 
+                textový obsah URI, ktorý môže WebAnalyzer použiž na analýzu textu. Textový 
+                obsah URI je dostupný až po skončení reťaze Fetch-processing chain. Nasledujúca
+                reťaz Extractor processing chain obsahuje procesory nazvaná Extractor, ktorých
+                hlavné úloha je extraktovať zo získaného textu URI všetky odkazy. Nachádzajú sa
+                tam extractory typu ExtractorHTML, ExtractorCSS a podobné. Keďže objavené kolekcia
+                objavených odkazov mohla byť ďalšou hodnotnou informáciou pre WebAnalyzer, bolo
+                nutné umiestniť WebAnalyzer do procesu, ktorý by sa nachádzal na samom konci
+                tejto reťaze, keď už bude všetky možné odkazy na URI objavené.
+                Nasledujúca reťaz po Extractor-processing chain je Write/index-processing chain, ktorej
+                hlavnou úlohou je archivovať URI. Úplne posledná reťaz procesorov je Post-processing
+                chain, ktorá skúma a vyhadzuje odkazy "out of scope" a z odkazov "in scope"
+                vytvára CandidateURI, ktoré následne predáva objektu Frontier, ktorý predstavuje
+                koniec spracovania danej URI.
+            </para>
+            <para>
+                Processor Extractor rovnako ponúka metódy initialize() a finalize(), ktoré
+                sa volali vždy práve jeden krát počas celého procesu plazenia webu. Tieto
+                instancie procesorov sú potom volané jednotlivými vláknami ToeThread, ktoré sa 
+                starajú o spracovanie práve jednej URI. V týchto metódach je možné jednoducho
+                zavolať inicializačnú aj zatváraciu metódu WebAnalyzeru, čím sa nám zaistí, že
+                WebAnalyzer sa správne nainicializuje aj uzavrie spolu s procesorom, v ktorom 
+                bude integrovaný. Hlavná metóda procesoru innerProcess(CrawlURI), ktorá sa 
+                vykonala vždy bola ideálnym kandidátom na volanie služieb poskytovaných
+                systémom WebAnalyzer.
             </para>
         </sect1>
+        <sect2>
+            <title>ExtractorWebAnalyzer</title>
+            <para>
+            </para>
+        </sect2>
     </chapter>
     
     <chapter>
