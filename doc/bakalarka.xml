@@ -1356,8 +1356,8 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para>
-                        <emphasis>getAlist()</emphasis>
-                        Táto metóda vracia objekt "AList" danej CrawlURI.
+                            <emphasis>getAlist()</emphasis>
+                            Táto metóda vracia objekt "AList" danej CrawlURI.
                         </para>
                         <para>
                             AList je v podstate hash mapa. Je použitá namiesto Java HashMap pretože je efektívnejšia, hlavne pri
@@ -1535,14 +1535,125 @@ protected final boolean innerAccepts(Object o) {
                 WebAnalyzer sa správne nainicializuje aj uzavrie spolu s procesorom, v ktorom 
                 bude integrovaný. Hlavná metóda procesoru innerProcess(CrawlURI), ktorá sa 
                 vykonala vždy bola ideálnym kandidátom na volanie služieb poskytovaných
-                systémom WebAnalyzer.
+                systémom WebAnalyzer. 
             </para>
-        </sect1>
+        
         <sect2>
             <title>ExtractorWebAnalyzer</title>
             <para>
+                Pri integrácií som vytvoril nový procesor v reťazi Extractor processing chain.
+                Extractor sa nazýva ExtractorWebAnalyzer a je to potomok triedy Extractor, ktorá
+                je zas potomkom triedy Processor. ExtractorWebAnalyzer bude 
+                jediný modul Heritrixu, ktorý bude priamo pracovať so systémom WebAnalyzer.
+                Systém WebAnalyzér ponúka v podstate 4 metódy, ktoré používa ExtractorWebAnalyzer.
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para><emphasis>initialize()</emphasis> -
+                        Metóda, ktorá inicializuje instanciu WebAnalyzer. 
+                        Pre celý proces plazenia weby sa použije práve jedna instancia WebAnalyzeru.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>isContetTypeText(curiName)</emphasis> -
+                        Metóda, ktora zistí Mime Type predanej URI, podlľa jej názvu.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>run(urlName, urlContent, urlOutlinks, contentType)</emphasis> -
+                        Metóda, ktorá spustí analýzu konkrénej URI. WebAnalyzer využíva 
+                        pri analýze názov URI, textový obsah URI, objavené odkazy a typ
+                        Mime.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>close()</emphasis> -
+                        Metóda, ktorá uzavrie všetky spojenia používané systémom WebAnalyzer.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <para>
+                Pri testovaní tejto verzie sme dosiahli, že každá jedna URI bola
+                analyzovaná našim WebAnalyzerom. Na základe rozhodnutia WebAnalyzeru
+                sme v procesore ExtractorWebAnalyzer nastavili, ktorá URI sa má
+                archivovať a ktorá má naopak procesor na archivovanie preskočiť.
+                Tým sme dokázali archivovať všetky URI, ktoré WebAnalyzer identifikoval
+                ako bohemikálne.
             </para>
         </sect2>
+        <sect2>
+            <title>Nedostatky prvej verzie integrácie WebAnalyzeru</title>
+            <para>
+                Počas testovania prvej verzie sa objavilo mnoho nedostatkov,
+                ktoré si vyžadovali ..... viac popracovať na integrácií.
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis>archivácia obrázkov</emphasis> - 
+                        Pri archivácií bohemikálnej stránky sa nearchivovali obrázky
+                        a css štýly, tým bola stránka veľmi ochudobnená. Každý obrázok
+                        a hociktorý iný zdroj na stránke je samostatnou URI adresou
+                        spracovávanou nezávisle na ostatných URI adresách. Preto je nutné
+                        aby si systém pamätal, ktoré URI sú obrázky z už archivovaných 
+                        bohemikálnych stránok a archivoval ich tiež.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>archivácia odkazov</emphasis> - 
+                        Podobný problém ako s obrázkami vznikol pri odkazoch. 
+                        Pri identifikácií vznikla požiadavka, aby systém okrem 
+                        samotnej bohemikálnej stránky archvival automaticky aj všetky
+                        odkazy, ktoré sa na tejto stránky vyskytujú a to do určitej úrovne.
+                        To znamená, že bolo nutné definovať do akej hĺbky od bohemikálnej
+                        stránky sa majú referencované stránky automaticky archivovať.
+                        Tieto referencované stránky z bohemikálnych URI by mohli 
+                        byť hodnotným zdrojom a preto je zájem ich automaticky archivovať.
+                        Opäť bolo nutné aby si systém pamätal, z ktorej rodičovskej URI bola
+                        aktuálna URI objavená a či tá rodičovská URI bola identifikovaná
+                        ako bohemikálna. Ak áno tak systém ju mal automaticky archivovať.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>analyzovanie binárneho obsahu</emphasis> - 
+                        Pri testovaní záznamy z logu ukazovali, že WebAnalyzer analyzuje
+                        aj binárny obsah, čo je nežiadúce pretože textová analýza 
+                        obrázku nedáva zmysel. Napriek tomu, že v procesore ExtractorWebAnalyzer 
+                        bolo jasne definované, aby WebAnalyzer analyzoval iba dokumenty 
+                        s textovým obsahom, sa v logu objavili analýzy dokumentov
+                        rôzneho Mime Typu (audio, video, image a iné application).
+                        Bolo teda nutné precízne identifikovať typ dokumentu aby sa
+                        predišlo nezmyslených analýzam, ktoré boli dôvodom mnohých
+                        ďalších chýb.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis>výnimka OutOfMemory</emphasis> - 
+                        Počas testovania Heritixu sa mnoho krát objavila výnimka 
+                        OutOfMemory. Z logu sa dalo vyčítať že dôvodom bola práve analýza
+                        textového obsahu rôznych dokumentov typu audio video a iné, ktorých
+                        veľkosť bola v stovkách MB. Pri analýze sa vytvárali objety
+                        java.lang.String ktoré zaberali mnoho pamäte a spôsobovali
+                        výnimku OutOfMemory. To bol ďalší dôvod aby bola riadne zabezpečená
+                        identifikácia typu dokumentu.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis></emphasis> - 
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis></emphasis> - 
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><emphasis></emphasis> - 
+                    </para>
+                </listitem>                
+            </itemizedlist>
+        </sect2>
+        </sect1>
     </chapter>
     
     <chapter>
