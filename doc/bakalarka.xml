@@ -1659,84 +1659,27 @@ protected final boolean innerAccepts(Object o) {
                 </itemizedlist>
             </sect2>
             <sect2>
-                <title>Integracia pomocou viacerych modulov</title>
-                <para>
-                    todo obrazok usecase
-                    Na zaklade nedostatov, inrtegracia modulov links, arc
-                </para>
+                <title>Integracia pomocou viacerých modulov</title>
                 <para>
                     Na základe nedostatkov z prvej otestovanej verzie, vznikli ďalšie
-                    požiadavky, ktoré bolo treba zakomponovať do systému. 
+                    požiadavky, ktoré by mal systém splňovať. Na základe nových
+                    požiadavkov vznikol use case diagram, ktorý popisuje
+                    integráciu modulu WebAnalyzer so systémom Heritrix. Integrácia
+                    je realizovaná pomocou modulov ExtractorWebAnalyzer, 
+                    LinksScoperWebAnalyzer a ARCWriterProcessorWebAnayzer, ktoré
+                    sú súčasťou Heritrixu. Procesor ExtractorWebAnalyzer je jediný, 
+                    ktorý používa rozhranie modulu WebAnalyzer.
+                    Užívateľ má možnosť pred spustením Heritrixu definovať vlastnosti 
+                    modulu WebAnalyzer prostredníctvom súboru webanalyzer.properties.
                 </para>
-                <sect3>
-                    <title>Archivácia odkazov</title>
-                <para>
-                    todo obrazok depth.png
-                    treba dosiahnut to co je na obrazku
-                    Archivácia odkazov z bohemikálnych stránok do určitej hĺbky 
-                    sa dala zrealizovať pomocou úprav v moduloch LinksScoperWebAnalyzer a
-                    ExtractorWebAnalyzer. Veľkou pomôckou boli objekty CrawlURI a CandidateURI, 
-                    ktoré obsahujú objekt AList, čo je zoznam objektov pridružených k
-                    danej URI. Do tohto zoznamu si môžeme pridať hocijaký objekt, ku 
-                    ktorému môžeme pristupovať v ľubovoľnom module.
-                    Keď modul WebAnalyzer identifikoval aktuálnu CrawlURI ako bohemikálnu
-                    pridal do jej zoznamu AList príslušný príznak a k nemu číslo, ktoré definovalo
-                    do akej úrovne sa majú obajvené odkazy archivovať automaicky. CrawlURI ďalej putovala
-                    nasledujúcimi procesormi, až vošla do modulu LinksScoperWebAnalyzer, 
-                    ktorý vytvára z jej objavených odkazov Link objekty CandidateURI.
-                    LinksScoperWebAnalyzer po vytvorení objektu CandidateURI zistí, či
-                    má aktuálna CrawlURI nastavený príznak v zozname AList a ak áno, tak
-                    novovytvorenej CandidateURI nastaví príznak a hĺbku úrovne o zmenšenú o 1
-                    , ktorý naznačuje, že
-                    sa táto nová URI pri spracovaní ihneď archivuje, bez akejkoľvek 
-                    analýzy. Pri nastavovaní príznaku
-                </para>
-                <para>
-                    Nasledujúci fragment kódu ukazuje nastavovanie príznaku 
-                    <emphasis>is_cz_flag</emphasis> pre CrawlURI, ktorá je WebAnalyzerom
-                    identifikovaná ako bohemikálna. Zároveň sa nastaví aj hĺbka, 
-                    ktorá určuje do akej úrovne sa budú nájdene odkazy automaticky
-                    archivovať. Ostatné CrawlURI prechádzajú do vetvy, kde sa 
-                    spustí metóda skip(curi), ktorá preskočí procesor na archiváciu.
-                </para>
-                <programlisting><![CDATA[            
-        // analyze CrawlURI by WebAnalyzer
-        if (WEB_ANALYZER.run(curiName, cs.toString(), 
-            createLinksForWebAnalyzer(curi), curi.getContentType())) {
-            // valid CrawlURI
-            log.info("innerProcess curi is valid archive it, curi=" + curiName);
-            curi.putObject("is_cz_flag", new Integer(deep));
-        } else {
-            // invlaid CrawlURI
-            log.info("innerProcess curi isn't valid skip it, curi=" + curiName);
-            skip(curi);
-        }            
-                ]]></programlisting>   
-                <para>
-                    CrawlURI ďalej prechádza ostatnými modulmi až príde do modulu
-                    LinksScoperWebAnalyzer. Ten vytvára z objavených odkazov 
-                    (objekty Link) objekty CandidateURI. Nasledujúci kód ukazuje
-                    získanie hodnoty príznaku <emphasis>is_cz_flag</emphasis>, ktorá
-                    definje hĺbku rekurzívneho automatického archivovania. Ak je 
-                    hĺbka väčšia ako 0, tak sa CandidateURI nastaví príznak 
-                    <emphasis>cz_link</emphasis> s hĺbkou o 1 menšou. Keď sa 
-                    hĺbka zníži na 0, tak to znamená, že chceme z danej CrawlURI
-                    archivovať všetky odkazy okrem html dokumentov, tým dosiahneme
-                    archivovanie obrázkov, ktoré sa na poslednej odkazovanej URI 
-                    vyskytujú.
-                </para>
-                <programlisting><![CDATA[                 
-                    Integer deep = (Integer) curi.getObject("is_cz_flag");
-                    if (deep != null) {
-                        if (deep.intValue() > 0) {
-                            // set link as valid, it will be archived immediately
-                            caURI.putObject("cz_link", new Integer(deep.intValue() - 1));
-                        } else {
-                            caURI.putObject("archive_bin_link", Boolean.valueOf(true));
-                        }
-                    }
-                ]]></programlisting>
-                </sect3>
+                <figure>
+                    <title>Use case diagram integrácie systému Heritrix a WebAnalyzer</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata format="PNG" scale="50" fileref="usecase1.png"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure>                
                 <sect3>
                     <title>Archivovanie DNS záznamov</title>
                     <para>
@@ -1751,8 +1694,8 @@ protected final boolean innerAccepts(Object o) {
                         obtiažne dosiahnuť, pretože samotná identifikácia URI prebieha až
                         po archivovaní DNS záznamu. Riešením by bolo archivovať DNS
                         záznam dodatočne až po identifikácií URI. 
-                        </para>
-                        <para>
+                    </para>
+                    <para>
                         Tento problém 
                         zatiaľ nemá vysokú prioritu a preto použijeme vlastný
                         procesor ARCWriterProcessorWebAnalyzer, ktorý jednoducho
@@ -1786,6 +1729,296 @@ protected final boolean innerAccepts(Object o) {
                         spustením modulu WebAnalyzer, aby sa predišlo analýzam
                         binárnych dokumentov. vid mimetypedetector
                     </para>
+                </sect3>
+                <sect3>
+                    <title>Archivácia odkazov a obrázkov</title>
+                    <para>
+                        Predchádzajúca verzia systém archivuje len tie URI, ktoré 
+                        WebAnalyzer identifikoval ako bohemikálne. Všetky ostatné
+                        URI (URI obrázkov, css  súborov a iných odkazov bohemikálnej
+                        stránky) sa nearchivujú. My však potrebujeme archivovať
+                        nielen zdroje bohemikálnej stránky (obrázky, css) ale aj 
+                        odkazy z tejto stránky a to do určitej úrovne. Odkazy vedúce
+                        z bohemikálnej stránky pravdepodobne nesú hodnotné informácie.
+                    </para>
+                    <figure>
+                        <title>Archivovanie odkazov do hĺbky 2</title>                    
+                        <mediaobject>
+                            <imageobject>
+                                <imagedata format="PNG" scale="50" fileref="depth.png"/>
+                            </imageobject>
+                        </mediaobject>
+                    </figure>
+                    <para>
+                        Obrázok ukazuje strom, ktorého koreň je bohemikálna stránka
+                        a jej listy sú odkazy z tejto stránky. Pri definovanej 
+                        hĺbke 2 by sa mali všetky odkazy, obrázky a iné zdroje 
+                        vedúce z bohemikálnej stránky automaticky archivovať do
+                        tejto úrovne. Pri archivovaní odkazov 2. úrovne
+                        však budú tieto URI opäť bez obrázkov, css a iných zdrojov.
+                        Preto musíme archivovať aj 3. úroveň s omedzením na 
+                        dokumenty typu text/html. Tým zabezpečíme, že každá archivovaná
+                        stránka bude mať v arc súboroch aj svoje obrázky, css štýly, 
+                        audio a video nahrávky a iné zdroje. Definovanie hĺbky
+                        môže nastaviť užívateľ pres spustením celého procesu.
+                    </para>
+                    <para>
+                        Archivácia odkazov z bohemikálnych stránok do určitej hĺbky 
+                        sa dala zrealizovať upraveným modulom LinksScoper a  
+                        ExtractorWebAnalyzer.
+                        Veľkou pomôckou boli objekty CrawlURI a CandidateURI, 
+                        ktoré obsahujú objekt AList, čo je zoznam objektov pridružených k
+                        danej URI. Do tohto zoznamu je možné pridať hocijaký objekt, ku 
+                        ktorému môžeme pristupovať v ľubovoľnom module. Na základe týchto
+                        príznakov si Heritrix môže zapamätať, ktoré URI sú bohemikálne, 
+                        ktoré URI sú validnými odkazmi z bohemikálnych stránok alebo
+                        URI, ktoré sú obrázky, css štýly či iné zdroje asociované s
+                        bohemikálnymi stránkami. Týmto spôsobom môžeme všetky typy URI odkazované z 
+                        bohemikálnej stránky archivovať a to do určitej úrovne, ktorú
+                        si môže užívateľ sám zvoliť.
+                    </para>
+                    <para>
+                        Realizácia si vynútila vytvorenie nového modulu
+                        LinksScoperWebAnalyzer, ktorý je potomkom modulu 
+                        LinksScoper, ale dopĺňa funcionalitu na spracovanie 
+                        odkazov z bohemikálnych stránok.
+                    </para>
+                    <para>
+                        Postup archivovania odkazov z bohemikálnych stránok
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis>1. Frontier next(int Timeout)</emphasis> - 
+                                Každá CrawlURI vstupuje do procesu z objektu Frontier.
+                                Zavolaním jeho metody next() si vlákno ToeThread vezme
+                                nasledujúcu CrawlURI, ktorá potom putuje procesormi.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>2. ExtractorWebAnalyzer innerProcess(CrawlURI curi)</emphasis> - 
+                                Keď CrawlURI dosiahne procesor ExtractorWebAnalyzer, tak sa zisťuje
+                                či má nastavený nejaký príznak, podľa ktorého sa odvíja ďalšie 
+                                spracovanie.
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><emphasis>2.1 CrawlURI NO FLAG</emphasis> - 
+                                        CrawlURI nemá nastavený žiadny príznak. Bude následne 
+                                        identifikovaný jej MimeType pomocou modulu WebAnalyzer.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>2.2 CrawlURI FLAG=valid_link, DEPTH=x</emphasis> - 
+                                        CrawlURI má nastavený príznak <emphasis>valid_link</emphasis>, ktorý
+                                        definuje, že táto URI bola odkazom z bohemikálnej stránky a má sa 
+                                        okamžite archivovať. Nie je nutné robiť jej analýzu. Putuje rovno do
+                                        procesoru ARCWriterProcesorWebAnalyzer, ktorý ju archivuje. Príznak
+                                        <emphasis>DEPTH=x</emphasis>, definuje do akej hĺbky sa majú odkazy
+                                        nájdené z tejto URI automaticky archivovať. Táto hĺbka sa znižuje s 
+                                        každou archivovanou úrovňou. (definované užívateľom).
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>2.3 CrawlURI FLAG=archive_bin_link, DEPTH=0</emphasis> - 
+                                        CrawlURI s príznakom <emphasis>archive_bin_link</emphasis> definuje, že
+                                        táto URI je odkazom z bohemikálnej stránky, ale v stromovej štruktúre
+                                        predstavuje list (viď obrázok hore). To znamená, že sa vykonala
+                                        archivácia všetkých uzlov vedúcich z bohemikálnej stránky (koreňa)
+                                        do definovanej hĺbky. V listoch však môžu existovať odkazy na obrázky, 
+                                        css štýly a iné zdroje, ktorý by chýbali v už archivovaných uzloch.
+                                        Preto je nutné z týchto listov archivovať všetky dokumenty okrem tých, 
+                                        ktorých MimeType je text/html. Týmto dosiahneme archiváciu obrázkov a 
+                                        css štýlov.
+                                    </para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para><emphasis>2.3.1 CrawlURI Content type=text/css, DEPTH=0</emphasis> - 
+                                                Ak je CrawlURI s príznakom <emphasis>archive_bin_link</emphasis> dokument
+                                                typu css, tak sa automaticky archivuje. Okrem toho sa pre túto CrawlURI
+                                                nastaví príznak <emphasis>valid_link</emphasis> a <emphasis>depth=0</emphasis>, 
+                                                čím sa zabezpečí, že sa odkazom z css dokumentu pri spracovaní procesorom
+                                                LinksScoperWebAnalyzer nastaví príznak <emphasis>archive_bin_link</emphasis>.
+                                                Pri následnom neskoršom spracovaní sa tieto odkazy z css dokumentu archivujú.                                            
+                                                Tým sa zabezpečí že budú archivované aj obrázky nachádzajúce sa v css dokumente, 
+                                                ktoré by inak chýbali.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>2.3.2 CrawlURI Content type=other</emphasis> - 
+                                                CrawlURI s príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
+                                                je iný ako text/html sa taktiež archivujú. Tým dosiahneme archiváciu obrázkov
+                                                a iných multimediálnych dokumentov, ktoré sa nachádzajú na už archivovaných
+                                                stránkach.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>2.3.2 CrawlURI Content type=other</emphasis> - 
+                                                CrawlURI s príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
+                                                je text/html sa už archivovať nebudú a rovnako sa nebudú nastavovať žiadne príznaky
+                                                pre odkazy na tejto stránke. To by už znamenalo presiahnutie definovanej hĺbky zadanej
+                                                užívateľom.
+                                            </para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                            </itemizedlist>                            
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>3. MimeTypeDetector isContentTypeText(curi.getName())</emphasis> - 
+                                CrawlURI, ktorá nemala nastavený žiadny príznak je identifikovaná modulom
+                                MimeTypeDetector, ktorý je súčasťou modulu WebAnalyzer. Na základe 
+                                získaného MimeType sa CrawlURI vydá dvomi rôznymi cestami.
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><emphasis>3.1 CrawlURI Content type=other</emphasis> - 
+                                        CrawlURI, ktorej identifikovaný MimeType bol iný ako text sa nebude analyzovať. Pravdepodobne 
+                                        sa jedná o URI s binárnym obsahom, ktorej analýza nemá zmysel. CrawlURI postupuje do reťazca
+                                        Post-processing chain.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>3.2 CrawlURI Content type=text</emphasis> - 
+                                        CrawlURI, ktorej identifikovaný MimeType bol text bude spracovaná modulom 
+                                        WebAnalyzer
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>4. WebAnalyzer run(curiName, outlinks, contetType, content)</emphasis> - 
+                                CrawlURI, ktoré sa dostali do tejto vetvy sú spracované WebAnalyzerom. Ten na základe parametrov
+                                o danej CrawlURI identifikuje či sa jedná o bohemikálnu URI alebo nie.
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><emphasis>4.1 CrawlURI NO FLAG</emphasis> - 
+                                        CrawlURI, ktorá bola WebAnalyzerom identifikovaná ako nebohemikálna postupuje do
+                                        reťaze Post-processing chain. Nenastavuje sa jej žiadny príznak.
+                                    </para>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>4.2 CrawlURI FLAG=valid_URI, DEPTH=x</emphasis> - 
+                                        CrawlURI, identifikovaná ako bohemikálna bude následne archivovaná. Predtým sa jej však nastaví
+                                        príznak <emphasis>valid_URI</emphasis> a <emphasis>depth=x</emphasis>. Hodnotu pre hĺbku získa 
+                                        WebAnalyzer zo súboru properties, ktorý nastavuje užívateľ pred spustením. Tým zabezpečíme 
+                                        aby si systém pamätal, do akej hĺbky má rekurzívne nájdené odkazy automaticky archivovať.
+                                    </para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>5. ARCWriterProcessorWebAnalyzer innerProcess(CrawlURI curi)</emphasis> - 
+                                Procesor ARCWriterProcessorWebAnalyzer archivuje každú CrawlURI, ktorá sa mu predá ako parameter s 
+                                výnimkou CrawlURI typu DNS.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>6. LinksScoperWebAnalyzer innerProcess(CrawlURI curi)</emphasis> - 
+                                Procesor LinksScoperWebAnalyzer spracuje všetky odkazy nájdené na danej CrawlURI predanej ako parameter.
+                                Podľa príznaku CrawlURI sa vytvoria ekvivalentné CandidateURI z odkazov a nastavia sa im príslušné
+                                príznaky.
+                            </para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><emphasis>6.1 CrawlURI NO FLAG</emphasis> - 
+                                        CrawlURI, ktorá nemá nastavený žiadny príznak sa spracuje klasickým spôsobom
+                                    </para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para><emphasis>6.1.2 createCandidateURI()</emphasis> - 
+                                                Vytvorí sa objekt CandidateURI.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>6.1.3 CandidateURI NO FLAG</emphasis> - 
+                                                CandidateURI, ktorej rodičovská stránka CrawlURI nemá žiadny príznak, taktiež nemá nastavený príznak.
+                                                Následne pokračuje klascikým spôsobom v spracovaní režazou Post-processing chain.
+                                            </para>
+                                        </listitem>
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>6.2 CrawlURI FLAG=valid_link, DEPTH=x</emphasis> - 
+                                        CrawlURI, ktorá ma nastavený príznak <emphasis>valid_link</emphasis> sa ďalej spracuje podľa toho
+                                        aká je hodnota príznaku <emphasis>depth</emphasis>.
+                                    </para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para><emphasis>6.2.1. createCandidateURI()</emphasis> - 
+                                                Vytvorí sa objekt CandidateURI.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>6.2.2 CandidateURI FLAG=valid_link, DEPTH=x-1</emphasis> - 
+                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x > 0. Objektom CandidateURI
+                                                vytvoreným z odkazov sa nastaví príznak <emphasis>valid_link</emphasis> a hodnota príznaku
+                                                <emphasis>depth</emphasis> bude <emphasis>depth=x-1</emphasis>. Tým sa zabezpečí, že sa 
+                                                archivujú validné odkazy do definovanej hĺbky. Po znížení hĺbky na x=0 sa objektom CandidateURI
+                                                nastaví príznak <emphasis>archive_bin_link</emphasis>, ktorý zaistí, že sa z týchto odkazov
+                                                archivujú len obrázky, css štýly a iné zdroje umiestené na predtým archivovanej stránke.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>6.2.3 CandidateURI FLAG=archive_bin_link</emphasis> - 
+                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x = 0. Objektom CandidateURI
+                                                vytvoreným z odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
+                                            </para>
+                                        </listitem>                                        
+                                    </itemizedlist>
+                                </listitem>
+                                <listitem>
+                                    <para><emphasis>6.3 CrawlURI FLAG=valid_URI, DEPTH=x</emphasis> - 
+                                        CrawlURI, ktorá ma nastavený príznak <emphasis>valid_URI</emphasis> sa ďalej spracuje podľa toho
+                                        aká je hodnota príznaku <emphasis>depth</emphasis>.
+                                    </para>
+                                    <itemizedlist>
+                                        <listitem>
+                                            <para><emphasis>6.3.1. createCandidateURI()</emphasis> - 
+                                                Vytvorí sa objekt CandidateURI.
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>6.3.2 CandidateURI FLAG=valid_link, DEPTH=x-1</emphasis> - 
+                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x > 0. Objektom CandidateURI
+                                                vytvoreným z odkazov sa nastaví príznak <emphasis>valid_link</emphasis> a hodnota príznaku
+                                                <emphasis>depth</emphasis> bude <emphasis>depth=x-1</emphasis>. 
+                                            </para>
+                                        </listitem>
+                                        <listitem>
+                                            <para><emphasis>6.3.3 CandidateURI FLAG=archive_bin_link</emphasis> - 
+                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x = 0. Objektom CandidateURI
+                                                vytvoreným z odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
+                                            </para>
+                                        </listitem>                                        
+                                    </itemizedlist>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>7. Post-processor chain</emphasis> - 
+                                Každá CrawlURI musí prejsť touto reťazou procesorov.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>8. Frontier schedule(CandidateURI caURI)</emphasis> - 
+                                Zaradí každú CandidateURI do kolekcie čakajúcich CandidateURI podľa priority.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis>9. Frontier finished(CrawlURI curi)</emphasis> - 
+                                Potom ako všetky procesory skončia, ToeThread volá metodu finish(CrawlURI curi) objektu Frontier.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    <figure float="1" id="archiveLinks"> 
+                        <title>spracovanie crawlURI</title>                    
+                        <mediaobject>
+                            <imageobject>
+                                <imagedata scale="50" fileref="archiveLinks.png" format="PNG"/>
+                            </imageobject>
+                        </mediaobject>
+                    </figure>                    
                 </sect3>
             </sect2>
         </sect1>
