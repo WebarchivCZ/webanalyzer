@@ -2054,7 +2054,7 @@ protected final boolean innerAccepts(Object o) {
                 <title>Class Diagram modulu WebAnalyzer</title>                    
                 <mediaobject>
                     <imageobject>
-                        <imagedata scale="50" fileref="webanalyzerCD.png" format="PNG"/>
+                        <imagedata scale="30" fileref="webanalyzerCD.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>    
@@ -2248,59 +2248,404 @@ protected final boolean innerAccepts(Object o) {
             <sect2>
                 <title>inicializácia</title>
                 <para>
-                    
+                    WebAnalyzer sa musí pred použitím nainicializovať. Inicializácia
+                    WebaAnalyzeru sa uskutočňuje zároveň s inicializáciu prosesoru
+                    ExtractorWebAnalyzer, ktorý je súčasťou Heritrixu. Postup
+                    inicializovania:
                 </para>
-            <figure float="1" id="sd1"> 
-                <title>seq</title>                    
-                <mediaobject>
-                    <imageobject>
-                        <imagedata scale="50" fileref="SD1.png" format="PNG"/>
-                    </imageobject>
-                </mediaobject>
-            </figure>    
-
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold">1.initialize()</emphasis> - 
+                        Systém Heritrix volá prostredníctvom procesoru ExtractorWebAnalyzer, 
+                        metódu inicialize() modulu WebAnalyzer. Jediná instancia WebAnalyzeru
+                        existuje po celú dobu spracovania úlohy Heritrixu.
+                        </para>
+                    </listitem> 
+                    <listitem>
+                        <para><emphasis role="bold">2.create PropertiesReader</emphasis> - 
+                        Pri inicializácií je nutné načítať nastavené vlastnosti v 
+                        externom súbore webanalyzer.properties, ktoré definujú
+                        požiadavky na idetifikáciu.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">3. loadPropertiesReader</emphasis> - 
+                        Metóda načíta hodnoty pre konkrétne vlastnosti a zvaliduje
+                        ich. Ak je hodnota nevalidná, tak systém vyhodí výnimku.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">4. create WebAnalyzerProperties</emphasis> - 
+                        PropertiesReader vytvorí objekt WebAnalyzerProperties a naplní
+                        mu všetky hodnoty jednotlivých vlastností. WebAnalyzerProperties
+                        bude uchovávať tieto informácie, aby k nim mohli 
+                        ostatné triedy pristupovať.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">5. create WebAnalyzerManager</emphasis> - 
+                        Vytvára sa objekt WebAnalyzerManager, ktorý spravuje ostatných
+                        potrebných manažérov .
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">6. initializeManagers()</emphasis> - 
+                        Metóda bude inicializovať potrebných manažérov.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">7. getSearchersToUse()</emphasis> - 
+                        WebAnalyzerManager potrebuje zistiť, ktorých manažérov
+                        má vytvoriť.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">8. return searchers</emphasis> - 
+                        WebAnalyzerProperties vráti zoznam vyhľadávačov, ktoré požadoval 
+                        uživateľ pri konfigurácií. Na základe vyhľadávačov WebAnalyzerManager
+                        spozná, ktorých manažérov má vytvoriť.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">9. create IManager</emphasis> - 
+                        Vytvárajú sa manažéri. Každý manažér bude predstavovať práve
+                        jednu instanciu, ktorá sa bude používať viacerými vláknami.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">10. init()</emphasis> - 
+                        Každý manažér sa musí inicializovať, aby otvoril potrebné spojenia
+                        do databáze, súboru alebo iných zdrojov.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <figure float="1" id="sd1"> 
+                    <title>seq</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="20" fileref="SD1.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure>    
             </sect2>
             <sect2>
                 <title>identifikácia MimeType dokumentu</title>
                 <para>
-                    
+                    Pred samotnou analýzou dokumentu je nutné overiť jeho typ.
+                    Analýza textu nemá pri binárnych súboroch a iných aplikácií
+                    význam. Preto ak chceme analyzovať webové stránky, musíme sa ubezpečiť, 
+                    že budú analyzované dokumenty s príslušným MimeType. Užívateľ však 
+                    môže chcieť identifikovať stránky iba podľa IP adresy alebo názvu URL
+                    adresy. V tomto prípade by mal WebAnalyzer nakonfigurovať tak, 
+                    aby používal iba príslušné kritéria pri identifikácií. Moduly
+                    na vyhľadávanie e-mailov, telefónych čísel alebo slov v slovníku
+                    by mali byť vypnuté.
                 </para>
-                            <figure float="1" id="sd2"> 
-                <title>seq</title>                    
-                <mediaobject>
-                    <imageobject>
-                        <imagedata scale="50" fileref="SD2.png" format="PNG"/>
-                    </imageobject>
-                </mediaobject>
-            </figure> 
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold">1. isContentTypeText()</emphasis> -
+                        Heritrix volá metódu isContentTypeText(), ktorá spúšťa identifikáciu
+                        MimeType danej URI adresy.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">2. create Content</emphasis> -
+                        WebAnalyzer vytvára objekt Content, ktorý nainicializuje
+                        potrebné objekty a poskytuje metódu na identifikovanie
+                        MimeType. Instancia objektu Content sa vytvára pri každom
+                        volaní metódy isContentTypeText(). Každé vlákno vlastní svoju
+                        instanciu tohto objektu.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">3. init()</emphasis> -
+                        Metóda init() inicializuje ostatné potrebné objekty. Objekty
+                        MimeTypes a MimeTypesReader sú finálne, ich instancia sa vytvára
+                        len raz, pri prvom volaní tejto komponenty.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">4. addMimeTypes()</emphasis> -
+                        Finálny objekt MimeTypes volá túto metódu, aby naplnil
+                        svoju kolekciu všetkých MimeType, ktoré sa neskôr použijú
+                        pri vyhľadávaní MimeType neznámeho dokumentu.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">5. readAllMimeTypes()</emphasis> -
+                        Metóda vytvára spojenie s externým XML súborom a číta z neho
+                        jednotlivé elementy MimeType.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">6. create MimeType</emphasis> -
+                        Z každého elementu MimeType zapísaného v XML dokumente sa 
+                        vytvorí odpovedajúci objet MimeType a pridá sa do kolecie všetkých
+                        MimeType záznamov.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">7. return MimeTypes</emphasis> -
+                            Naplní sa kolekcia MimeType záznamov v objekte MimeTypes.
+                            Tým sa dokončí potrebná inicializácia, ktorá sa už viac
+                            krát nebude opakovať. Pri ostatných volaniach sa zavolá priamo
+                            metóda getContentType().
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">8. getContentType</emphasis> -
+                        Metóda, ktorá hľadá MimeType skúmaného dokumentu.                        
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">9. getMimeTypes()</emphasis> -
+                        Podľa informácií získaných zo skúmaného dokumentu sa hľadajú
+                        odpovedajúce MimeType.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">10. getMimeTypes</emphasis> -
+                        Objekt sa snaží zistiť MimeType skúmaného dokumentu podľa
+                        názvu URI alebo bytov reprezentujúcich skúmaný dokument 
+                        (zisťovanie magic Mime).
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">11. return mimeTypes</emphasis> -
+                        Vráti sa zoznam možných odpovedajúcich MimeType.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">12. return MimeType</emphasis> -
+                        Zo zoznamu odpvedajúcich MimeType sa jeden vyberie a ten sa vráti
+                        ako identifikovaný MimeType.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">13. return true if text</emphasis> -
+                        WebAnalyzer vráti systému Heritrix logickú hodnotu true, iba ak
+                        je identifikovaný MimeType typu text.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <figure float="1" id="sd2"> 
+                    <title>seq</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="20" fileref="SD2.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure> 
             </sect2>
             <sect2>
                 <title>analýza</title>
                 <para>
-                    
+                    Po nainicializovaní modulu WebAnalyzer môžeme začať používať jeho
+                    metódu na analyzovanie.
                 </para>
-                            <figure float="1" id="sd3"> 
-                <title>seq</title>                    
-                <mediaobject>
-                    <imageobject>
-                        <imagedata scale="50" fileref="SD3.png" format="PNG"/>
-                    </imageobject>
-                </mediaobject>
-            </figure> 
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold">1. run()</emphasis> - 
+                        Heritrix volá metódu run(), ktorá spúšťa analýzu.
+                        Metóde run sú predané parametre, ktoré predstavujú informácie
+                        získané už z Heritrixu. Medzi významné patría názov URI, ktorá sa analyzuje, 
+                        jej textový obsah a množina odkazov obajvených na tejto URI.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">2. create UrlAnalyzer</emphasis> - 
+                        Pri každom volaní metódy run() sa vytvorí nová instancia
+                        objektu UrlAnalyzer, ktorý si pamätá stav pri spracovaní
+                        konkrétnej URI. Tým dosiahneme, že sa bude uskutočňovať
+                        analýza paralelne vo viacerých vláknach. Samotný Heritrix
+                        pri východiskovom nastavení spúšťa 50 vláken, ktoré potom môžu
+                        súčasne používať modul WebAnalyzer. Bolo by neoptimálne čakať
+                        kým jedno vlákno skončí časovo náročnú analýzu a potom predá 
+                        riadenie druhému vláknu.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">3. create PointsCounter</emphasis> - 
+                        Pre každú instanciu UrlAnalyzer sa vytvorí instancia PointsCounter, ktorá
+                        si pamätá počet nazbieraných bodov pre analyzovanú URI.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">4. getSearchersToUse()</emphasis> - 
+                        Z už vytvoreného objektu WebAnalyzerProperties si získame zoznam
+                        vyhľadávačov, ktoré sa majú pri analýze použiť.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">5. return searcherToUse</emphasis> - 
+                        Vráti zoznam vyhľadávačov, definovaných užívateľom.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">6. create ISearcher</emphasis> - 
+                        Pre každý záznam zo zoznamu vyhľadávačov sa vytvorí odvedajúci objekt.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">7. setPointsCounter()</emphasis> - 
+                        Každá instancia vyhľadávača si priradí už vytvorený objekt
+                        PointsCounter, ktorý bude používať.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">8. getProperties()</emphasis> - 
+                        Každý vyhľadávač pri nájdení hľadanej informácie pripočíta alebo
+                        odpočíta počet bodov analyzovanej stránke. Počet bodov, s ktorými
+                        vyhľadávač pracuje je definovaná taktiež v externom súbore a 
+                        prístupná cez WebAnalyzerProperties.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">9. return props</emphasis> - 
+                        WebAnalyzerProperties vráti hodntoty vlastností, ktoré používa
+                        konkrétny vyhľadávač.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">10. setIManager()</emphasis> - 
+                        Niektoré vyhľadávače pristupujú k databázam alebo externým
+                        súborom, a preto používajú manažerov, ktoré poskytujú synchronizované 
+                        metody volané odpovedajúcim vyhľadávačom. Pri vytvorení si 
+                        musí každý vyhľadávač asociovať svoj už vytvorený manažér.
+                        Tým sa končí nastavenie vhľadávačov a môžu sa použiť pri analýze.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">11. analyze()</emphasis> - 
+                        Metóda analyze() už má pripravené všetky podklady pre 
+                        spustenie analýzy, tak aby sa použili tie vyhľadávače, ktoré
+                        boli nadefinované.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">12. create ProcessedCrawlURI</emphasis> - 
+                        Pri analýze URI sa vytvorí objet ProcessedCrawlURI, ktorý
+                        zabaľuje informácie o URI predané z Heritrixu (názov, typ, obsah, odkazy).
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">13. return curi</emphasis> - 
+                        Vytvorená instancia sa vráti objektu UrlAnalyzer, aby ju mohol 
+                        použiť ako parameter pre každý vyhľadávač.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">14. search(curi)</emphasis> - 
+                        V cykle sa spustí každý vyhľadávač jeho metódou 
+                        search(ProcessedCrawlURI curi). Každý vyhľadávač pracuje 
+                        nad konkrétnými atribútmi objektu ProcessedCrawlURI.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">15. uses IManager</emphasis> - 
+                        Pri vyhľadávaní používajú niektoré vyhľadávače svojich manažérov.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">16. increment()</emphasis> - 
+                        Pri nájdení hľadanej informácie sa inkrementuje počet bodov
+                        objektu PointsCounter. PointsCounter poskytuje synchronizované
+                        metódy, aby bol zachovaný konzistentý stav v multivláknovom prostredí.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">17. getStatistics(curi)</emphasis> - 
+                        Po spracovaní skúmanej URI všetkými vyhľadávačmi
+                        WebAnalyzer vypíše štatistiky získané vyhľadávačmi. Vypisovanie
+                        je nastavené do viacerých log súborov.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">18. isValid()</emphasis> - 
+                        Na základe analýzy sa vyhodnotí či je stránka validná alebo nie.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">19. getPoints()</emphasis> - 
+                        UrlAnalyzer požaduje počet dosiahnutých bodov z objektu PointsCounter.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">20. return points</emphasis> - 
+                        Vráti sa počet dosiahnutých bodov, ktoré sa použijú na výsledné vyhodnotenie
+                        spracovávanej URI.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">21. valid = (ponints >= minPointsToValid)</emphasis> - 
+                        Vyhodnotenie validity funguje na základe porovnania získaných bodov a 
+                        predstavujúich hranicu, ktorú treba prekonať aby bola stránka identifikovaná ako
+                        validná. Táto hranica je definovaná užívateľom v externom súbore.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">22. return valid</emphasis> - 
+                        UrlAnalyzer vracia logickú hodnotu.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">23. return valid</emphasis> - 
+                        WebAnalyzer predáva Heritrixu informáciu, či je analyzovaná
+                        URI identifikovaná ako validná alebo nie.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <figure float="1" id="sd3"> 
+                    <title>seq</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="20" fileref="SD3.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure> 
             </sect2>
             <sect2>
                 <title>uzavrenie</title>
                 <para>
-                    
+                    Keď skončí úloha v Heritrixe, tak sa následne zatvárajú
+                    všetky procesory, ktoré boli použité. Preto sme v integračnom 
+                    procesore ExtractorWebAnalyzer pri jeho finalizovaní zavolali
+                    metódu na finalizáciu modulu WebAnalyzer. Tým zabezpečíme, že
+                    sa WebAnalyzer správne ukončí, aby nevznikali zbytočné problémy
+                    v spojení s Heritrixom.
                 </para>
-                            <figure float="1" id="sd4"> 
-                <title>seq</title>                    
-                <mediaobject>
-                    <imageobject>
-                        <imagedata scale="50" fileref="SD4.png" format="PNG"/>
-                    </imageobject>
-                </mediaobject>
-            </figure> 
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold">1. close()</emphasis> -
+                        Heritrix volá metódu close() objektu WebAnalyzer, ktorá
+                        ukončí všetky spojenia a iné relácie.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">2. closeManagers()</emphasis> -
+                        Zatvoria sa spojenia s DB, súbormi a inými zdrojmi používanými
+                        manažérmi.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">3. close()</emphasis> -
+                        Každý manažér volá svoju metódu close().
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">4. clearProperties()</emphasis> -
+                        Nakoniec sa vymažú nastavenia definované v objekte WebAnalyzerProperties.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <figure float="1" id="sd4"> 
+                    <title>seq</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="20" fileref="SD4.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure> 
             </sect2>
         </sect1>
     </chapter>
