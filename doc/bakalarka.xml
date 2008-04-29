@@ -2023,6 +2023,287 @@ protected final boolean innerAccepts(Object o) {
             </sect2>
         </sect1>
     </chapter>
+    <chapter>
+        <title>WebAnalyzer - návrh a implementácia</title>
+        <para>
+            V kapitole o integrácií modulu WebAnalyzer so systémom Heritrix, 
+            sme spomínali, že WebAnalyzer bude klasická knižcnica, ktorá bude
+            poskytovať rozhranie, používané v procesore ExtractorWebAnalyzer.
+            Zbytok funcionality celého systému na identifikovanie a rozpoznanie
+            webu mimo národnej domény je zahrnutý v integračných moduloch.
+            Teraz sa zameriame na návrh tried systému WebAnalyzer.
+            WebAnalyzer sme navrhli tak, aby mohol byť použitý ako samostatná
+            komponenta, ktorá bude identifikovať URI podľa nastavených požiadavkov.
+            Súčasťou je súbor webanalyzer.properties, v ktorom môže užívateľ nastaviť
+            aké rozhodovacie kritéria sa majú použiť a za akých podmienok sa má
+            stránka identidikovať ako validná. todo odkaz dalej.
+            WebAnalyzer je navrhnutý tak, aby bolo jednoduché pridať nové
+            rozhodovacie krytérium do kódu. Poskytuje rozhrania, ktoré musí
+            nové kritérium implementovať. Potom stačí pridať pár riadkov do
+            triedy, ktorá získava informácie zo súboru webanalyzer.properties, aby 
+            sme mohli konfigurovať nový modul pomocou tohto externého súboru.
+        </para>
+        <sect1>
+            <title>Návrh tried modulu WebAnalyzer</title>
+            <para>
+                Návrh tried modulu WebAnalyzer je zobrazený na obrázku.
+                Triedy sú zabalené do jednotlivých balíkov, ktorých triedy
+                vykonávajú podobnú funcionalitu, alebo sú vzájomne tesne spjaté.
+            </para>
+            <figure float="1" id="webanalyzerCD"> 
+                <title>Class Diagram modulu WebAnalyzer</title>                    
+                <mediaobject>
+                    <imageobject>
+                        <imagedata scale="50" fileref="webanalyzerCD.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>    
+            <itemizedlist>
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread</emphasis> -
+                        Tento balík obsahuje triedy, ktoré sa starajú o načítavanie
+                        vlasntostí definovaných v externom súbore a triedu, ktoré poskytuje
+                        rozhranie pre prácu s celým systémom.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">WebAnalyzer</emphasis> - 
+                                Trieda poskytuje rozhranie pre prácu so systémom. Počas
+                                celého procesu je vytorená iba jedna instancia tejto triedy.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">PropertiesReader</emphasis> -
+                                Trieda, ktorá načíta a zvaliduje hodnoty parametrov z externého
+                                súboru webanalyzer.properties.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">WebAnalyzerProperties</emphasis> - 
+                                Trieda, ktorá slúži na uchovanie informácií načítaných z externého
+                                súboru. Ostatné triedy majú takto prístup ku všetkým informáciam
+                                definovaným užívateľom.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread.analyzer.util</emphasis> -
+                        Tento balík obsahuje triedy, ktoré obsahujú často používané funkcie
+                        WebAnalyzeru. Okrem toho obsahuje triedu, kde sú definované konštanty
+                        pre jednoduchú identifikáciu rozhodovacích kritérií.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">FilterText</emphasis> - 
+                                Trieda poskytuje funkcie na prácu s textom.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">PropertiesReader</emphasis> -
+                                Trieda, ktorá obsahuje konštanty na lepšiu indetifikáciu
+                                rozhodovacích kritérií.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread.analyzer</emphasis> -
+                        Tento balík obsahuje triedy, ktoré uchovávajú celý stav
+                        procesu a poskytujú hlavný komunikačný kanál pre ostatné triedy.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">UrlAnalyzer</emphasis> - 
+                                Trieda, ktorá inicializuje všetky požadované rozhodovacie kritéria a
+                                spúšťa analýzu. Okrem toho počíta štatistiky a rozhoduje či je 
+                                stránka validná alebo nie.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">PointsCounter</emphasis> -
+                                Trieda, ktorá uchováva počet dosiahnutých bodov pre
+                                analyzovanú stránku. Pri nájdení hľadanej informácie
+                                vyhľadávače zvyšujú počet bodov. Na konci sa porovná
+                                dosiahnutý počet bodov s požadovanou minimálnou hranicou a 
+                                rozhodne sa či je stránka validná alebo nie.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">ProcessedCrawlURI</emphasis> - 
+                                Trieda, ktorá uchováva informácie o spracovávanej URI.
+                                Jej názov, typ(MimeType), textový obsah a kolekciu 
+                                odkazov nájdených v textovom obsahu.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread.mime</emphasis> -
+                        Tento balík obsahuje triedy, ktoré identifikujú MimeType
+                        dokumentu.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">Content</emphasis> - 
+                                Trieda, ktorá poskytuje rozhranie na volanie tejto 
+                                komponenty. Pri vytvorení instancie tohto objektu
+                                sa vytvoria ostatné objekty a načítajú zoznam
+                                elementov MimeType, ktorý je uložený v externom 
+                                xml súbore. Na základe informácií o dokumente sa 
+                                indetifikuje jeho MimeType porovnávaním so zoznamom
+                                všetkých MimeTypov (napr. podľa koncovky). 
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">MimeType</emphasis> -
+                                Trieda, ktorá uchováva informácie o danom MimeType.
+                                Názov koncovky, popis, MagicMimeType a iné.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">MimeTypes</emphasis> - 
+                                Táto trieda poskytuje úlohu repozitára všetkých MimeType, 
+                                prostredníctvom ktorých dokáže identifikovať MimeType
+                                dokumentu na základe koncovky alebo magic sekvencie.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">MimeTypesReader</emphasis> - 
+                                Trieda jednoducho načíta zoznam MimeType z externého
+                                xml súboru a naplní ním objekt MimeTypes.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">MimeTypesException</emphasis> - 
+                                Výnimka pri identifkovaní MimeType.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem> 
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread.managers</emphasis> -
+                        Tento balík obsahuje triedy, ktoré sú nevyhnutné pre prácu
+                        niektorých vyhľadávačov. Inicializujú databázové spojenia, 
+                        otvárajú súbory a iné zdroje používané vyhľadávačmi. Musia sa inicializovať
+                        pred spustením analýzy a musia poskytovať synchronizované metódy, aby
+                        sa dali použiť viacerými vláknami.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">WebAnalyzerManager</emphasis> - 
+                                Hlavná trieda, ktorá inicializuje potrebné objekty
+                                IManager, tak ako je definované užívateľom. Pri skončení
+                                procesu volá metodu close() každého vytvoreného objektu IManager, 
+                                aby sa uzavreli všetky otvorené spojenia.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">IManager</emphasis> -
+                                IManager je rozhranie, ktoré musia implementovať 
+                                manažéri. Manažér obsahuje metódy požadované rozhraním
+                                a synchronizovanú metódu používanú asociovaným vyhľadávačom.
+                                (napr. GeoIPSearcher používa GeoIPManager na získanie informácií
+                                o danej IP z databáze)
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+                <listitem>
+                    <para><emphasis>cz.webarchiv.webanalyzer.multithread.criteria</emphasis> -
+                        Tento balík obsahuje triedy, ktoré predstaujú vyhľadávače 
+                        na základe konkrétnych kritérií. Všetky vyhľadávače musia
+                        implementovať rozhranie ISearcher.
+                    </para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><emphasis role="bold">ISearcher</emphasis> - 
+                                Rozhranie ISearcher požaduje metódu search(ProcessedCrawlURI curi), 
+                                ktorá vyhľadáva konkrétnu informáciu a metódu toSring(), 
+                                ktorá poskytuje štatistiky získané počas spracovania danej
+                                ProcessedCrawlURI.
+                                Realizácia napr. EmailSearcher, GeoIPSearcher, PhoneSearcher...
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para><emphasis role="bold">IManager</emphasis> -
+                                IManager je rozhranie, ktoré musia implementovať 
+                                manažéri. Manažér obsahuje metódy požadované rozhraním
+                                a synchronizovanú metódu používanú asociovaným vyhľadávačom.
+                                (napr. GeoIPSearcher používa GeoIPManager na získanie informácií
+                                o danej IP z databáze)
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </itemizedlist>
+        </sect1>
+        <sect1>
+            <title>Workflow modulu WebAnalyzer</title>
+            <para>
+                Pracovný postup identifikovania URI adresy sme rozdelili na 4 časti.
+                Každá časť predstavuje jednu metódu volanú zo systému Heritrix
+                (konkrétne náš modul ExtractorWebAnalyzer).
+            </para>
+            <sect2>
+                <title>inicializácia</title>
+                <para>
+                    
+                </para>
+            <figure float="1" id="sd1"> 
+                <title>seq</title>                    
+                <mediaobject>
+                    <imageobject>
+                        <imagedata scale="50" fileref="SD1.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>    
+
+            </sect2>
+            <sect2>
+                <title>identifikácia MimeType dokumentu</title>
+                <para>
+                    
+                </para>
+                            <figure float="1" id="sd2"> 
+                <title>seq</title>                    
+                <mediaobject>
+                    <imageobject>
+                        <imagedata scale="50" fileref="SD2.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </figure> 
+            </sect2>
+            <sect2>
+                <title>analýza</title>
+                <para>
+                    
+                </para>
+                            <figure float="1" id="sd3"> 
+                <title>seq</title>                    
+                <mediaobject>
+                    <imageobject>
+                        <imagedata scale="50" fileref="SD3.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </figure> 
+            </sect2>
+            <sect2>
+                <title>uzavrenie</title>
+                <para>
+                    
+                </para>
+                            <figure float="1" id="sd4"> 
+                <title>seq</title>                    
+                <mediaobject>
+                    <imageobject>
+                        <imagedata scale="50" fileref="SD4.png" format="PNG"/>
+                    </imageobject>
+                </mediaobject>
+            </figure> 
+            </sect2>
+        </sect1>
+    </chapter>
     
     <chapter>
         <title>VoiceXML</title>
