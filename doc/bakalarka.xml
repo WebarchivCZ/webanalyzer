@@ -2256,66 +2256,66 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para><emphasis role="bold">1.initialize()</emphasis> - 
-                        Systém Heritrix volá prostredníctvom procesoru ExtractorWebAnalyzer, 
-                        metódu inicialize() modulu WebAnalyzer. Jediná instancia WebAnalyzeru
-                        existuje po celú dobu spracovania úlohy Heritrixu.
+                            Systém Heritrix volá prostredníctvom procesoru ExtractorWebAnalyzer, 
+                            metódu inicialize() modulu WebAnalyzer. Jediná instancia WebAnalyzeru
+                            existuje po celú dobu spracovania úlohy Heritrixu.
                         </para>
                     </listitem> 
                     <listitem>
                         <para><emphasis role="bold">2.create PropertiesReader</emphasis> - 
-                        Pri inicializácií je nutné načítať nastavené vlastnosti v 
-                        externom súbore webanalyzer.properties, ktoré definujú
-                        požiadavky na idetifikáciu.
+                            Pri inicializácií je nutné načítať nastavené vlastnosti v 
+                            externom súbore webanalyzer.properties, ktoré definujú
+                            požiadavky na idetifikáciu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">3. loadPropertiesReader</emphasis> - 
-                        Metóda načíta hodnoty pre konkrétne vlastnosti a zvaliduje
-                        ich. Ak je hodnota nevalidná, tak systém vyhodí výnimku.
+                            Metóda načíta hodnoty pre konkrétne vlastnosti a zvaliduje
+                            ich. Ak je hodnota nevalidná, tak systém vyhodí výnimku.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">4. create WebAnalyzerProperties</emphasis> - 
-                        PropertiesReader vytvorí objekt WebAnalyzerProperties a naplní
-                        mu všetky hodnoty jednotlivých vlastností. WebAnalyzerProperties
-                        bude uchovávať tieto informácie, aby k nim mohli 
-                        ostatné triedy pristupovať.
+                            PropertiesReader vytvorí objekt WebAnalyzerProperties a naplní
+                            mu všetky hodnoty jednotlivých vlastností. WebAnalyzerProperties
+                            bude uchovávať tieto informácie, aby k nim mohli 
+                            ostatné triedy pristupovať.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">5. create WebAnalyzerManager</emphasis> - 
-                        Vytvára sa objekt WebAnalyzerManager, ktorý spravuje ostatných
-                        potrebných manažérov .
+                            Vytvára sa objekt WebAnalyzerManager, ktorý spravuje ostatných
+                            potrebných manažérov .
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">6. initializeManagers()</emphasis> - 
-                        Metóda bude inicializovať potrebných manažérov.
+                            Metóda bude inicializovať potrebných manažérov.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">7. getSearchersToUse()</emphasis> - 
-                        WebAnalyzerManager potrebuje zistiť, ktorých manažérov
-                        má vytvoriť.
+                            WebAnalyzerManager potrebuje zistiť, ktorých manažérov
+                            má vytvoriť.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">8. return searchers</emphasis> - 
-                        WebAnalyzerProperties vráti zoznam vyhľadávačov, ktoré požadoval 
-                        uživateľ pri konfigurácií. Na základe vyhľadávačov WebAnalyzerManager
-                        spozná, ktorých manažérov má vytvoriť.
+                            WebAnalyzerProperties vráti zoznam vyhľadávačov, ktoré požadoval 
+                            uživateľ pri konfigurácií. Na základe vyhľadávačov WebAnalyzerManager
+                            spozná, ktorých manažérov má vytvoriť.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">9. create IManager</emphasis> - 
-                        Vytvárajú sa manažéri. Každý manažér bude predstavovať práve
-                        jednu instanciu, ktorá sa bude používať viacerými vláknami.
+                            Vytvárajú sa manažéri. Každý manažér bude predstavovať práve
+                            jednu instanciu, ktorá sa bude používať viacerými vláknami.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">10. init()</emphasis> - 
-                        Každý manažér sa musí inicializovať, aby otvoril potrebné spojenia
-                        do databáze, súboru alebo iných zdrojov.
+                            Každý manažér sa musí inicializovať, aby otvoril potrebné spojenia
+                            do databáze, súboru alebo iných zdrojov.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -2344,44 +2344,44 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para><emphasis role="bold">1. isContentTypeText()</emphasis> -
-                        Heritrix volá metódu isContentTypeText(), ktorá spúšťa identifikáciu
-                        MimeType danej URI adresy.
+                            Heritrix volá metódu isContentTypeText(), ktorá spúšťa identifikáciu
+                            MimeType danej URI adresy.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">2. create Content</emphasis> -
-                        WebAnalyzer vytvára objekt Content, ktorý nainicializuje
-                        potrebné objekty a poskytuje metódu na identifikovanie
-                        MimeType. Instancia objektu Content sa vytvára pri každom
-                        volaní metódy isContentTypeText(). Každé vlákno vlastní svoju
-                        instanciu tohto objektu.
+                            WebAnalyzer vytvára objekt Content, ktorý nainicializuje
+                            potrebné objekty a poskytuje metódu na identifikovanie
+                            MimeType. Instancia objektu Content sa vytvára pri každom
+                            volaní metódy isContentTypeText(). Každé vlákno vlastní svoju
+                            instanciu tohto objektu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">3. init()</emphasis> -
-                        Metóda init() inicializuje ostatné potrebné objekty. Objekty
-                        MimeTypes a MimeTypesReader sú finálne, ich instancia sa vytvára
-                        len raz, pri prvom volaní tejto komponenty.
+                            Metóda init() inicializuje ostatné potrebné objekty. Objekty
+                            MimeTypes a MimeTypesReader sú finálne, ich instancia sa vytvára
+                            len raz, pri prvom volaní tejto komponenty.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">4. addMimeTypes()</emphasis> -
-                        Finálny objekt MimeTypes volá túto metódu, aby naplnil
-                        svoju kolekciu všetkých MimeType, ktoré sa neskôr použijú
-                        pri vyhľadávaní MimeType neznámeho dokumentu.
+                            Finálny objekt MimeTypes volá túto metódu, aby naplnil
+                            svoju kolekciu všetkých MimeType, ktoré sa neskôr použijú
+                            pri vyhľadávaní MimeType neznámeho dokumentu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">5. readAllMimeTypes()</emphasis> -
-                        Metóda vytvára spojenie s externým XML súborom a číta z neho
-                        jednotlivé elementy MimeType.
+                            Metóda vytvára spojenie s externým XML súborom a číta z neho
+                            jednotlivé elementy MimeType.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">6. create MimeType</emphasis> -
-                        Z každého elementu MimeType zapísaného v XML dokumente sa 
-                        vytvorí odpovedajúci objet MimeType a pridá sa do kolecie všetkých
-                        MimeType záznamov.
+                            Z každého elementu MimeType zapísaného v XML dokumente sa 
+                            vytvorí odpovedajúci objet MimeType a pridá sa do kolecie všetkých
+                            MimeType záznamov.
                         </para>
                     </listitem>
                     <listitem>
@@ -2394,37 +2394,37 @@ protected final boolean innerAccepts(Object o) {
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">8. getContentType</emphasis> -
-                        Metóda, ktorá hľadá MimeType skúmaného dokumentu.                        
+                            Metóda, ktorá hľadá MimeType skúmaného dokumentu.                        
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">9. getMimeTypes()</emphasis> -
-                        Podľa informácií získaných zo skúmaného dokumentu sa hľadajú
-                        odpovedajúce MimeType.
+                            Podľa informácií získaných zo skúmaného dokumentu sa hľadajú
+                            odpovedajúce MimeType.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">10. getMimeTypes</emphasis> -
-                        Objekt sa snaží zistiť MimeType skúmaného dokumentu podľa
-                        názvu URI alebo bytov reprezentujúcich skúmaný dokument 
-                        (zisťovanie magic Mime).
+                            Objekt sa snaží zistiť MimeType skúmaného dokumentu podľa
+                            názvu URI alebo bytov reprezentujúcich skúmaný dokument 
+                            (zisťovanie magic Mime).
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">11. return mimeTypes</emphasis> -
-                        Vráti sa zoznam možných odpovedajúcich MimeType.
+                            Vráti sa zoznam možných odpovedajúcich MimeType.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">12. return MimeType</emphasis> -
-                        Zo zoznamu odpvedajúcich MimeType sa jeden vyberie a ten sa vráti
-                        ako identifikovaný MimeType.
+                            Zo zoznamu odpvedajúcich MimeType sa jeden vyberie a ten sa vráti
+                            ako identifikovaný MimeType.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">13. return true if text</emphasis> -
-                        WebAnalyzer vráti systému Heritrix logickú hodnotu true, iba ak
-                        je identifikovaný MimeType typu text.
+                            WebAnalyzer vráti systému Heritrix logickú hodnotu true, iba ak
+                            je identifikovaný MimeType typu text.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -2446,152 +2446,152 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para><emphasis role="bold">1. run()</emphasis> - 
-                        Heritrix volá metódu run(), ktorá spúšťa analýzu.
-                        Metóde run sú predané parametre, ktoré predstavujú informácie
-                        získané už z Heritrixu. Medzi významné patría názov URI, ktorá sa analyzuje, 
-                        jej textový obsah a množina odkazov obajvených na tejto URI.
+                            Heritrix volá metódu run(), ktorá spúšťa analýzu.
+                            Metóde run sú predané parametre, ktoré predstavujú informácie
+                            získané už z Heritrixu. Medzi významné patría názov URI, ktorá sa analyzuje, 
+                            jej textový obsah a množina odkazov obajvených na tejto URI.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">2. create UrlAnalyzer</emphasis> - 
-                        Pri každom volaní metódy run() sa vytvorí nová instancia
-                        objektu UrlAnalyzer, ktorý si pamätá stav pri spracovaní
-                        konkrétnej URI. Tým dosiahneme, že sa bude uskutočňovať
-                        analýza paralelne vo viacerých vláknach. Samotný Heritrix
-                        pri východiskovom nastavení spúšťa 50 vláken, ktoré potom môžu
-                        súčasne používať modul WebAnalyzer. Bolo by neoptimálne čakať
-                        kým jedno vlákno skončí časovo náročnú analýzu a potom predá 
-                        riadenie druhému vláknu.
+                            Pri každom volaní metódy run() sa vytvorí nová instancia
+                            objektu UrlAnalyzer, ktorý si pamätá stav pri spracovaní
+                            konkrétnej URI. Tým dosiahneme, že sa bude uskutočňovať
+                            analýza paralelne vo viacerých vláknach. Samotný Heritrix
+                            pri východiskovom nastavení spúšťa 50 vláken, ktoré potom môžu
+                            súčasne používať modul WebAnalyzer. Bolo by neoptimálne čakať
+                            kým jedno vlákno skončí časovo náročnú analýzu a potom predá 
+                            riadenie druhému vláknu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">3. create PointsCounter</emphasis> - 
-                        Pre každú instanciu UrlAnalyzer sa vytvorí instancia PointsCounter, ktorá
-                        si pamätá počet nazbieraných bodov pre analyzovanú URI.
+                            Pre každú instanciu UrlAnalyzer sa vytvorí instancia PointsCounter, ktorá
+                            si pamätá počet nazbieraných bodov pre analyzovanú URI.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">4. getSearchersToUse()</emphasis> - 
-                        Z už vytvoreného objektu WebAnalyzerProperties si získame zoznam
-                        vyhľadávačov, ktoré sa majú pri analýze použiť.
+                            Z už vytvoreného objektu WebAnalyzerProperties si získame zoznam
+                            vyhľadávačov, ktoré sa majú pri analýze použiť.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">5. return searcherToUse</emphasis> - 
-                        Vráti zoznam vyhľadávačov, definovaných užívateľom.
+                            Vráti zoznam vyhľadávačov, definovaných užívateľom.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">6. create ISearcher</emphasis> - 
-                        Pre každý záznam zo zoznamu vyhľadávačov sa vytvorí odvedajúci objekt.
+                            Pre každý záznam zo zoznamu vyhľadávačov sa vytvorí odvedajúci objekt.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">7. setPointsCounter()</emphasis> - 
-                        Každá instancia vyhľadávača si priradí už vytvorený objekt
-                        PointsCounter, ktorý bude používať.
+                            Každá instancia vyhľadávača si priradí už vytvorený objekt
+                            PointsCounter, ktorý bude používať.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">8. getProperties()</emphasis> - 
-                        Každý vyhľadávač pri nájdení hľadanej informácie pripočíta alebo
-                        odpočíta počet bodov analyzovanej stránke. Počet bodov, s ktorými
-                        vyhľadávač pracuje je definovaná taktiež v externom súbore a 
-                        prístupná cez WebAnalyzerProperties.
+                            Každý vyhľadávač pri nájdení hľadanej informácie pripočíta alebo
+                            odpočíta počet bodov analyzovanej stránke. Počet bodov, s ktorými
+                            vyhľadávač pracuje je definovaná taktiež v externom súbore a 
+                            prístupná cez WebAnalyzerProperties.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">9. return props</emphasis> - 
-                        WebAnalyzerProperties vráti hodntoty vlastností, ktoré používa
-                        konkrétny vyhľadávač.
+                            WebAnalyzerProperties vráti hodntoty vlastností, ktoré používa
+                            konkrétny vyhľadávač.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">10. setIManager()</emphasis> - 
-                        Niektoré vyhľadávače pristupujú k databázam alebo externým
-                        súborom, a preto používajú manažerov, ktoré poskytujú synchronizované 
-                        metody volané odpovedajúcim vyhľadávačom. Pri vytvorení si 
-                        musí každý vyhľadávač asociovať svoj už vytvorený manažér.
-                        Tým sa končí nastavenie vhľadávačov a môžu sa použiť pri analýze.
+                            Niektoré vyhľadávače pristupujú k databázam alebo externým
+                            súborom, a preto používajú manažerov, ktoré poskytujú synchronizované 
+                            metody volané odpovedajúcim vyhľadávačom. Pri vytvorení si 
+                            musí každý vyhľadávač asociovať svoj už vytvorený manažér.
+                            Tým sa končí nastavenie vhľadávačov a môžu sa použiť pri analýze.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">11. analyze()</emphasis> - 
-                        Metóda analyze() už má pripravené všetky podklady pre 
-                        spustenie analýzy, tak aby sa použili tie vyhľadávače, ktoré
-                        boli nadefinované.
+                            Metóda analyze() už má pripravené všetky podklady pre 
+                            spustenie analýzy, tak aby sa použili tie vyhľadávače, ktoré
+                            boli nadefinované.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">12. create ProcessedCrawlURI</emphasis> - 
-                        Pri analýze URI sa vytvorí objet ProcessedCrawlURI, ktorý
-                        zabaľuje informácie o URI predané z Heritrixu (názov, typ, obsah, odkazy).
+                            Pri analýze URI sa vytvorí objet ProcessedCrawlURI, ktorý
+                            zabaľuje informácie o URI predané z Heritrixu (názov, typ, obsah, odkazy).
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">13. return curi</emphasis> - 
-                        Vytvorená instancia sa vráti objektu UrlAnalyzer, aby ju mohol 
-                        použiť ako parameter pre každý vyhľadávač.
+                            Vytvorená instancia sa vráti objektu UrlAnalyzer, aby ju mohol 
+                            použiť ako parameter pre každý vyhľadávač.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">14. search(curi)</emphasis> - 
-                        V cykle sa spustí každý vyhľadávač jeho metódou 
-                        search(ProcessedCrawlURI curi). Každý vyhľadávač pracuje 
-                        nad konkrétnými atribútmi objektu ProcessedCrawlURI.
+                            V cykle sa spustí každý vyhľadávač jeho metódou 
+                            search(ProcessedCrawlURI curi). Každý vyhľadávač pracuje 
+                            nad konkrétnými atribútmi objektu ProcessedCrawlURI.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">15. uses IManager</emphasis> - 
-                        Pri vyhľadávaní používajú niektoré vyhľadávače svojich manažérov.
+                            Pri vyhľadávaní používajú niektoré vyhľadávače svojich manažérov.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">16. increment()</emphasis> - 
-                        Pri nájdení hľadanej informácie sa inkrementuje počet bodov
-                        objektu PointsCounter. PointsCounter poskytuje synchronizované
-                        metódy, aby bol zachovaný konzistentý stav v multivláknovom prostredí.
+                            Pri nájdení hľadanej informácie sa inkrementuje počet bodov
+                            objektu PointsCounter. PointsCounter poskytuje synchronizované
+                            metódy, aby bol zachovaný konzistentý stav v multivláknovom prostredí.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">17. getStatistics(curi)</emphasis> - 
-                        Po spracovaní skúmanej URI všetkými vyhľadávačmi
-                        WebAnalyzer vypíše štatistiky získané vyhľadávačmi. Vypisovanie
-                        je nastavené do viacerých log súborov.
+                            Po spracovaní skúmanej URI všetkými vyhľadávačmi
+                            WebAnalyzer vypíše štatistiky získané vyhľadávačmi. Vypisovanie
+                            je nastavené do viacerých log súborov.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">18. isValid()</emphasis> - 
-                        Na základe analýzy sa vyhodnotí či je stránka validná alebo nie.
+                            Na základe analýzy sa vyhodnotí či je stránka validná alebo nie.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">19. getPoints()</emphasis> - 
-                        UrlAnalyzer požaduje počet dosiahnutých bodov z objektu PointsCounter.
+                            UrlAnalyzer požaduje počet dosiahnutých bodov z objektu PointsCounter.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">20. return points</emphasis> - 
-                        Vráti sa počet dosiahnutých bodov, ktoré sa použijú na výsledné vyhodnotenie
-                        spracovávanej URI.
+                            Vráti sa počet dosiahnutých bodov, ktoré sa použijú na výsledné vyhodnotenie
+                            spracovávanej URI.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">21. valid = (ponints >= minPointsToValid)</emphasis> - 
-                        Vyhodnotenie validity funguje na základe porovnania získaných bodov a 
-                        predstavujúich hranicu, ktorú treba prekonať aby bola stránka identifikovaná ako
-                        validná. Táto hranica je definovaná užívateľom v externom súbore.
+                            Vyhodnotenie validity funguje na základe porovnania získaných bodov a 
+                            predstavujúich hranicu, ktorú treba prekonať aby bola stránka identifikovaná ako
+                            validná. Táto hranica je definovaná užívateľom v externom súbore.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">22. return valid</emphasis> - 
-                        UrlAnalyzer vracia logickú hodnotu.
+                            UrlAnalyzer vracia logickú hodnotu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">23. return valid</emphasis> - 
-                        WebAnalyzer predáva Heritrixu informáciu, či je analyzovaná
-                        URI identifikovaná ako validná alebo nie.
+                            WebAnalyzer predáva Heritrixu informáciu, či je analyzovaná
+                            URI identifikovaná ako validná alebo nie.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -2617,24 +2617,24 @@ protected final boolean innerAccepts(Object o) {
                 <itemizedlist>
                     <listitem>
                         <para><emphasis role="bold">1. close()</emphasis> -
-                        Heritrix volá metódu close() objektu WebAnalyzer, ktorá
-                        ukončí všetky spojenia a iné relácie.
+                            Heritrix volá metódu close() objektu WebAnalyzer, ktorá
+                            ukončí všetky spojenia a iné relácie.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">2. closeManagers()</emphasis> -
-                        Zatvoria sa spojenia s DB, súbormi a inými zdrojmi používanými
-                        manažérmi.
+                            Zatvoria sa spojenia s DB, súbormi a inými zdrojmi používanými
+                            manažérmi.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">3. close()</emphasis> -
-                        Každý manažér volá svoju metódu close().
+                            Každý manažér volá svoju metódu close().
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">4. clearProperties()</emphasis> -
-                        Nakoniec sa vymažú nastavenia definované v objekte WebAnalyzerProperties.
+                            Nakoniec sa vymažú nastavenia definované v objekte WebAnalyzerProperties.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -2646,6 +2646,286 @@ protected final boolean innerAccepts(Object o) {
                         </imageobject>
                     </mediaobject>
                 </figure> 
+            </sect2>
+        </sect1>
+        <sect1>
+            <title>Konfigurácia systému</title>
+            <para>
+                nastavenie heritrixu, nastavenie webanalyzeru
+            </para>
+            <para>
+                Konfigurácia celého systému sa skladá z konfigurácie Heritrixu, 
+                prostredníctvom jeho webového rozhrania a z konfigurácie WebAnalyzeru
+                cez externý súbor webanalyzer.properties.
+                Heritrix musíme nastaviť tak aby používal naše integračné procesory
+                (ExtractorWebAnalyzer, LinksScoper, ARCWriterProcessor). 
+                - na vstupe semienka, čo sú odkazy mimo národnú doménu
+                - všetky objavené odkazy smerujúce do národnej domény musia byť
+                odstránené
+                - omedziť
+            </para>
+            <sect2>
+                <title>Konfigurácia Heritrixu</title>
+                <para>
+                    Požiadavky na Heritrix.
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Na vstupe by mali byť semienka, ktoré predstavujú
+                            odhodené odkazy zo sklizne_cz_2007. Tieto semienka
+                            sú veľkí konkurenti na bohemikálne stránky mimo 
+                            národnej domény.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Nastavenie väčšiny procesorov môže ostať, tak ako
+                            sú pôvodne nastavené vždy pri vytvorení novej úlohy
+                            Heritrixu. V odpovedajúcich reťaziach však musíme pridať
+                            naše integračné procesory.
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>ExtractorWebAnalyzer</emphasis> -
+                                    do reťaze <emphasis>extractor processors</emphasis>musíme
+                                    pridať ExtractorWebAnalyzer, ktorý priamo používa 
+                                    modul WebAnalyzer. Procesor musíme pridať
+                                    na samý koniec reťaze.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>ARCWriterProcessorWebAnalyzer</emphasis> -
+                                    do reťaze <emphasis>writers processors</emphasis>musíme
+                                    pridať tento procesor, ktorý nearchivuje DNS záznamy.
+                                    Pôvodný procesor ARCWriterProcessor odstránime.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>LinksScoperWebAnalyzer</emphasis> -
+                                    Tento procesor pridáme do reťaze Post-processing chain.
+                                    Procesor zabezpačuje správne spracovanie odkazov a nastavovanie
+                                    príslušných príznakov pre spracovávané odkazy.
+                                    Pôvodný procesor LinksScoper odstránime.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Po nastavení procesorov musíme ďalej nastaviť
+                            moduly <emphasis>Deciding rule</emphasis> a to v 
+                            nasledujúcom poradí. Tieto nastavenia sa nachádzajú v
+                            záložke submodules.
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>1. AcceptDecideRule</emphasis> -
+                                    todo
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>2. PathologicalPathDecideRule</emphasis> -
+                                    
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>3. TooManyPathSegmentsDecideRule</emphasis> -
+                                    
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>4. MatchesRegExpDecideRule</emphasis> -
+                                    
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            Posledné nastavenie v Heritrixe je v záložke 
+                            settings, kde nastavíme konkrétne hodnoty
+                            pre moduly Deciding rule.
+                        </para>
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    <emphasis>MatchesRegExpDecideRule</emphasis> -
+                                    Nastavíme, aby sa každý objavený odkaz, ktorý odpovedá
+                                    regulárnemu výrazu odhodil. Regulárny výraz na 
+                                    na zistenie českých stránok ^.*\.cz.*$
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    <emphasis>Počet vláken ToeThread</emphasis> -
+                                    Môžeme nastaviť počet vláken, ktoré budú súčasne 
+                                    spracovávať URI adresy. Pôvodne 50.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    Nakoniec ostatné podrobnosti o zvyšných moduloch 
+                                    Deciding rule. 
+                                    todo
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </listitem>
+                </itemizedlist>
+            </sect2>
+            <sect2>
+                <title>Konigurácia modulu WebAnalyzer</title>
+                <para>
+                    Konfigurácia modulu WebAnalyzer sa uskutočňuje pred spustením
+                    nadefinovanej úlohy Heritrixu. Všetko je v jednom externom súbore
+                    webanalyzer.properties.
+                </para>
+                <programlisting><![CDATA[
+# Properties file for WebAnalyzer.
+# As first read the readme.txt
+# point properties must be in interval from 0 to 10
+
+# properties for geoIpSearcher
+webanalyzer.searcher.geoip.use=1
+webanalyzer.searcher.geoip.point=1
+webanalyzer.searcher.geoip.countrycode=cz
+
+# properties for dictionarySearcher
+webanalyzer.searcher.dictionary.use=1
+webanalyzer.manager.dictionary.language=cz
+webanalyzer.searcher.dictionary.point=1
+
+# properties for emailSearcher
+webanalyzer.searcher.email.use=1
+webanalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)
+webanalyzer.searcher.email.point=1
+
+# properties for phoneSearcher
+webanalyzer.searcher.phone.use=1
+webanalyzer.searcher.phone.regexp=\\+420 [0-9]{3} ?[0-9]{3} ?[0-9]{3}
+webanalyzer.searcher.phone.point=1
+
+# properties for htmlLangSearcher
+webanalyzer.searcher.htmllang.use=1
+webanalyzer.searcher.htmllang.regexp=lang ?= ?[\"|']? ?cs ?[\"|']?
+webanalyzer.searcher.htmllang.point=1
+
+# properties for urlAnalyzer, points je typu long
+webanalyzer.urlanalyzer.min.valid.points=200
+# min 0 - archives only first valid url with its images, bin links,
+# max 1000000 - archives up to depth a milion of links refered from a valid url
+webanalyzer.urlanalyzer.depth.toarchive=0
+                ]]></programlisting>
+                <para>                    
+                    V súbore webanalyzer.properties môžeme nájsť vlastnosti a ich hodnoty, ktoré
+                    systém WebAnalyzer používa. Medzi dôležité patria hodnoty vlastností:
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold">webanalyzer.urlanalyzer.min.valid.points=200</emphasis> -
+                            táto vlastnosť definuje aký počet
+                            bodov musí skúmaný dokument pri analýze dosiahnuť, aby bol identifikovaný ako
+                            validný.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">webanalyzer.urlanalyzer.depth.toarchive=3</emphasis> -
+                            táto vlastnosť slúži pre Heritrix, 
+                            ktorý ju používa na archivovanie odkazov z validnej stránky do určitej hĺbky. 
+                            Ak je nastavená hodnota 0, tak sa archivuje len validná stránka, spolu s jej zdrojmi
+                            (obrázky, css štýly, audio a video dokumenty), ktoré sa na nej nachádzajú. Ostanté
+                            odkazy sú ignorované. 
+                            Ak nastavíme hodntotu na 3, tak sa budú okrem validnej stránky
+                            archivovať všetky odkazy z nej vedúce a to až do hĺbky 3.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    Ostatné vlastnosti, ktoré sa v súbore nachádzajú sú vlastnosti konkrétnych vyhľadávačov.
+                </para>
+                <itemizedlist>
+                    <listitem>
+                        <para><emphasis role="bold"># properties for emailSearcher</emphasis> -
+                            
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">webanalyzer.searcher.email.use=1</emphasis> -
+                            pri analýze sa má použiť vyhľadávač emailSearcher.
+                            Hodnota 0 znamená, že komponenta sa nemá použiť.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">webanalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)</emphasis> -
+                            EmailSearcher vyhľadáva z daného kontextu všetky emaily. Pomocou regulárneho výrazu si
+                            môžeme nastaviť, ktoré z nich nás zaujímajú. Zadaný regulárny výraz ukazuje, že zo všetkých
+                            e-mailov hľadáme iba tie s doménou cz.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para><emphasis role="bold">webanalyzer.searcher.email.point=1</emphasis> -
+                            Vždy pri nájdení hľadaného e-mailu sa pripočíta stránke definovaný počet bodov.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                <para>
+                    Podobne sú definované ostatné vlastnosti vyhľadávačov.
+                </para>
+            </sect2>
+            <sect2>
+                <title>Spustenie Heritrixu</title>
+                <para>
+                    Po tom ako sme nakonfigurovali oba systémy môžeme spustiť 
+                    nadefinovanú úlohu Heritrixu. Heririx začne prehľadávať
+                    web a s pomocou modulu WebAnalyzer bude identifikovať 
+                    bohemikálne stránky, ktoré následne archivuje.
+                </para>
+                <para>
+                    Priebeh celého procesu môžeme sledovať priamo cez webové rozhranie
+                    Heritrixu. Podrobné informácie sa zapisujú do viacerých logov.
+                    Niektoré logujú čisto priebeh Heritrixu, iné logujú štatisktiky
+                    , ktoré produkuje WebAnalyzer pri analyzované stránok. Štatisktiky
+                    ukazujú všetky informácie o spracovávanej URI, počet dosiahnutých
+                    bodov v konkrétnych vyhliadavačoch. Samozrejme je možné 
+                    po úprave logovacej úrovne v súbore log4j.xml logovať aj 
+                    konkrétne nájdene hodnoty.
+                </para>
+            </sect2>
+        </sect1>
+        <sect1>
+            <title>Komponenty modulu WebAnalyzer</title>
+            <para>
+                WebAnalyzer uskutočňuje analýzu pomocou jednotlivých vyhľadávačov, 
+                ktoré sú modulárne, tak aby sa dali nové kritéria jednoducho pridávať
+                pomocou implementovania rozhrania. Každý nový vyhľadávač musí dediť
+                abstraktnú triedu AStatisticsSearcher, ktorá slúži na počítanie štatistík.
+                Štatiskity vyjadrujú koľko percent zo všetkých nájdených elementov
+                je validných. Napríklad pri hľadaní českých e-mailov sa na stránke 
+                môžu vyskytovať 4 e-maily, ale len 2 z nich budú české. Štatistiky
+                budú uvádzať hodnotu 50%, pri hľadaní e-mailov na konkrétnej stránke.
+            </para>
+            <sect2>
+                <title>EmailSearcher</title>
+                <para>
+                    Vyhľadávač e-mailov funguje na základe prehľadávania textového
+                    obsahu spracovávanej URI. Tento textový obsah zvyčajne predstavuje
+                    zdrojový kód stránky. EmailSearcher vyhľadáva všetky e-maily
+                    pomocou regulárneho výrazu. Každý nájdený e-mail je ďalej podrobený
+                    kontrole, či spĺňa požiadavky definované užívateľom. Užívateľ si 
+                    takto môže jednoducho nakonfigurovať, či hľadá e-maily určitej
+                    domény, hostu alebo nejaký konkrétny e-mail. Podobne fungujú 
+                    ostatné vyhľadávače : telefónne čísla, IP adresy, html atribút lang.
+                    Pri nájdení požadovaného e-mailu EmailSearcher zvýši počet
+                    bodov danej URI.
+                </para>
             </sect2>
         </sect1>
     </chapter>
