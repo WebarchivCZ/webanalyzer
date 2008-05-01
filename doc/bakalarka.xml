@@ -2927,6 +2927,147 @@ webanalyzer.urlanalyzer.depth.toarchive=0
                     bodov danej URI.
                 </para>
             </sect2>
+            <sect2>
+                <title>PhoneSearcher</title>
+                <para>
+                    Vyhľadávač e-mailov funguje podobne ako EmailSearcher. Taktiež
+                    prehľadáva textový obsah spracovávanej URI pomocou regulárnych
+                    výrazov. Tento text je však pred vyhľadávaním upravený triedou
+                    FilterText, ktorá poskytuje funkcie na odfiltrovanie nepodstatných
+                    znakov, html tagov  a iných skriptov zahrnutých v zdrojovom texte
+                    stránky. Užívateľ si môže v konfiguračnom súbore sám zvoliť
+                    aké telefónne čísla hľadá, pomocou regulárneho výrazu.
+                </para>
+            </sect2>
+            <sect2>
+                <title>HtmlLangSearcher</title>
+                <para>
+                    Ďalším kritériom pri identifikovaní stránky môže byť hodnota
+                    html tagu <emphasis>lang</emphasis>. Veľká väčšina internetových
+                    stránok má hodnotu tohto tagu definovanú. Užívateľ môže
+                    nastaviť hľadanú hodnotu v konfiguračnom súbore 
+                    (cs, sk, en, atd).
+                </para>
+            </sect2>
+            <sect2>
+                <title>GeoIPSearcher</title>
+                <para>
+                    Zaujímavým kritériom pri analyzovaní je kód krajiny, z ktorej
+                    stránka pochádza a  zároveň kódy krajín z ktorých pochádzajú odkazy
+                    objavené na tejto stránke. Modul používa funkcie projektu MaxMind.                    
+                    Projekt sa zaoberá geologickou lokalizáciou danej IP adresy.
+                    Ponúka varianty GeoLite Country a GeoLite City, ktoré lokalizujú 
+                    krajinu a mesto, odkiaľ pochádza IP adresa (je hostovaná na nejakom servery).
+                    Tieto varianty ponúkajú
+                    zdarma. My použijeme GeoLite Country, pretože chceme zistiť krajinu
+                    danej IP adresy. GeoLite Country v podstate obsahuje databázu, 
+                    IP adries s jej informáciami. K tejto databáze dodávajú API, pomocou
+                    ktorého sa dajú informácie o IP adrese rýchlo vyhľadať. 
+                    Náš vyhľadávač používa svojho manažéra, ktorý volá funkcie z tohoto
+                    API. Manažér musí pred používaním inicializovať databázu GoeLite Country. 
+                    Pri vyhľadávaní nám API vráti kód krajiny danej IP adresy vo formáte
+                    cz, sk a podobne. Ak sa kód krajiny zhoduje s kódom zadaným užívateľom, 
+                    tak sa analyzovanej stránke pripočítajú body.
+                    Keďže sa Internet stále rozrastá je nutné túto
+                    databázu občas aktualizovať.
+                </para>
+            </sect2>
+            <sect2>
+                <title>DictionarySearcher</title>
+                <para>
+                    Táto komponenta slúži na vyhľadávanie slov v konkrétnom slovníku.
+                    Pomáha pri identifikácií českého jazyka, na základe slov nachádzajúcich 
+                    sa v kontexte stránky. Pred spracovaním textu je použitý filter, 
+                    ktorý upraví text do vhodnej podoby. Odstránia sa skripty, kód
+                    a nečitateľné znaky. Prefiltrovaný text sa ďalej upraví na jeden 
+                    reťazec, obsahujúci konečnú postupnosť slov a medzier. todo pozri filter
+                    Vyhľadávač takto upravený text parsuje po jednom slove a volá
+                    metódu svojo manažéra, ktorý toto slovo vyhľadáva v slovníku.
+                    Ak sa slovo nájde, tak sa pripočíta počet bodov definovaný užívateľom.
+                </para>
+                <sect3>
+                    <title>Slovník slov</title>
+                    <para>
+                       Slovník slov je vlastne zoznam slov. Pri vytváraní
+                       slovníka českých slov, som použil korpus českého jazyka ako 
+                       základný zdroj. V korpuse sa nachádzajú aj nezmyslné slová, ktoré
+                       bolo treba prefiltrovať. Požiadavka na tento slovík bola taká
+                       aby to bol rýdzo český slovník. To znamená, že nemal obsahovať
+                       slová, ktoré sa vyskytujú aj iných jazykoch. Preto bolo nutné
+                       tieto slová odstrániť. Napríklad slovo <emphasis>auto</emphasis>
+                       sa nachádza v českom slovenskom aj anglickom jazyku a preto ho
+                       treba z nášho slovníka odstrániť. Najviac českých slov sa prekrýva
+                       so slovenským jazykom a preto bolo nutné tieto slová odstrániť pomocou
+                       korpusu slovenského jazyka. Okrem toho som použil aj iné
+                       zdroje ktoré boli zdrama prístupné na Internete. Slovníky pre mobilné telefóny
+                       boli dobrým podkladom. Všetky slovníky som programovo spracoval do
+                       potrebnej podoby a potom som ich mohol použiť na ďalšie odfiltrovanie
+                       českých slov, ktoré sa nachádzajú aj v iných jazykoch.
+                       Výsledná fyzická podoba zoznamu 
+                       rýdzo českých slov bol textový súbor, v ktorom bolo na každom 
+                       riadku jedno slovo.
+                    </para>
+                </sect3>
+                <sect3>
+                    <title>Vytvorenie indexu</title>
+                    <para>
+                        Ďalšia otázka bola ako sa bude v tomto slovníku vyhľadávať.
+                        Slovník obsahoval pár desiatok MB todo, takže bol pomerne
+                        veľký. Prvá varianta bola pamätať si celý zoznam slov v nejakej
+                        štruktúre v pamäti. Druhá varianta bola spraviť k slovníku
+                        index a pomocou neho vyhľadávať.
+                    </para>
+                    <para>
+                        Pred vytvorením indexu je nutné slová v slovníku zoradiť
+                        podľa abecedy. Následne sa vytvoril index
+                        Záznam zo slovníku:
+                        abandonovat
+                        abatyše
+                        abdikace
+                        abdikovat
+                        Odpovedajúci index:
+                        0
+                        12
+                        20
+                        29
+                        DictionarySearcher používa dvoch manažérov. Jeden sa stará 
+                        o prístup k hodnotám indexu a druhý načítava slovo od
+                        konkrétneho byte až po koniec riadku (znak <emphasis>\n</emphasis>).
+                        Potom stačilo naprogramovať klasické binárne vyhľadávanie, ktoré si
+                        ako pilota zvolí hodnotu <emphasis>n</emphasis> z indexu vyjadrujúcu byte
+                        na ktorom začína odpovedajúce slovo. Manažér na načítavanie slov zo 
+                        slovníka takto môže preskočiť daný počet bytov a načítať priamo
+                        odpovedajúce slovo. Toto slovo sa následne porovná so skúmaným 
+                        slovom. Celý proces sa opakuje. Ak sa skúmané slovo nájde v slovníku
+                        tak sa pre analyzovanú stránku pripočítajú body.
+                    </para>
+                </sect3>
+                <sect3>
+                    <title>Synchronizácia</title>
+                    <para>
+                        Každé vlákno si pri vyhľadávaní slov vytvorí vlastnú instanciu
+                        objektu DictionarySearcher, ale samotné čítanie zo súboru, ktoré
+                        poskytuje odpovedajúci manažér je prístupné cez synchronizovanú
+                        metódu.
+                    </para>
+                </sect3>
+                <sect3>
+                    <title>Ďalšie možnosti</title>
+                    <para>
+                        Takto vytvorená komponenta na vyhľadávanie sa dá pužiť na mnoho
+                        ďalších modulov. Napríklad vyhľadávanie v zozname českých miest
+                        alebo vyhľadávanie vulgárnych slov. Pri nájdení vulgárneho slova
+                        budeme naopak odpočítavať body analyzovanej stránke, pretože
+                        WebArchív nechce archivovať stránky s vulgárnym, pornografickým či
+                        rasistickým obsahom.
+                    </para>
+              </sect3>
+            </sect2>
+            <sect2>
+                <title>cz URL, URL seznam.cz (lucene), forbiden URL, forbiden dict, cities dict, trigramy cz</title>
+                <para>
+                </para>
+            </sect2>
         </sect1>
     </chapter>
     

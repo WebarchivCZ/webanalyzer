@@ -425,8 +425,13 @@ public class TestClass {
         } catch (URISyntaxException ex) {
             Logger.getLogger(TestClass.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
+    
+    public static void testPatternMatch() {
+        String s = "3.32";
+        System.out.println(s.matches(".*\\d.*"));
+    }
+    
     
     public static void main(String[] args) throws IOException  {
 //        testIPAddress();
@@ -442,7 +447,8 @@ public class TestClass {
 //        getSpecifiedText("bla");
 //        regexp();
 //        formatOutlinks();
-        mimeDetector();
+//        mimeDetector();
+        testPatternMatch();
     }
     
 }
