@@ -23,14 +23,17 @@ import java.util.Set;
 public class MakeTestCrawlURI {
 
     public String text = "dovednost dovézt abandonovat abdominální mahátma " +
-            "slučitelný zakašlání zrušitelný žďár žvýkačka this is the" +
+            "slučitelný zakašlání zrušitelný žďár žív žvýkačka this is the" +
             "occasionaly word in english, pure clear colosal track a ješte" +
             "bych chtěl neco říct, jenže já neumím žádne slova po česky a" +
             "právě proto tu teď musím psát takové blbosti" +
             "emaily : email@email.sk praso@alive.cz nexo@askdjflskdf.com" +
             ",oddelene@oddelene.cz a tak a tedko telefonne cisla: " +
             "+421 774 920 666 alebo +420 902 438 336 " +
-            "html elements: html <lang=sk/><lang='cs' a lang= sk : lang=cs;";
+            " +420234234234 or 234234234 or 23423423423434" +
+            "html elements: html <lang=sk/><lang='cs' a lang= sk : lang=cs;" +
+            "this should be found xml:lang=\"en\" but this souldn't" +
+            "ahreflang=\"en\" žív,žívanému,žívaly,žívala,aaa,aaaa,aaaaa, aaaaaa, při";
 
     public SimpleTestCrawlURI createEmptyCrawlURI() {
         try {
@@ -64,8 +67,8 @@ public class MakeTestCrawlURI {
         Set<SimpleTestCrawlURI> curis = new HashSet<SimpleTestCrawlURI>();
 
         // read uris from file, also write stripped uris from logs to file
-        File file = new File("data/outlinks.txt");
-        File out = new File("data/out.txt");
+        File file = new File("_anal/outscope_f");
+        File out = new File("_anal/out.txt");
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -105,8 +108,8 @@ public class MakeTestCrawlURI {
         Set<String> curis = new HashSet<String>();
 
         // read uris from file, also write stripped uris from logs to file
-        File file = new File("data/outlinks.txt");
-        File out = new File("data/out.txt");
+        File file = new File("_anal/outscope_f");
+        File out = new File("_anal/out.txt");
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);

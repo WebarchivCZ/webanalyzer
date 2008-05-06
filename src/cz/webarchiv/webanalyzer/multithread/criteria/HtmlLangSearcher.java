@@ -21,7 +21,7 @@ public class HtmlLangSearcher extends AStatisticsSearcher implements ISearcher {
     
     private static final Logger log4j = Logger.getLogger(HtmlLangSearcher.class);
     private final String htmlLangDefaultRegexp = 
-            "lang ?= ?[\"|']? ?([a-z]){2} ?[\"|']?";
+            "[\\W]lang ?= ?[\"|']? ?([a-z]){2} ?[\"|']?";
     private PointsCounter pointsCounter;
     private Pattern htmlLangDefaultPattern;
     private Pattern htmlLangPattern;

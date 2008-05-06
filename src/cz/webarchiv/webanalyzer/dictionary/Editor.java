@@ -41,7 +41,7 @@ class Editor {
                 
                 // read file
                 fis = new FileInputStream(input);
-                InputStreamReader in = new InputStreamReader(fis, "ISO-8859-2");
+                InputStreamReader in = new InputStreamReader(fis, "UTF-8");
                 BufferedReader br = new BufferedReader(in);
                 // write file
                 FileOutputStream fos = new FileOutputStream(output);
@@ -56,7 +56,7 @@ class Editor {
                 Set<Word> sort = new TreeSet<Word>();
                 
                 while((line = br.readLine()) != null) {
-                    // filtering
+                    // filtering starts here ===================================
 //                    String[] parts = line.split("\\s");
 //                    word = parts[0].toLowerCase();
 //                    if (word.matches(".*\\d.*")) {
@@ -65,12 +65,20 @@ class Editor {
 //                    if (word.length() < 3) {
 //                        continue;
 //                    }
+//                    
+//                    if(word.contains("&")) {  
+//                        continue;
+//                    }
 //                
 //                    // writing
 //                    bw.write(word);
 //                    bw.newLine();
-                
-                    //sort
+                    // filtering ends here =====================================
+                  
+                    // DANGER !!!
+                    // I use this method for two purposes : filtering and sorting
+                    // I always have to comment right block of commands. read the source code carfully
+                    // sorting starts here ==================================================
                     Word w = new Word();
                     w.setWord(line);
                     sort.add(w);
@@ -81,7 +89,7 @@ class Editor {
                     bw.write(w.getWord());
                     bw.newLine();
                 }
-                
+                // sorting ends here=====================================================
                 
             } catch (FileNotFoundException ex) {
                 java.util.logging.Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);

@@ -382,8 +382,8 @@ public class TestClass {
      * odkazy, ktore potrebujem
      */
     public static void formatOutlinks() {
-        File file = new File("data/outlinks.txt");
-        File out = new File("data/out.txt");
+        File file = new File("_anal/outscope");
+        File out = new File("_anal/outscope_f");
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -446,9 +446,9 @@ public class TestClass {
 //        externalFormOfURL();
 //        getSpecifiedText("bla");
 //        regexp();
-//        formatOutlinks();
+        formatOutlinks();
 //        mimeDetector();
-        testPatternMatch();
+//        testPatternMatch();
     }
     
 }

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 public class EmailSearcher extends AStatisticsSearcher implements ISearcher {
 
     private static final Logger log4j = Logger.getLogger(EmailSearcher.class);
+    // todo ivl edit regexp, so it can find email em[at].vla.cz, see web for examples
     private final String emailDefaultRegexp = 
             "([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,4})";
     private PointsCounter pointsCounter;

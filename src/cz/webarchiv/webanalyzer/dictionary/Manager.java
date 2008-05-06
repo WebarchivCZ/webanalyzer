@@ -21,10 +21,11 @@ class Manager {
     }
     
     public static void main(String[] args) {
-        String input = "_anal/korpus_cz_1.txt";
-//        String input = "_anal/wordlist_syn2k.txt";
-//        String output = "_anal/korpus_cz_1.txt";
-        String output = "_anal/korpus_cz_2.txt";
+    // DANGER comment next lines carefully
+//        String input = "_anal/wordlist_syn2k.txt";    // this is for filtering
+//        String output = "_anal/korpus_cz_1.txt";      // this is for filtering
+        String input = "_anal/korpus_cz_1.txt";     // this is for sorting
+        String output = "_anal/korpus_cz_2.txt";    // this is for sorting
         IFilter iFilter = new Filter();
         Manager manager = new Manager();
         manager.run(input, iFilter, output);
