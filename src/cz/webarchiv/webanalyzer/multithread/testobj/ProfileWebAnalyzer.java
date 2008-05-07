@@ -40,7 +40,6 @@ public class ProfileWebAnalyzer {
         try {
             log4j.debug("multiThreadSearching");
             WebAnalyzer.getInstance().initialize();
-//            WebAnalyzerManager.getInstance().initializeManagers();
 
             // todo urobit crawl pre search(curi) aj seach(curi.name, points, ...)
             List<SimpleTestThread> toes = new ArrayList<SimpleTestThread>();
@@ -63,13 +62,12 @@ public class ProfileWebAnalyzer {
 
             // pause main thread for a while, so that the toe thread has enough
             // time to search URL.
-            Thread.currentThread().sleep(40 * 1000);
+            Thread.currentThread().sleep(200 * 1000);
 
             for (UrlAnalyzer analyzer : analyzers) {
                 log4j.debug(analyzer.getPointsCounter().getPoints());
             }
 
-//            WebAnalyzerManager.getInstance().closeManagers();
             WebAnalyzer.getInstance().close();
             log4j.debug("multiThreadSearching");
         } catch (InterruptedException ex) {

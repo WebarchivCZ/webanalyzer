@@ -87,7 +87,6 @@ public class UrlAnalyzer {
         log4j.debug("analyze url=" + url);
         ProcessedCrawlURI curi = new ProcessedCrawlURI(url, content, links,
                 contentType);
-        // get ContentType is called by webAnalyzer
         // start all searchers
         for (ISearcher searcher : searchers) {
             searcher.search(curi);

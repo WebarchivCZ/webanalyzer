@@ -33,7 +33,8 @@ public class MakeTestCrawlURI {
             " +420234234234 or 234234234 or 23423423423434" +
             "html elements: html <lang=sk/><lang='cs' a lang= sk : lang=cs;" +
             "this should be found xml:lang=\"en\" but this souldn't" +
-            "ahreflang=\"en\" žív,žívanému,žívaly,žívala,aaa,aaaa,aaaaa, aaaaaa, při";
+            "ahreflang=\"en\" žív,žívanému,žívaly,žívala,aaa,aaaa,aaaaa, aaaaaa, při" +
+            " podrápaly, podrápanou podrápala podrápal";
 
     public SimpleTestCrawlURI createEmptyCrawlURI() {
         try {
