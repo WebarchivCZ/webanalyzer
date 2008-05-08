@@ -11,22 +11,33 @@
 % pdflatex first.tex
 % acroread first.pdf
 \documentclass[11pt,a4paper]{article}
-\usepackage[cp1250]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{url}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\title{Identification and Archiving of the Czech~Web Outside the National Domain}
+\author{Ivan Vlček}
+\date{05.06.2008}
 
 \begin{document}
 
 \begin{center}
-{\huge Identification and Archiving of the Czech Web Outside the National Domain}
+\thispagestyle{empty}
 
-\vspace{3.2em}
+\huge{Identification and Archiving of the Czech Web Outside the National Domain}
 
-{\LARGE Ivan Vlček}
+\vspace{5em}
+
+\large{Ivan Vlček}
+
+\normalsize{6 May, 2008}
 
 \newpage
+\thispagestyle{empty}
 \tableofcontents
 
 \end{center}
@@ -34,45 +45,46 @@
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{Introduction}
 
-The placement of different documents on the Internet has become very popular recently todo(has become recently ?). Internet users find this feature helpfull, because new documents can be uploaded on the Internet in relatively small prices of time and effort.  Some of these documents are considered to be very important in spheres such as history, science and many many others. But there exists a risk, that the information will be changed, or even deleted and lost forever. Therefore it's our duty to save this sort of documents, that carry important information, so as to be available (todo check) for future generation.
+The placement of different documents on the Internet has recently become very popular. Internet users find this feature helpfull, because new documents can be uploaded on the Internet in relatively small effort. Some of these documents are considered to be very important in spheres such as hi\-sto\-ry, science, art and so forth. But there exists a risk that the information will be changed, or even deleted and lost forever. Therefore it's our duty to save this sort of documents for future generation.
 
-The question of archiving the Internet content is solved by many institutions. The most famous is called Internet Archive, that creates Internet library and provides access to this library.
+The question of archiving the Internet content is solved by many institutions. The most famous is called Internet Archive that creates Internet library and provides access to archival collection.
 
-There is a project called WebArchiv in Czech Republic, that manages archiving and ensures access to archival collection. The only criterion how to identify the czech webpage operates on the basis of occurrence of domain, that is included in URL. This ensures all URLs with czech domain are archived. But there are also websites considered to be czech, whose domain is different from cz. WebArchiv has strong interest in these websites and therefore one of the latest goal is archiving the czech web outside the national domain.
+There is a project called WebArchiv in Czech Republic that manages archiving of Czech web and ensures access to archival collection. The only criterion how to identify the czech webpage operates on the basis of domain. This ensures all URLs with czech domain are archived. But there are also websites considered to be czech, whose domain is different from cz, e.g. .net, .com, .org, edu. The WebArchiv is interested in these websites and therefore one of the latest goal is archiving the Czech web outside the national domain.
 
-This work describes the system called WebAnalyzer to identify and archive the czech web outside the national domain. The system identifying czech web is integrated in open-source software Heritrix, that is able to archive these webpages. With this system it is possible to identify the Bohemian resource on the basis of many criteria that are included in the system. Bohemian source is every document that meets conditions defined by user. The user is able to set these conditions before starting Heritrix, so that the conditions meet his demands for Bohemian source. These conditions are valuated by criteria that are implemented in the system. Criteria contains identifying of language, czech IP addresses, czech e-mails and many others. Each webpage identified as Bohemian page is than achived by Heritrix.
+This work describes the system to identify and archive the Cech web outside the national domain. The system for identifying the Czech web is called a WebAnalyzer and is integrated in an open-source software Heritrix, which is able to archive webpages. With this system it's possible to identify the Bohemian source on the basis of many criteria included in the system. The Bohemian source is every document that meets conditions specified by user. Having received confirmation from WebAnalyzer that the processed URI is identified as Bohemian URI, Heritrix archives it.
 
 %================================NEW SECTION================================%
 
 \newpage
-\section{WebArchiv project}
+\section{The WebArchiv Project}
 
-Main task of the project WebArchiv is archiving and providing access to Czech web. WebArchiv uses web crawlers to perform comprehensive harvesting of national domain. We have been using Hertrix recently(todo cas), because of it's advantages. Heritrix is modular, extendible and it's easy to configure the crawl job. You're able to set those modules, that meets your needs. And if you demand some new functionality, it's possible to develop new module and attach it to Heritrix.
+Main task of the project WebArchiv is archiving and providing access to the archival collecton of Czech web. The WebArchiv uses web crawlers to perform comprehensive harvesting of national domain. Heritris seems to be suitable tool for this kind of work, because it's modular, extendible and everyone finds it easy to configure the crawl job. The Heritrix provides a lot of configurable modules that can be combined together and this gives you many creative possibilities to specify the crawl job you need. And if you demand some new functionality, it's possible to develop new module and attach it to Heritrix.
 
-\subsection{The comprehensive harvesting of Czech web}
-Heritrix performs the comprehensive harvesting on basis of modules, that filters out all URIs whose domain differs from .cz. These filtered URIs are called out of scope links and they're ignored by crawl job. All Czech webpages, that pass through the process of crawl job are archived. Links discovered in the content of processed webpages are filtered on the basis of their domain. Discovered links with czech domain are further included into collection of URIs, waiting for being processed, while other links with different domains are ignored and marked as out of scope.
+\subsection*{The Comprehensive Harvesting of Czech Web}
+Heritrix performs the comprehensive harvesting on basis of modules, that filters out all URIs whose domain differs from .cz. All Czech webpages, that pass through the processors and deciding rules are archived. Discovered links with czech domain are further included into the collection of waiting URIs, while other links with different domains are ignored and marked as \emph{out of scope}.
 
-\subsection{The comprehensive harvesting of Czech web outside the national domain}
+\subsection*{The Comprehensive Harvesting of Czech Web Outside the National Domain}
 Harvesting of Czech web outside the national domain should follow the harvesting of Czech web. 
 
-Out of scope links, that comes from harvesting of Czech web are valuable input material for following harvesting of web outside the national domain. There is a chance, that these links reffered from czech webpages lead to Bohemian sites. Therefore it's important to start crawling with these URIs. Out of scope links are set as seeds for new crawl job of harvesting outside the national domain.
+The \emph{out of scope} links, that comes out from harvesting of Czech web are valuable input material for following harvesting of Czech web outside the national domain. There is a chance that these links reffered from czech webpages lead to Bohemian sites. Therefore it's convenient to start crawling with these URIs. The \emph{out of scope} links will represent seeds for new crawl job of harvesting outside the national domain.
 
 %================================NEW SECTION================================%
 
 \newpage
 \section{Heritrix}
 
-Heritrix is able to do both, crawl web and archive it. It's open-source software written in Java, that provides user-friendly web interface. User manual is available on http://crawler.archive.org. Before we try to describe new system integrated in Heritrix it's important to know how Heritrix works.
+Heritrix is able to do both, crawl web and archive it. It's open-source software written in Java, that provides user-friendly web interface. User manual is available on \url{http://crawler.archive.org}. Before describing the WebAnalyzer, we should know how Heritrix works.
 
-\subsection{A brief overview}
+\subsection{A brief Overview}
 Heritrix is designed to be modular. Which modules to use can be set at runtime from the user interface. If you demand new functionality, you can implement new module and attach it to Heritrix, or you can replace existing module.
 
 The crawler consists of core classes and pluggable modules. The core classes can be configured, but not replaced. The pluggable classes can be substituted by altering the configuration of the crawler. A set of basic pluggable classes are shipped with the crawler, but if you have needs not met by these classes you could write your own.
 
+\begin{center}
 \includegraphics[width=120mm]{crawler_overview1.png}
+\end{center}
 
 \subsection{The CrawlController}
 The CrawlController collects all the classes which cooperate to perform a crawl, provides a high-level interface to the running crawl, and executes the "master thread" which doles out URIs from the Frontier to the ToeThreads. As the "global context" for a crawl, subcomponents will usually reach each other through the CrawlController.
@@ -98,30 +110,32 @@ The Heritrix web crawler is multi threaded. Every URI is handled by its own thre
 \subsection{Processors}
 Processors are grouped into processor chains. Each chain does some processing on a URI. When a Processor is finished with a URI the ToeThread sends the URI to the next Processor until the URI has been processed by all the Processors. A processor has the option of telling the URI to skip to a particular chain. Also if a processor throws a fatal error, the processing skips to the Post-processing chain.
 
+\begin{center}
 \includegraphics[width=40mm]{processing_steps.png}
+\end{center}
 
 The task performed by the different processing chains are as follows:
 
-\subsubsection{Pre-fetch processing chain}
+\subsubsection{Pre-fetch processing Chain}
 The first chain is responsible for investigating if the URI could be crawled at this point. That includes checking if all preconditions are met (DNS-lookup, fetching robots.txt, authentication). It is also possible to completely block the crawling of URIs that have not passed through the scope check.
 
 In the Pre-fetch processing chain the following processors should be included (or replacement modules that perform similar operations):
 
 \begin{description}
 \item[Preselector] Last check if the URI should indeed be crawled. Can for example recheck scope. Useful if scope rules have been changed after the crawl starts. The scope is usually checked by the LinksScoper, before new URIs are added to the Frontier to be crawled. If the user changes the scope limits, it will not affect already queued URIs. By rechecking the scope at this point, you make sure that only URIs that are within current scope are being crawled.
-\item[PreconditionEnforcer] Ensures that all preconditions for crawling a URI have been met. These currently include verifying that DNS and robots.txt information has been fetched for the URI.
+\item[PreconditionEnforcer] Ensures that all preconditions for crawling a URI have been met. These currently include verifying that DNS and \\robots.txt information has been fetched for the URI.
 \end{description}
 
-\subsubsection{Fetch processing chain}
+\subsubsection{Fetch processing Chain}
 The processors in this chain are responsible for getting the data from the remote server. There should be one processor for each protocol that Heritrix supports: e.g. FetchHTTP.
 
-\subsubsection{Extractor processing chain}
+\subsubsection{Extractor processing Chain}
 At this point the content of the document referenced by the URI is available and several processors will in turn try to get new links from it.
 
-\subsubsection{Write/index processing chain}
+\subsubsection{Write/index processing Chain}
 This chain is responsible for writing the data to archive files. Heritrix comes with an ARCWriterProcessor which writes to the ARC format. New processors could be written to support other formats and even create indexes.
 
-\subsubsection{Post-processing chain}
+\subsubsection{Post-processing Chain}
 A URI should always pass through this chain even if a decision not to crawl the URI was done in a processor earlier in the chain. The post-processing chain must contain the following processors (or replacement modules that perform similar operations):
 
 \begin{description}
@@ -135,81 +149,90 @@ Further information are available in developer manual \url{http://crawler.archiv
 %================================NEW SECTION================================%
 
 \newpage
-\section{Design and Integration}
+\section{The Integration}
 
-It's very important to integrate the WebAnalyzer into the Heritrix properly for us to gain required behaviour. The WebAnalyzer must analyze every URI, that goes through the process of crawling. Therefore it's necessary to integrate WebAnalyzer into some module in Heritrix. 
+It's very important to integrate the WebAnalyzer into the Heritrix properly for us to reach required behaviour. The WebAnalyzer must analyze every URI, that goes through the process of crawling. Therefore it's necessary to integrate the WebAnalyzer into some module that will be used by Heritrix.
 
-A good idea is to implement the WebAnalyzer as a standalone module, that provides defined inteface, that will be used by some of Heritrix's module. The simple input for WebAnalyzer should be the URI, about which it decides whether it is Bohemian URI or isn't. The output should be the logical value (true if analyzed URI is marked as Bohemian URI and false otherwise). The next important thing, is to choose the proper Heritrix's module, into which we integrate the WebAnalyzer.
+A good idea is to implement the WebAnalyzer as a standalone module with defined inteface, that will be used by some module in Heritrix. The simple input for WebAnalyzer should be the URI, about which it decides whether it is the Bohemian URI or not. The output for Heritrix should be the logical value (\emph{true} if analyzed URI is marked as Bohemian URI and \emph{false} otherwise). The next important thing, is to choose the proper Heritrix module, into which we integrate the WebAnalyzer.
 
 The WebAnalyzer should start analyzing the URI, after Heritrix gets the biggest possible amount of information about processed URI.
 
 % integration into Frontier
-Integration into Frontier is not possible due to two reasons. Frontier has access to processed URI at the very beginning of crawling or at the very end. At the beginning there are almost no discovered information about URI. At the end of processing Heritrix discovered much information about URI, but at this point it's not possible to archive Bohemian URI. Archiving is executed by ARCWriterProcessor that archives URI before it finishes in Frontier. Both of these possibilities aren't convenient. We have to integrate the WebAnalyzer into module, that will be executed before ARCWriterProcessor, so that we can decide whether the processed URI has to be archived.
+Integration into Frontier is not possible due to two reasons. The Frontier has access to processed URI at the very beginning or at the very end of crawling. At the beginning there are almost no discovered information about URI. At the end of processing Heritrix discovered much information about URI, but at this point it's not possible to archive Bohemian URI. Archiving is executed by ARCWriterProcessor that is performed before URI finishes in Frontier. Both of these possibilities aren't convenient. We have to integrate the WebAnalyzer into module, that will be executed before \mbox{ARCWriterProcessor}, so that we can decide whether the processed URI has to be archived.
 
 % integration into Filter
-Integration into module Filter seemed to be conveniet, because Filter can be placed at any point during the process of crawling. Filter checks whether processed URL meets all defined criteria. It would be easy to place the Filter before ARCWriterProcessor and use the WebAnalyzer in Filter to identify the URI. But later there was a problem with initialization. WebAnalyzer must be initialized before it can be used, because it uses some databases and files that must be initialized. The Filter's interface doesn't provide the method to do this.
+Integration into module Filter seemed to be conveniet, because Filter can be placed at any point in the process of crawling. Configurable Filter checks whether processed URL meets all specified criteria. It would be pretty easy to place the Filter before ARCWriterProcessor and use the WebAnalyzer in Filter to identify the URI. Having tried this possibility, we noticed the problem with initialization of WebAnalyzer. Before analyzing the processed URI, the WebAnalyzer has to be initialized, so that the database connections used by WebAnalyzer can be established. The Filter's interface doesn't provide suitable interface for this job.
 
 % integration into Scope
-Integration into module Scope meets requirements for initializing and closing the WebAnalyzer instance. But Interne Archive posted, that the Scope module will be reorganized in the next version of Heritrix, so we tried another possibility.
+Integration into module Scope meets requirements for initializing and closing the WebAnalyzer instance. But the Interne Archive posted, that the Scope module would be completely reorganized in the next version of Heritrix, so we better tried another possible way.
 
 % integration into Processor
-Integration into module Processor was the final and right possibility. During testing the first version it was clear, that the integration into Processor is necessary. Processors are grouped in processor chains as we described before. The right chain for WebAnalyzer is extractor processing chain. At this point the content of the document referenced by the URI is available and several processors such as ExtractorHTML and ExtractorCSS discovered new links from it. Therefore we have to implement new Extractor, that will be placed at the end of extractor processing chain, when all information (content type, text content, discovered links), will be available. Next chain is write/index processing chain that archives URI and last chain is called post-processing chain, that filters out discovered links according to definition set by user. Having been processed by post-processing chain, the URI finishes in Frontier again. All URI's discovered links are scheduled in Frontier and at this point the crawling of URI finishes
+Integration into module Processor was the final and right possibility. While testing the first version with processor, we found out that the integration in processor is the most suitable way. Processors are grouped in processor chains as we described above. We chose the extractor processing chain for the WebAnalyzer, because at this point the content of the document referenced by the URI is available and several processors such as ExtractorHTML and ExtractorCSS discovered new links from it. Therefore we have to implement new Extractor, that will be placed at the end of extractor processing chain, when all information (content type, text content, discovered links) will be available.
 
-The Extractor provides two methods initialize() and finalize(). All Processors are initialized by initialize() method at the beginning of the crawling and at the end the finalize() method is called by ToeThread to finalze all used Processors. We can simply use these methods to initialize and close WebAnalyzer. In the main method of Extractor, called innerProcess(CrawlURI curi), we can use the WebAnalyzer to identify the processed CrawlURI. Only CrawlURI identified as Bohemian is archived by ARCWriterProcessor.
+Next chain is write/index processing chain that archives URI and last chain is called post-processing chain, that filters out discovered links according to definition specified by user. Having been processed by post-processing chain, the URI finishes in Frontier again. After all discovered links on this URI are scheduled in Frontier, the process of crawling the URI ends.
 
-The first prototype was implemented and tested. During testing we found some new requirements, because prototype wasn't able to archive images, css styles, links and other sources placed on the Bohemian URI. The integration must be done by more modules.
+The Extractor provides \emph{initialize()} and \emph{finalize()} methods. All Processors are initialized by \emph{initialize()} method at the beginning of the crawl job and at the end \emph{finalize()} method is called by CrawlController to finalze all used Processors. We can simply use these methods to initialize and close WebAnalyzer instance. In the main method of Extractor, called \emph{innerProcess(CrawlURI\footnote{CrawlURI is URI object that is just processed by processors and is associated with one ToeThread} curi)}, we can use the WebAnalyzer to identify the processed CrawlURI. Only CrawlURI identified as Bohemian URI is archived by ARCWriterProcessor.
 
-\subsection{The integration by few modules}
-On the basis of new requirements, the use case diagram was created. The use case diagram describes intregration of WebAnalyzer into Heritrix. The integration is realized by modules ExtractorWebAnalyzer, ARCWriterProcessorWebAnalyzer and LinksScoperWebAnalyzer. The ExtractorWebAnalyzer is the only one, that directly uses the interface of WebAnalyzer module.
+After implementing and testing the first version with Extractor module, we noticed several imperfections. The system wasn't able to archive images, css styles, links and other sources placed on the Bohemian URI. The integration must be done by more modules, to solve these problems.
 
+\subsection{The Integration by Modules}
+On the basis of new requirements the use case diagram was created, to describe the intregration of WebAnalyzer into Heritrix. The integration is realized by modules ExtractorWebAnalyzer, ARCWriterProcessorWebAnalyzer and LinksScoperWebAnalyzer. The ExtractorWebAnalyzer is the only one, that directly uses the interface of WebAnalyzer module.
+
+\begin{center}
 \includegraphics[width=120mm]{usecase1.png}
+\end{center}
 
-\subsubsection{The archiving of DNS records}
-The Heritrix automaticaly archives all DNS records, before processing any webpage. We don't need all these DNS records but only those of Bohemian URI. It's hard to reach this state, therefore we use our ARCWriterProcessorWebAnalyzer, that simply ignores all DNS records so far.
+\subsubsection{The Archiving of DNS Records}
+Before processing any webpage, Heritrix automaticaly archives all asso\-cia\-ted DNS records. We don't need all these DNS records but only those of Bohemian URI. It's hard to reach this state, therefore we use our own ARCWriterProcessorWebAnalyzer, that simply ignores all DNS records so far.
 
-\subsubsection{The Mime type detector}
-During testing the first version, we noticed many OutOfMemeory exceptions, that was caused by analyzing the documents, the Mime type of which was wrong detected by Heritrix.
+\subsubsection{The Mime Type Detector}
+While testing the first version, we noticed many \emph{java.lang.OutOfMemory} exceptions caused by analyzing the documents, the Mime type of which was wrong detected by Heritrix.
 
-Old servers unable to identify the type of document, set text/plain value as Mime type for each document. WebAnalyzer analyzed only documents of text type, but actually they could be audio or video documents, the size of which can take hundreds of MB. This led to creating big java.lang.String objects, that caused OutOfMemory exceptions. The functionality of Heritrix to identify the content type of document is not sufficient and therefore we have to implement some sort of Mime detector, that will identify the content type of document before it will be analyzed by WebAnalyzer. This ensures that documents of binary content won't be analyzed by WebAnalyzer.
+Old servers unable to identify the type of document, set \emph{text/plain} value as content type for each document. The WebAnalyzer analyzed only documents of text type, but actually they could be audio or video documents, the size of which can take hundreds of MB. The text analyzing led to creating huge \emph{java.lang.String} objects, that caused \emph{java.lang.OutOfMemory} exceptions. The functionality of Heritrix to identify the content type of document is not sufficient and therefore we have to implement some sort of Mime Type detector, that will identify the content type of document before it will be analyzed by WebAnalyzer. This ensures that documents of binary content won't be analyzed by WebAnalyzer.
 
-\subsubsection{The archiving of links and images}
-The first version archives only Bohemian URI. Other URIs (images, css, other sources) associated with this Bohemian URI are not archived. But we need to archive not only sources associated with Bohemian URI but also it's links. Links referenced from Bohemian URI can carry worth information and it's good idea to archive them to defined level from Bohemian URI.
+\subsubsection{The Archiving of Links and Images}
+\label{aolai}
+The first version archives only Bohemian URI. Other URIs (images, css, other multimedia sources) associated with this Bohemian URI are not archived. But we need to archive not only sources associated with Bohemian URI but also its links. Links referenced from Bohemian URI can carry worth information and it's good idea to archive them to defined depth from Bohemian URI.
 
+\begin{center}
 \includegraphics[width=120mm]{depth.png}
+\end{center}
 
-Picture shows a tree with Bohemian URI as root. The nodes are links referenced from Bohemian URI (images, css styles, other html pages). If the defined depth equals 2, than all links have to be archived to this level (as shows picture). If the document on the second level is html page, than it will be archived without it's images, css styles and other sources. Therefore we have to archive all documents from the third level except of html documents. This ensures that all images and other sources placed on archived html page will be achived as well. User is able to define the depth's value before starting the crawl job of Heritrix.
+Picture shows a tree with Bohemian URI as root. The nodes are links referenced from Bohemian URI (images, css styles, other html pages). If the defined depth equals 2, than all links have to be archived to this level (see picture). But if the document on the second level is html page, than it will be archived without its images, css styles and other sources. Therefore we have to archive all documents from the third level except of html documents. This ensures that all images and other sources placed on archived html page will be achived as well. User is able to define the depth's value before starting the crawl job of Heritrix.
 
-Realization of archiving links and images required new module LinksScoperWebAnalyzer and some changes in ExtractorWebAnalyzer, so that these modules could cooperate together. Objects CrawlURI and CandidateURI are able to remember any information during the process of their crawling. And this is the way how we force the Heritrix to maintain the state of archiving the links and images. Module LinksScoperWebAnalyzer extends original module LinksScoper, but adds the functionality to handle links referenced from Bohemian URI.
+Realization of archiving links and images required new module Links\-ScoperWebAnalyzer and some changes in ExtractorWebAnalyzer, so that these modules could cooperate together. Objects CrawlURI and CandidateURI\footnote{CandidateURI represents URI referenced from CrawlURI. When CandidateURI is going to be crawled, it turns to CrawlURI object.} are able to remember any information during the process of their crawling. And this is the way how we force the Heritrix to maintain the state of archiving the links and images. Module LinksScoperWebAnalyzer extends original module LinksScoper, but adds the functionality to handle links referenced from Bohemian URI.
 
 Lets describe the workflow of archiving links from Bohemian URI:
 
+\begin{center}
 \includegraphics[width=120mm]{archiveLinks.png}
+\end{center}
 
 \begin{description}
-\item[1. Frontier next(int timeout)] - Each CrawlURI enters the process of crawling from Frontier, by calling his method next() by ToeThread. The CrawlURI than goes through processors.
-\item[2. ExtractorWebAnalyzer innerProcess(CrawlURI curi)] - When CrawlURI reaches the ExtractorWebAnalyzer, the CrawlURI is checked whether it contains some flag. Next processing depedns on the flag's value.
+\item[1. Frontier next(int timeout)] - Having been called by ToeThread, the CrawlURI entered the process of crawling. Each URI is stored and scheduled in Frontier object and waits for ToeThread to be crawled. While crawling, the CrawlURI is processed by processors defined by user.
+\item[2. ExtractorWebAnalyzer innerProcess(CrawlURI curi)] - After the CrawlURI reaches the ExtractorWebAnalyzer, it is checked whether it contains some flag. Next processing depedns on the flag's value.
 
 \begin{description}
-\item[2.1 CrawlURI NO FLAG] - The CrawlURI has no flag. WebAnalyzer identifies it's mime type with MimeTypeDetector.
-\item[2.2 CrawlURI FLAG=valid\_link, DEPTH=x] - The CrawlURI has the flag valid\_link determining that this CrawlURI was referenced from Bohemian URI and it has to be archived immediately. WebAnalyzer doesn't analyze this CrawlURI, it would do it in vain. The CrawlURI is sent directly to ARCWriterProcessorWebAnalyzer to be archived. The DEPTH=x determines the level, to which the links discovered on this CrawlURI has to be archived as well.
-\item[2.3 CrawlURI FLAG=archive\_bin\_link, DEPTH=0] - The CrawlURI with this flag determines, that this URI is referenced from Bohemian URI. We have to archive all CrawlURIs with this flag except of html pages to ensure that all images and other sources referenced from Bohemian URI will be archived. See picture depth,... todo. CrawlURIs with this flag represent the lists of tree.
+\item[2.1 CrawlURI NO FLAG] - The CrawlURI has no flag. WebAnalyzer will identifiy its mime type with MimeTypeDetector.
+\item[2.2 CrawlURI FLAG=valid\_link, DEPTH=x] - The CrawlURI has the flag \emph{valid\_link} determining that this CrawlURI was re\-fe\-ren\-ced from Bohemian URI and it has to be archived immediately. WebAnalyzer doesn't analyze this CrawlURI, it would do it in vain. The CrawlURI is sent directly to ARCWriterProcessorWebAnalyzer to be archived. The \emph{DEPTH=x} determines the level, to which the links discovered on this CrawlURI has to be archived as well.
+\item[2.3 CrawlURI FLAG=archive\_bin\_link, DEPTH=0] - The \\CrawlURI with this flag determines, that this URI is referenced from Bohemian URI. We have to archive all CrawlURIs with this flag except of html pages to ensure that all images and other sources referenced from Bohemian URI will be archived. Crawl\-URI\-s with this flag represent the lists of tree. See picture \S\ref{aolai}.
 
 \begin{description}
-\item[2.3.1 CrawlURI Content type=text/css, DEPTH=0] - If the CrawlURI with flag archive\_bin\_link is a document of type text/css, we have to archive it immediately and also set new flag valid\_link, DEPTH=0 for this CrawlURI. This ensures that all links referenced from css document will be archive as well. 
-\item[2.3.2 CrawlURI Content type=other] - CrawlURI with flag archive\_bin\_link, the content type of which differs from text/html, has to be archived. This ensures all multimedia sources from Bohemian URI will be in arhival collection.
-\item[2.3.3 CrawlURI Content type=text/html] - CrawlURI with archive\_bin\_link flag, the content type of which is text/html will not be archived. This ensures that the depth defined by user will not be exceeded.
+\item[2.3.1 CrawlURI Content type=text/css, DEPTH=0] - If \\the CrawlURI with flag \emph{archive\_bin\_link} is a document of type \emph{text/css}, we have to archive it immediately and also set new flag \emph{valid\_link, DEPTH=0} for this CrawlURI. This ensures that all links referenced from css document will be archived. 
+\item[2.3.2 CrawlURI Content type=other] - CrawlURI with flag \emph{archive\_bin\_link}, the content type of which differs from \\ \emph{text/html}, has to be archived. This ensures all multimedia sources from Bohemian URI will be in archival collection.
+\item[2.3.3 CrawlURI Content type=text/html] - CrawlURI with \emph{archive\_bin\_link} flag, the content type of which is \emph{text/html} will not be archived. This ensures that the depth defined by user will not be exceeded.
 \end{description}
 \end{description}
 
 
-\item[3. MimeTypeDetector isContentTypeText(curi.getName())] - The CrawlURI with no flag is identified by MimeTypeDetector, that is a part of WebAnalyzer module. According to the identified mime type, the next step is chosen.
+\item[3. MimeTypeDetector isContentTypeText(curi.getName())] - The \\CrawlURI with no flag is identified by MimeTypeDetector. According to the identified mime type, the next step is chosen.
 
 \begin{description}
-\item[3.1 CrawlURI Content type=other] - The CrawlURI which identified mime type is different from text will not be analyzed. Probably it's a URI with binary content. This CrawlURI skips to post-processing chain.
-\item[3.2 CrawlURI Content type=text] - The CrawlURI with text content type will be analyzed by WebAnalyzer in next step.
+\item[3.1 CrawlURI Content type=other] - The CrawlURI which identified mime type is different from \emph{text} will not be analyzed. Pro\-bab\-ly it is a URI with binary content. This CrawlURI skips to post-processing chain.
+\item[3.2 CrawlURI Content type=text] - The CrawlURI with \emph{text} content type will be analyzed by WebAnalyzer in next step.
 \end{description}
 
-\item[4. WebAnalyzer run(curiName, outlinks, contentType, content)] - All CrawlURIs in this branch are analyzed by WebAnalyzer. On the basis of CrawlURI's details, WebAnalyzer decides whether the CrawlURI is Bohemian URI or isn't.
+\item[4. WebAnalyzer run(curiName, outlinks, contentType, content)] - \\All CrawlURIs in this branch are analyzed by WebAnalyzer. On the basis of CrawlURI's details, WebAnalyzer decides whether the CrawlURI is Bohemian URI or not.
 
 \begin{description}
 \item[4.1 CrawlURI NO FLAG] - CrawlURI is not identified as Bohemian URI. It skips to post-processing chain.
@@ -217,7 +240,7 @@ Lets describe the workflow of archiving links from Bohemian URI:
 \end{description}
 
 \item[5. ARCWriterProcessorWebAnalyzer innerProcess(CrawlURI curi)] - This processor archives all CrawlURIs except of DNS records.
-\item[6. LinksScoperWebAnalyzer innerProcess(CrawlURI curi)] - This processor handles all links discovered on CrawlURI. New CandidateURIs are created from discovered links and corresponding flags are associated with CandidateURIs.
+\item[6. LinksScoperWebAnalyzer innerProcess(CrawlURI curi)] - This \\processor handles all links discovered on CrawlURI. New CandidateURIs are created from discovered links and corresponding flags are associated with CandidateURIs.
 
 \begin{description}
 \item[6.1 CrawlURI NO FLAG] - The CrawlURI with no flag is processed in usual way.
@@ -227,21 +250,21 @@ Lets describe the workflow of archiving links from Bohemian URI:
 \item[6.1.3 CandidateURI NO FLAG] - The CandidateURI whose parent CrawlURI doesn't contain any flag, has no flag as well.
 \end{description}
 
-\item[6.2 CrawlURI FLAG=valid\_link, DEPTH=x] - The CrawlURI with this flag is next processed according to the value of DEPTH attribute.
+\item[6.2 CrawlURI FLAG=valid\_link, DEPTH=x] - The CrawlURI with this flag is next processed according to the value of \emph{DEPTH} attribute.
 
 \begin{description}
 \item[6.2.1 createCandidateURI()] - The CandidateURI object is created from link.
-\item[6.2.2 CandidateURI FLAG=valid\_link, DEPTH=x-1] - The CrawlURI with depth value x>0. Flag valid\_link, DEPTH=x-1, is set for newly created CandidateURI. When the depth value is x=0, then the archive\_bin\_link is associated with CandidateURI. This ensures that valid links from Bohemian URI will be archived until (todo unless) they reach defined depth.
-\item[6.2.3 CandidateURI FLAG=archive\_bin\_link] - The CrawlURI with depth value x=0. The flag archive\_bin\_link is associated with CandidateURI. This flag ensures, that all sources (images, css, ...) placed on the archived URI will be archived as well.
+\item[6.2.2 CandidateURI FLAG=valid\_link, DEPTH=x-1] - \\The CrawlURI with depth value \emph{x>0}. Flag \emph{valid\_link, \\DEPTH=x-1}, is set for newly created CandidateURI. When the depth value is \emph{x=0}, then the \emph{archive\_bin\_link} is associated with CandidateURI. This ensures that valid links from Bohemian URI will be archived until they reach the defined depth.
+\item[6.2.3 CandidateURI FLAG=archive\_bin\_link] - The \\CrawlURI with depth value \emph{x=0}. The flag \emph{archive\_bin\_link} is associated with CandidateURI. This flag ensures, that all sources (images, css, ...) placed on the archived URI will be archived as well.
 \end{description}
 
 
-\item[6.3 CralURI FLAG=valid\_URI, DEPTH=x] - The CrawlURI with this flag is next processed according to the value of depth attribute.
+\item[6.3 CralURI FLAG=valid\_URI, DEPTH=x] - The CrawlURI \\with this flag is next processed according to the value of depth attribute.
 
 \begin{description}
 \item[6.3.1 createCandidateURI()] - The CandidateURI object is created from link.
-\item[6.3.2 CandidateURI FLAG=valid\_link, DEPTH=x-1] - The CrawlURI with depth value x>0. Flag valid\_link, DEPTH=x-1 will be associated with CandidateURI.
-\item[6.3.3 CandidateURI FLAG=arhchive\_bin\_link] - The CrawlURI with depth value x=0. Flag archive\_bin\_link will be associated with CandidateURI.
+\item[6.3.2 CandidateURI FLAG=valid\_link, DEPTH=x-1] - \\The CrawlURI with depth value \emph{x>0}. Flag \emph{valid\_link, \\DEPTH=x-1} will be associated with CandidateURI.
+\item[6.3.3 CandidateURI FLAG=arhchive\_bin\_link] - The \\CrawlURI with depth value \emph{x=0}. Flag \emph{archive\_bin\_link} will be associated with CandidateURI.
 \end{description}
 \end{description}
 
@@ -254,36 +277,203 @@ Lets describe the workflow of archiving links from Bohemian URI:
 %================================NEW SECTION================================%
 
 \newpage
-\section{WebAnalyzer - Design and Implementation}
+\section{WebAnalyzer}
 
-WebAnalyzer is realized as standalone module packaged into .jar file. WebAnalyzer provides simple interface, that is used by ExtractorWebAnalyzer to identify the processed URI. The rest of the functionality is implemented in integration modules. WebAnalyzer identifies the processed URI on the basis of properties defined by user. These properties can be defined in external file webanalyzer.properies. User is able to configure which modules of WebAnalyzer he wants to use and define conditions for valid URI.
+The WebAnalyzer is realized as standalone module packaged into \emph{.jar} file. WebAnalyzer provides simple interface, that is used by ExtractorWebAnalyzer to identify the processed URI. WebAnalyzer identifies the processed URI on the basis of properties specified by user. These properties can be defined in external file \emph{webanalyzer.properies}. User is able to configure which componentes of WebAnalyzer he wants to use. Important thing is to specify conditions for valid URI.
 
-WebAnalyzer is designed to be modular, so that new modules can be added easily. WebAnalyzer provides interfaces for new modules, so it is easy to implement new criterion to identifying analyzed URI.
+WebAnalyzer is designed to be modular, so that new modules can be added. WebAnalyzer provides interfaces for new modules, so it is easy to implement new criterion(module) for identifying analyzed URI.
 
-\subsection{Overview of class diagram}
+\subsection{Overview of Class Diagram}
 
 WebAnalyzer consists of few packages.
 
+\begin{center}
 \includegraphics[width=120mm]{webanalyzerCD.png}
+\end{center}
 
 Lets describe the packages:
 
+\begin{description}
+\item[cz.webarchiv.webanalyzer.multithread] - This package contains classes that handles properties defined in \emph{webanalyzer.properties} file. There is also the main class that provides interface for using the WebAnalyzer.
 
+\begin{description}
+\item[WebAnalyzer] - This class provides interface for the whole system. This class is singleton (there is only one instance created during the process) and is directly used by ExtractorWebAnalyzer.
+\item[PropertiesReader] - This class reads and validates the values of pro\-per\-ties defined in \emph{webanalyzer.properties} file.
+\item[WebAnalyzerProperties] - This class stores the values for properties from \emph{webanalyzer.properties} file, for other objects to access these properties easily.
+\end{description}
 
+\item[cz.webarchiv.webanalyzer.multithread.analyzer.util] - This package \\contains classes with functions that are often used by the system.
+\begin{description}
+\item[FilterText] - This class provides functions for working with text.
+\item[AnalyzerConstatns] - The class provides constants for better identification of criteria(modules) in source code.
+\end{description}
+
+\item[cz.webarchiv.webanalyzer.multithread.analyzer] - This package contains classes that stores the actual state of analyzing. All components cooperate with this package.
+\begin{description}
+\item[UrlAnalyzer] - The class that initializes all required criteria(com\-po\-nent\-s) and executes the analyzing. This class also counts statistics and decides whether the analyzed URI is valid or not.
+\item[PointsCounter] - This class stores reached points for analyzed URI. If some component finds the relevant information, the PointsConter increments its points. At the end of analyzing reached points are compared with defined amount of points required for valid URI.
+\item[ProcessedCrawlURI] - This class stores information about processed URI (name, content, content type, links).
+\end{description}
+
+\item[cz.webarchiv.webanalyzer.multithread.mime] - This package represents components that identify the mime type or URI.
+\begin{description}
+\item[Content] - This class provides interface to call the main method that identifies the mime type of URI. This class initializes all other objects needed for identifying.
+\item[MimeType] - The class that stores information about mime type.
+\item[MimeTypes] - This class stores all MimeType objects and is able to identify the mime type of unkonwn document on the basis of its(todo its) name or content.
+\item[MimeTypesException] - The Exception that is thrown if some error occurs.
+\end{description}
+
+\item[cz.webarchiv.webanalyzer.multithread.managers] - This package contains classes that are neccessary for some searchers(components). I\-Ma\-na\-ger objects initializes database connections and opens necessary files.
+\begin{description}
+\item[WebAnalyzerManager] - The main class that initializes all objects of type IManager. At the end of the whole process this object closes all used managers.
+\item[IManager] - IManager is interface, that all managers must implement. The Methods of managers that access to files and databases are usually synchronized, so that many threads can use the Web\-A\-na\-lyzer instance.
+\end{description}
+
+\item[cz.webarchiv.webanalyzer.multithread.criteria] - This package contains searchers. Each serchers represents some criterion. All searchers must implement ISeacher interface.
+\begin{description}
+\item[ISearcher] - The interface ISeacher requires \emph{search(ProcessedCrawlURI curi)} method and \emph{toString()} method. First method searches concrete information in object ProcessedCrawlURI and the other method provides statistics of analyzing.
+\end{description}
+
+\end{description}
+
+%================================NEW SECTION================================%
+
+\newpage
+\section{Workflow}
+
+Workflow of identifing the URI is divided into 4 parts. Each part represents one method, that is called from Heritrix.
+
+\subsection{The Initialization}
+
+\begin{center}
+\includegraphics[width=120mm]{SD1.png}
+\end{center}
+
+Before using the WebAnalyzer, it's necessary to initialize it. The i\-ni\-tia\-li\-za\-tion is performed simultaneously with the initialization of Extractor\-Web\-Analyzer. There is only one instance of WebAnalyzer object during the running of crawl job. The WebAnalyzer gets the properties from \emph{webanalyzer.properties} file, so that it can initialize all managers which are needed for searchers chosen by the user. After initialization WebAnalyzer is prepared to use.
+
+\subsection{The Identification of Mime Type}
+
+\begin{center}
+\includegraphics[width=120mm]{SD2.png}
+\end{center}
+
+Before analyzing the document it's important to identify its mime type. The text analyzing of binary document doesn't have sense. But user may want to identify the analyzed document only on the basis of URI name or IP address. Than the user has to deny all searchers that use text content to analyze the URI. Only searchers like GeoIPSearcher can be allowed in that case.
+
+When the MimeTypeDetector is used for the first time, the Content object calls \emph{init()} method, that initializes all necessary objects. MimeTypesReader reads all elements from external xml document and creates MimeType instances from them. These instances are than stored into the collection of object MimeTypes. Now everything's prepared for identifing the unknown documents.
+
+\subsection{The Analyzis}
+
+\begin{center}
+\includegraphics[width=120mm]{SD3.png}
+\end{center}
+
+The initialized WebAnalyzer is ready to analyze the URI. WebAnalyzer accepts some parametres of processed CrawlURI such as content, name and discovered links. Everytime when the Heriritrx calls WebAnalyzer to analyze the URI, new instance of UrlAnalyzer object is created. We prefer each thread has its own UrlAnalyzer instance, so that many threads can analyze the documents.
+
+For each UrlAnalyzer new instance of PointsCounter is created and associated with it. According to the properties defined by the user all required searchers are instantiated. Each instance of ISearcher is associated with PointsCounter object, for searchers to be able to increment points of analyzed document, when relevant information is found. Some of the searches uses theirs managers. These managers provides synchronized methods, that accesses to files and databases. On the basis of reached points, the UrlAnalyzer decides whether the analyzed document is valid or not. Having received confirmation, that the processed URI is valid, Heritrix hanles it as we described above.
+
+\subsection{The Finalization}
+
+\begin{center}
+\includegraphics[width=120mm]{SD4.png}
+\end{center}
+
+When the whole process of crawl job is finished, it's necessaryto finalize the WebAnalyzer instance, so that it can be used in next crawl job. The WebAnalyzer instance is closed simultaneously with ExtractorWebAnalyzer processor. All managers in WebAnalyzer close opened database connections, files and streams.
+
+\subsection{The Configuration}
+
+Before we start the crawl job we have to configure both systems.
+
+\subsubsection{Heritrix}
+The configuration of Heritrix is easy. Just follow the steps in Heritrix user manual. If you want to use WebAnalyzer, you have to add ExtractorWebA\-na\-ly\-zer to extractors, replace ARCWriterProcessor by ARCWriterProcessorWebAnalyzer and replace original LinksScoper by LinksScoperWebAnalyzer. These three processor are required by WebAnalyzer. If you want to crawl the web outside the national domain you have to add some DecidingRules to filter out links from national domain (\emph{MatchesRegExpDecideRule}). We use the following DecidingRules in given order: \emph{AcceptDecideRule, Pa\-tho\-lo\-gi\-calPathDecideRule, TooManyPathSegmentsDecideRule, MatchesRegExpDecideRule}. Some further information is available in user manual.
+
+\subsubsection{WebAnalyzer}
+The configuration of WebAnalyzer works on the basis of configuration file \emph{webanalyzer.properties}. In this file you can find properties and their values used by WebAnalyzer.
+
+\begin{description}
+\item[webanalyzer.urlanalyzer.min.valid.points=200] - This property defines how many points must analyzed document reach to be identified as valid.
+\item[webanalyzer.urlanalyzer.depth.toarchive=3] - This property is used by Heritrix to archive links referenced from valid URI. If value equals 0, than only valid URI with its sources (images, css styles,...) is archived. If we set the value to 3, it means that all links referenced from valid URI will be archived automatically to this level.
+\end{description} 
+
+other properties are used by concrete searchers:
+\begin{description}
+\item[properties for EmailSearcher]
+\item[webanalyzer.searcher.email.use=1] - This means that the user wants to use EmailSearcher to analyze the document. Value 0 disables this searcher.
+\item[webanalyzer.searcher.email.regexp=][a-z0-9.\_-]+@[a-z0-9.\_-]+$\backslash$$\backslash$.cz] - EmailSearcher searches all e-mails in the document. On the basis of this regular expression the user is able to define which e-mails are in his interest. This regular expression searches e-mails with .cz domain.
+\item[webanalyzer.searcher.email.point=1] - When the relevant e-mail is found this value is added to reached points of analyzed URI.
+\end{description}
+
+Other properties of searchers are very similar.
+
+\subsection{Components of WebAnalyzer}
+WebAnalyzer analyzes the URI on the baseis of searchers, that are modular, so it's easy to add new module if you're skilled developer. All searchers perform very similar activities. They looks for relevant information in the ProcessedCrawlURI object. Some searchers work with text content of URI, others use its name or IP address. When the relevant information is found, searcher increments points of analyzed URI.
+
+\subsubsection*{EmailSearcher}
+Simple searcher based on the regular expression, that searches emails in text content of processed URI.
+
+\subsubsection*{PhoneSearcher}
+Simple searcher based on the regular expression, that searches phone numbers in text content of processed URI. The User is able to define in \emph{web\-a\-na\-lyzer.properties} file which phone numbers are in his interest. This searcher uses functionality of FilterText object to filter out source code from document  e.g. javascript.
+
+\subsubsection*{HtmlLangSearcher}
+Simple searcher based on the regular expression, that searches lang attributes in html source code of processed URI.
+
+\subsubsection*{GeoIPSearcher}
+The interesting criterion is code of country, from which the analyzed URI and URI's discovered links comes from. This searcher uses the project \emph{MaxMind}. The \emph{MaxMind} is able to find out the geological localization of concrete IP address. The version called \emph{GeoLiteCountry} is released for free and we can use it in our WebAnalyzer. This searcher uses its associated manager, that cooperates with \emph{GeoLiteCountry} interface. Some further information about MaxMind can be found on \url{http://www.maxmind.com}.
+
+\subsubsection*{DictSearcher}
+This component is able to search words in defined dictionary. It uses its own list of words with associated index for faster searching. If the word from text content of URI is found in this dictionary, searcher increments points of analyzed URI. The text content of URI is processed by FilterText object to filter out unrelevant block of text, such as source code. The DictSearcher uses its manager that cooperates with dictionary file and index file. The dictionary(wordlist) is created from czech corpus and contains no words occuring in other corpuses(slovak, english).
+
+\subsubsection*{In Future we want to implement these Searchers}
+
+\subsubsection*{TrigramSearcher}
+TrigramSearcher will be able to identify the language of URI's text, on the basis of trigrams. This method seems to be quite precise, as we heard from the laboratory processing natural language.
+
+\subsubsection*{URLSearcher}
+The URLSearcher searches the URLs with specified domain in collection of discovered links.
+
+\subsubsection*{ValidLinkSearcher}
+This searchers checks whether the link discovered in analyzed URI is valid link. We gain the list of valid links from famous portals of concrete nation. In Czech republic it can be portal \emph{www.seznam.cz}. These links are considered to be important for the nation, and if analyzed URI contains some of these links, it means that it has something to do with the nation. This searcher uses \emph{Apache Lucene} project to index and search links.
+
+\subsubsection*{ForbiddenLinkSearcher}
+There are many links refering to sites with pornographic content. So it's a good thing to check whether the analyzed URI contains this sort of links. If forbidden link is found
+we reduce points of analyzed URI. This will ensure that we won't archive pornographic webpages. The \emph{Apache Lucene} will be suitable for this job. 
+
+\subsubsection*{ForbiddenDictSearcher}
+ForbiddenDictSearcher will search vulgar words, because we don't want to archive vulgar webpages. The most important thing is to gain some list of vulgar words. The implementation will be very similar to DictSearcher.
+
+\subsubsection*{CitySearcher}
+The next module that can be usefull is CitySearcher. We just have to gain the list of cities of concrete nation. We can use \emph{Apache Lucene} project to implement this module.
+
+\subsubsection*{GoogleSearcher}
+In the future we want to implement searcher, that will use some functions from \emph{GoogleAPI}, but we don't have exact idea so far.
 
 %================================NEW SECTION================================%
 
 \newpage
 \section{Testing}
 
-all from bachelour work
+The system hasn't run till the end so far. We was testing it only for 24 hours, due to lack of disk space. The system is still under construction and we expect that new errors may occur during the complete test, which may take few weeks.
+
+Some statistics from test. The system processed xxx URIs in xxx hours. The Collection of seeds consisted of URIs outside the national domain.
+todo make new charts chande xxx to concrete values
+
+\begin{center}
+\includegraphics[width=120mm]{dict.png}
+
+\includegraphics[width=120mm]{email.png}
+
+\includegraphics[width=120mm]{geo.png}
+
+\includegraphics[width=120mm]{html.png}
+\end{center}
 
 %================================NEW SECTION================================%
 
 \newpage
-\section{Conclusion}
+\section{The Conclusion}
 
-Conclusion
+We have to mention that the system si still under construction and we will develop new criteria to identify URIs. When we gain more experience with the system, we will upgrade it to meet new requirements that may occur during the running. We will try to develop the system to be modular, for us to add new functionality easily. 
+
+In the future the system will be able to identify not only Czech web but also web of other nations. The only importatnt thing for identifing the web of other nations is to gain relevant sources that are used by WebAnalyzer (list of words, relevant URIs). Next importatnt milestone will be a new version of \emph{Heritrix 2}. We will try to adapt to this new version. It can be also a good oportunity to use new functionality that comes with \emph{Heritrix 2}. The WebAnalyzer is open-source system and we hope that some people will find it useful.
 
 %================================NEW SECTION================================%
 
@@ -291,300 +481,8 @@ Conclusion
 \section{Sources}
 
 \begin{itemize}
-\item http://lucene.apache.org
-\item http://www.vsj.co.uk/java/display.asp?id=474
-\end{itemize}
-
-
-\begin{itemize}
-\item Pri v�voji r�znych softw�rov sa v���ina v�voj�rov ihne� uchy�uje k rela�n�m datab�zam.
-\item Napriek tomu, �e rela�n� datab�za je jednoducho pr�sptupn�, vyspel� a robustn�, je to technol�gia, ktor� bola p�vodne navrhnut�
-pre vysoko �trukturovan� d�ta.
-\item Existuje v�ak mnoho re�lnych d�t, ktor� sa jednoducho nehodia do �trutkt�rovanej organiz�cie (dokumenty, webov� str�nky, e-maily...)
-\item Na efekt�vnu persistenciu t�chto d�t, ktor� umo�n� r�chle a �ahk� vyh�ad�vanie, m��ete d�ta ulo�i� do rela�nej datab�zy alebo m��ete pou�i� jednoduch�iu a mo�no v�konnej�iu alternat�vu.
-\item Takouto alternat�vou m��e by� open-source projekt Lucene search engine od Apache Souftware Foundation.
-\end{itemize}
-
-\section{O projekte Apache Lucene}
-
-\begin{itemize}
-\item Apache Lucene je vysoko v�konn�, full-textov� vyh�ad�vac� n�stroj, nap�san� v Jave. Je to technol�gia vhodn� pre takmer ka�d� aplik�ciu, ktor� vy�aduje full-textov� vyh�ad�vanie.
-\item Je to open-source projekt verejne pr�stupn� na str�nke http://lucene.apache.org/
-\item Projekt Lucene patr� k popredn�m projektom Apache Software Foundation. To znamen�, �e je z�ujem ho na�alej podporova� a vyv�ja�. Vhodn� na pou�itie do aplik�ci�, bude na�alej podporovan� aj v bud�cnosti.
-\item Fyzick� podoba Lucene je vo forme Java APIs. M��ete ju pou�i� na indexovanie a h�adanie vo ve�k�ch blokoch textov�ch d�t, vr�tane vytvorenia full-textov�ho indexu.
-\item Full-textov� indexovanie n�m pon�ka vyh�ada� hocijak� slov�, fr�zy alebo fragmenty viet v celom textovom obsahu.
-\end{itemize}
-
-\newpage
-
-\section{Z�kladn� koncepty Lucene}
-
-\begin{itemize}
-\item Kni�nica Lucene vytv�ra a spravuje indexy.
-\item V Lucene je index ch�pan� ako seqencia Dokumentov. Document je �pecifick� Java trieda, ktor� pozost�va z mno�iny pol�.
-
-\includegraphics[width=120mm]{depth.png}
-
-\item Pri pou�it� Lucene m��ete indexova� blok textu vytvoren�m objektu Dokument, predan�m v�etk�ch instanci� vytvoren�ch dokumentov objektu
-IndexWriter. Trieda IndexWriter vytv�ra a spravuje indexy.
-\item Napr�klad ak chcete indexova� v�etky Shakespearov� sonety, m��ete vytvori� podtriedu triedy Document nazvan� SonnetDocument a potom vytvori� instanciu SonnetDocument pre ka�d� sonet a preda� ju objektu IndexWriter na spracovanie.
-\item Ka�d� pole v Lucene je p�r meno/hodnota. Hodnota je textov� a m��e by� ve�mi dlh� re�azec. 
-\item Napr�klad jeden field v SonnetDocument m��e by� pomenovan� PATH s hodnotou ukladaj�cou cestu a n�zov s�boru, ktor� obsahuje text sonetu a druh� field m��e by� pomenovan� CONTENT a bude obsahova� vel� text sonetu.
-\item Pri pou��van� ve�k�ho bloku textu pon�ka rozhranie Lucene met�du, ktor� berie na vstupe objekt java.io.Reader (vstup s�bor, alebo URL s�boru)
-\item V�etky tieto polia m��u by� ulo�en� priamo v indexe, ale ak u� m�te d�ta ulo�en� napr�klad v osobitn�ch textov�ch s�boroch nemus�te �iada� Lucene aby ich ukladal znovu. (Sonety ulo�en� v textov�ch s�boroch).
-\end{itemize}
-
-\section{A Lucene index}
-\begin{itemize}
-\item Index logicky pozost�va z objektov Dokumentov a Fieldov. Lucene v�ak fyzicky spravuje index ako mno�inu s�borov v adres�ri.
-\item Po�as procesu indexovania sa Dokumenty predan� objektu IndexWriter sp�jaj� do segmentov. Tieto segmenty s� fyzicky zap�san� v s�boroch v danom indexovom adres�ri.
-\item Ka�d� segment je osobitn� samostatn� index.
-
-\includegraphics[width=60mm]{depth.png}
-
-\item Na obr�zku vid�te, �e Lucene spravuje indexy vo forme segmentov (sub-indexov). Viacer� segmenty sa m��u sp�ja� po�as �dr�by alebo optimaliz�cie indexovania.
-
-\item V dokument�ci� je nap�san� ako sa d� zv��i� v�kon Lucene nastaven�m r�znych syst�mov�ch premenn�ch. (java heap memory, ...)
-\end{itemize}
-
-\newpage
-
-\section{Praktick� pr�klad}
-
-Praktick� uk��ka pr�ce Lucene na vzorke Shakespearov�ch sonetov.
-Nasleduj�ci program bude schopn� vykon�va� tieto funkcie:
-
-\begin{itemize}
-\item Vytvori� Lucene index pre v�etky sonety
-\item Dovo�uje u��vate�ovi dotazova� sa na slov� a fr�zy v sonetoch
-\end{itemize}
-
-pr�klad pozost�va z t�chto Java tried:
-
-\begin{description}
-\item[SonnetDocument] Vytv�ra Lucene Document pre sonet. N�zov s�boru tvor� jeden argument a druh� tvor� textov� obsah cel�ho sonetu.
-\item[Indexer] T�to trieda obsahuje k�d, ktor� vytvor� index pre sonet. Pou��va StandardAnalyzer a zapisuje index do adres�ra nazvan�ho index.
-\item[SonnetFinder] T�to trieda bude vyh�ad�va� pomocou indexu na z�klade u��vate�sk�ho dotazu. Pou��va QueryParser a StandardAnalyzer na sparsovanie dotazu a INdexSearcher na vyh�ad�vanie v indexe.
-\end{description}
-
-Z internetu si m��eme stiahnu� textov� s�bory jednotliv�ch sonetov, ulo�en�ch pod n�zvom Sonet?, kde ot�znik zastupuje poradov� ��slo sonetu.
-
-\subsection{Adding fields to a Lucene document}
-Trieda SonnetDocument vytv�ra Lucene Document, ktor� sa pu�ije na indexovanie sonetu.
-
-\begin{verbatim}
-package uk.co.vsj.lucene;
-
-import java.io.File;
-import java.io.Reader;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-\end{verbatim}
-
-\begin{itemize}
-\item Statick� met�da nazvan� createDocument() je tov�re� na v�robu objektov Document.
-\item Atrib�ty path a content s� pridan� metodou Document.add().
-\item Field.Text() je pou�it� na vytvorenie atrib�tu content,(parameter je objekt Reader z�skan� zo s�boru Sonet). Field.Text() vytv�ra obsah, ktor� nie je ulo�en� v samotnom indexe. (textov� obsah u� m�me v textov�ch s�boroch Sonet?)
-\end{itemize}
-
-
-\begin{verbatim}
-public class SonnetDocument {
-	public static Document createDocument(File f)
-		 throws java.io.FileNotFoundException {
-	Document doc = new Document();
-	doc.add(Field.Text(�path�, f.getPath()));
-
-	FileInputStream is = new FileInputStream(f);
-	Reader reader = new BufferedReader(new InputStreamReader(is));
-	doc.add(Field.Text(�contents�, reader));
-	return doc;
-	}
-
-	private SonnetDocument() {}
-}
-\end{verbatim}
-
-\subsection{Creating the sonnet index}
-Trieda Indexer je zodpovedn� za vytvorenie indexu. Ak je kolekcia s�borov iba read-only, tak sta�� vytvori� jednu instanciu triedy Indexer. Pri prid�van� a odoberan� d�t do indexu pozri dokument�ciu.
-
-Zdrojov� k�d triedy Indexer:
-
-\begin{verbatim}
-package uk.co.vsj.lucene;
-
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.IndexWriter;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-\end{verbatim}
-
-StandardAnalyzer v Lucene analyzuje obsah v anglickom jazyku a odfiltruje nepodstatn� slov� ako ``a'' a ``the'' po�as vytv�tania indexu. Lucene obsahuje taktie� analyzatori pre rusk� a nemeck� jazyk.
-
-postup index�cie:
-\begin{itemize}
-\item Vytvori� instanciu IndexWriter s konkr�tnym analyz�torom.
-\item Postupne povytv�ra� objekty Document a prida� ich do indexu metodou IndexWriter.addDocument().
-\item Zavola� met�du IndexWriter.optimize na optimalizovanie indexu.
-\item Zatvori� instanciu IndexWriter.
-\end{itemize}
-
-Index�cia potrv� na modernej��ch pc iba p�r sek�nd.
-
-\begin{verbatim}
-public class Indexer {
-	public static void createIndex() {
-		Date start = new Date();
-		IndexWriter writer = null;
-		try {
-			writer = new IndexWriter(�index�, new StandardAnalyzer(), true);
-			for( int i=1; i< 155; i++) {
-				writer.addDocument(SonnetDocument.createDocument(new File(
-			�Sonnet� + i)));
-			}
-			writer.optimize();
-
-			Date end = new Date();
-
-			System.out.println(�Indexing took � + (end.getTime() - start.getTime()) +
-			 � milliseconds�);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (writer != null)
-			try {
-				writer.close();
-			} catch (Exception ex) {}
-		}
-	}
-}
-\end{verbatim}
-
-\subsection{Searching the index}
-Dotazy m��eme vykon�va� bu� pomocou Lucene API alebo pomocou pr�kazov�ho riadku.
-
-\begin{verbatim}
-package uk.co.vsj.lucene;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Searcher;
-\end{verbatim}
-
-\begin{itemize}
-\item QueryParser vytv�ra dotazy pre Lucene. Pri vytvoren� QueryParseru potrebujete rovnako StandardAnalyzer.
-\item IndexSearcher poskytuje met�du search(). Met�da vracia objekt Hits, �o je zoznam dokumentov, v ktor�ch sa na�lo dotazovan� slovo.
-\item Pomocou Hits.doc(n) m��eme pristupova� k dokumentom a zobrazi� ich n�zov, aby sme vedeli v ktor�ch sonetoch sa nach�dza dane slovo.
-\end{itemize}
-
-\begin{verbatim}
-public class SonnetFinder {
-	public static void searchFor(
-		String queryText) {
-		try {
-			Searcher searcher = new	IndexSearcher(�index�);
-			Analyzer analyzer = new	StandardAnalyzer();
-
-			Query query = QueryParser.parse(queryText, �contents�, analyzer);
-			System.out.println(�Searching for: � + query.toString(�contents�));
-
-			Hits hits = searcher.search(query);
-			int hitsCount =	hits.length();
-			System.out.println(hitsCount + � matching sonnets found�);
-			for (int i = 0;	i < hitsCount; i++) {
-				Document doc = hits.doc(i);
-				String path = doc.get(�path�);
-				if (path != null) {
-					System.out.println(i + �. � + path);
-				}
-			} // of for
-
-		searcher.close();
-
-		} catch (Exception e) {
-				e.printStackTrace();
-		}
-	}
-}
-\end{verbatim}
-
-\newpage 
-
-\subsection{Test}
-
-\begin{verbatim}
-You will be prompted to enter your query. Try to look for a word: 
-
-Please enter your query:
-deeds
-
-The system returns a list of sonnets that contains the word �deeds�. 
-You should see 10 matching sonnets, similar to: 
-
-Searching for: deeds
-10 matching sonnets found
-0. Sonnet37
-1. Sonnet90
-2. Sonnet94
-3. Sonnet111
-4. Sonnet121
-5. Sonnet34
-6. Sonnet61
-7. Sonnet69
-8. Sonnet131
-9. Sonnet150
-
-You can also search for a phrase by using quotation marks, as in: 
-Please enter your query:
-�thy deeds�
-
-This time, �thy deeds� only matches 3 sonnets: 
-
-Searching for: �thy deeds�
-3 matching sonnets found
-0. Sonnet69
-1. Sonnet131
-2. Sonnet150
-
-It is also possible to search using the AND operator. 
-The following query makes sure the sonnet contains both
-the phrase �thy deeds� and �my mind�: 
-
-Please enter your query:
-�thy deeds� AND �my mind�
-
-You will match only one single sonnet using the above query: 
-
-Searching for: +�thy deeds� +�my mind�
-1 matching sonnets found
-0. Sonnet150
-\end{verbatim}
-
-\newpage
-
-\section{Z�ver}
-
-\begin{itemize}
-\item Lucene je jednodch� na nau�enie.
-\item Ak potrebujete rie�enie na index�ciu textu, Lucene je ten prav� n�stroj.
-\item Vyu�itie vo viacer�ch oblastiach, kde by RDBMS bolo zbyto�n�.
-\end{itemize}
-
-\section{Zdroje}
-
-\begin{itemize}
-\item http://lucene.apache.org
-\item http://www.vsj.co.uk/java/display.asp?id=474
+\item http://www.webarchiv.cz
+\item http://crawler.archive.org/articles/developer\_manual/overview.html
 \end{itemize}
 
 \end{document}
