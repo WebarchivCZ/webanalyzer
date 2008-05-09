@@ -17,14 +17,14 @@
         </author>
         <fi:thanks>Ďakujem vedúcemu mojej práce, Ing. Petrovi Žabičkovi za
             ochotu, usmerňovanie a pripomienky a rovnako celému týmu WebArchiv. 
-        Tiež ďakujem mojej priateľke za podporu.</fi:thanks>
+        </fi:thanks>
         <pubdate>2008</pubdate>
         <abstract>
             <para>Cieľom práce bolo navrhnúť a zrealizovať systém pre rozpoznávanie a archiváciu webových
                 informačných zdrojov ako súčasť archivačného systému Heritrix. Systém by mal tieto zdroje čo
                 najpresnejšie a najefektívnejšie automaticky identifikovať a archivovať pre využitie
                 v projekte Webarchív Národnej knižnice ČR. Programové riešenie systému je implementované
-                v jazyku Java. Program využíva funkcie mnohých projektov. Zvolenou platformou bol Linux
+                v jazyku Java. Program využíva funkcie viacerých projektov. Zvolenou platformou bol Linux
                 s vývojovým prostredím NetBeans.
             </para>
         </abstract>
@@ -34,7 +34,7 @@
             <keyword>WebArchiv</keyword>
             <keyword>Archivácia webu</keyword>
             <keyword>Rozpoznanie webu</keyword>
-            <keyword>harvester</keyword>
+            <keyword>Sklizeň</keyword>
         </keywordset>
     </bookinfo>
     <toc></toc>
@@ -50,31 +50,22 @@
             masovo zavádzať a používať v nespočetnom množstve inštitúcií, firiem
             a iných organizácií, či už verejnoprávnych alebo súkromných.
             Jeho veľký vplyv sa postupne premieta aj do škôl. Mení sa spôsob a forma
-            výuky, ktorá sa s Internetom stáva viac interaktívna, kvalitnejšia a zábavnejšia.
-            Hlavnou úlohou, či poslaním Internetu je zjednodušiť nám život pri
-            riešení rôznych problémov, na ktoré Internet pozná tie správne ale aj
-            nesprávne odpovede. Je to veľký pomocník, zdroj informácií, ktoré
-            poskytuje s veľmi dobrou rýchlosťou a presnosťou.
-            Drtivá väčšina ľudí súčasnej mladej generácie 
-            pozná spôsob ako umiestniť nejaký dokument na Internet, tak aby bol
-            online prístupný pre všetkých.
+            výuky, ktorá sa s Internetom stáva interaktívnejšia, kvalitnejšia a zábavnejšia.
         </para>
         <para>
-            Umiestňovanie rôznych materiálov na Internet sa stalo veľmi populárne.
-            Tým pádom sú každodenne nové informácie verejne prístupné za relatívne 
-            nízke nároky na čas a cenu. Existuje však aj riziko, že niektoré z
-            informácií budú zmenené, čím môžu stratiť svoju informačnú hodnotu alebo 
-            dokonca zmazané a navždy stratené. Existuje nespočetné množstvo 
-            hodnoverného materiálu umiestneného na Internete. Mnohí z nás k takýmto
-            internetovým stránkam a portálom pristupujeme, aby sme uvedené informácie
-            použili v škole, práci, dome alebo v inej sfére života. Ak sa na Internet
+            Ďalšou možnosťou, ktorú Internet ponúka je umiestňovanie materiálov
+            prostredníctvom webových stránok. Mnoho užívateľov túto službu pokladá
+            za výhodnú a rýchlu, čím sa na Internete každodenne objavujú nové a nové
+            informácie a dokumenty. V posledných rokoch je zaznamenaný 
+            obrovský nárast elektronických online zdrojov prístupných iba na Internete.
+            Mnohé z týchto zdrojov sú považované za veľmi hodnotné.
+            Existuje však aj riziko, že tieto informácie budú zmenené alebo dokonca 
+            zmazané a navždy stratené. Preto
+            sa musíme pokúsiť takéto informácie zachrániť, aby boli zachované kultúrne
+            umelecké a historické hodnoty, ktoré tieto dokumenty nesú a aby boli
+            prístupné aj pre budúce generácie. Ak sa na Internet
             pozeráme z tohto hľadiska, tak ho môžeme označiť za studňu ľudskej 
             múdrosti, o ktorú sa musíme starať a nemôžeme dovoliť aby vyschla.
-            todo zaclenit
-            Musíme sa pokúsiť takéto informácie zachrániť, aby boli zachované kultúrne
-            umelecké a historické hodnoty, ktoré tieto dokumenty nesú a aby boli
-            prístupné aj pre budúce generácie. V posledných rokoch je zaznamenaný 
-            obrovský nárast elektronických online zdrojov prístupných iba na Internete.
         </para>
         <para>
             Otázkou uchovávania obsahu Internetu sa zaoberali inštitúcie už pred mnohými rokmi.
@@ -82,43 +73,47 @@
             bola založená v roku 1996 za účelom vybudovania Internetovej knižnice a 
             poskytnutia permanentného prístupu pre výskumných pracovníkov, historikov, 
             školákov a všeobecnú verejnosť k historickým kolekciam, ktoré existujú v digitálnej podobe. V súčasnosti
-            Internet Archive zahrňuje vo svojich kolekciách texty, audio, animované obrázky,
+            Internet Archive zahrňuje vo svojich kolekciách texty, audio záznamy, animované obrázky,
             softwér a webové stránky.
             Prostredníctvom Internet Archive môžete nájsť webové stránky, ktoré v súčasnosti 
             neexistujú alebo sa môžete pozrieť ako vyzerali vaše obľúbené stránky pred 
-            desiatimi rokmi a sledovať ich vývoj až do súčasnosti. Internet Archive
+            desiatimi rokmi a sledovať ich vývoj až do súčasnosti. 
+            </para>
+            <para>
+            Internet Archive (IA)
             obsahuje snímky webových stránok už od roku 1996 až po dnes. Aj keď je 
             priemerná doba životnosti stránky 100 dní, Internet Archive archivuje
             stránky pravidelne každé dva mesiace. Pre posilnenie stability a trvanlivosti
-            archívu je IA zrkadlovaný do Bibliotheca Alexandrina v Egypte, jediná knižnica
-            na svete so zrkadlom. Podľa údajov z 20. februára IA v Bibliotheca Alexandrina
+            archívu je IA zrkadlovaný do Bibliotheca Alexandrina v Egypte. 
+            Podľa údajov z 20. februára IA v Bibliotheca Alexandrina
             zahŕňa webovú kolekciu od roku 1996 po rok 2006, 2000 hodín Egyptského a
-            US vysielania a 1000 archívnych filmov. Toto všetko predstavuje 1.5 PB (petabytes)
+            US vysielania a 1000 archívnych filmov. Toto všetko predstavuje 1.5 PB
             dát uložených na 880 počítačoch. Archív je plne funkčný a prístupný cez
             webové stránky projektu IA.
+            </para>
+            <para>
             Sprístupnenie archívu je uskutočňované pomocou programu Wayback Machine.
             Wayback Machine je služba, ktorá Vám umožňuje navštíviť archivované verzie
             webových stránok. Všetko čo potrebujete spraviť je napísať URL, ktorú
             požadujete a Wayback Machine Vám vráti zoznam všetkých
             archivovaných verzií zadanej stránky.                
-            todo dopln info WM, neskor oddiel o wayback machine
         </para>
         <para>
-            V Českej Republike existuje projekt nazvaný WebArchív, ktorý sa zaoberá 
+            V Českej Republike existuje projekt nazvaný WebArchiv, ktorý sa zaoberá 
             archiváciou a zprístupnením českého webu. 
             Jediné rozhodovacie kritérium pre identifikovanie českého webu funguje
-            na základe domény, ktorú obsahuje každá URL. Tým je zaručené, že všetky
+            na základe domény. Tým je zaručené, že všetky
             URL s českou doménou budú archivované. Existujú však stránky, ktoré
             sa nachádzajú na iných doménach ako .cz a sú jednoznačne považované za 
-            české. WebArchiv má silný záujem o tieto stránky a preto je jeden z
+            české. WebArchiv má záujem o tieto stránky a preto je jeden z
             novších cieľov WebArchivu archivácia českého webu mimo doménu .cz.
         </para>
         <para>
             Táto práca popisuje systém na rozpoznanie a archiváciu českého webu
             mimo národnú doménu. Systém na rozpoznanie českého webu je integrovaný
             do systému Heritrix, ktorý okrem iného tieto identifikované stránky 
-            archivuje. Pomocou systému je možné identifikovať bohemikálny zdroj, 
-            konkrétne webovú stránku, na základe viacerých kritérií, ktoré sú 
+            archivuje. Pomocou systému je možné identifikovať bohemikálny zdroj
+            na základe viacerých kritérií, ktoré sú 
             v systéme zakomponované. Za bohemikálny zdroj systém považuje všetky
             stránky, ktoré spĺňajú určité podmienky. Tieto podmienky môže užívateľ
             upraviť pred spustením samotného systému, tak aby vyhovovali jeho 
@@ -131,9 +126,7 @@
         </para>
         <para>
             Následná kapitola bližšie popisuje spôsob archivácie v projekte 
-            WebArchiv. Potom nasleduje kapitola popisujúca nadviazanie sklizne mimo
-            .cz na sklizeň .cz. Ďalšie kapitoly, implementácie, popis, workflow,
-            Heritrix doplním neskôr.
+            WebArchiv.
         </para>
     </chapter>
     
@@ -206,7 +199,7 @@
             </indexterm>
             <para><emphasis role="bold">Tematické zbierky</emphasis>
                 Tematické zbierky sú monotematické súbory webových dokumentov. V rámci
-                tematických sklizní sledujeme predovšetkým také deje, ktoré doprevádzaja
+                tematických sklizní sledujeme predovšetkým také deje, ktoré doprevádza
                 celospoločenská debata a je u nich teda predpoklad, že zaujmú 
                 významejšie miesto z hľadiska dejín Českej republiky 
                 (napr. voľby, povodne)<citation>02</citation>. 
@@ -224,7 +217,7 @@
                 Nedlib Harvester. 
             </para>
             <para>
-                Webové pavúky začínajú parsovaním zvolenej webovej stránky,
+                Webové pavúky začínajú parsovaním štartovacej webovej stránky,
                 ktoré sú v tejto problematike známe pod názvom semienka. 
                 Semienka sú zdrojové URI (unified resource identifier), z 
                 ktorých celý proces začína. Pri parsovaní webový pavúk hľadá 
@@ -234,7 +227,7 @@
                 opakuje, pokiaľ už nebudú žiadne odkazy, ktoré by sa spracovali.
                 Webový pavúk posiela HTTP požiadavky na dokumenty, umiestnené na
                 serveroch. Postup je rovnaký ako keď užívateľ kliká na odkazy vo
-                svojom webovom prehliadači. Webový pavúk však dokáže tento 
+                svojom webovom prehliadači, avšak Webový pavúk dokáže tento 
                 proces automatizovať.
             </para>
             <sect2>
