@@ -16,23 +16,23 @@
             <fi:advisor>Ing. Peter Žabička</fi:advisor>
         </author>
         <fi:thanks>Ďakujem vedúcemu mojej práce, Ing. Petrovi Žabičkovi za
-            ochotu, usmerňovanie a pripomienky a rovnako celému týmu WebArchivWebArchiv. 
+            ochotu, usmerňovanie a pripomienky a rovnako celému týmu WebArchiv. 
         </fi:thanks>
         <pubdate>2008</pubdate>
         <abstract>
             <para>Cieľom práce bolo navrhnúť a zrealizovať systém pre rozpoznávanie a archiváciu webových
-                informačných zdrojov ako súčasť archivačného systému HeritrixHeritrix. Systém by mal tieto zdroje čo
+                informačných zdrojov ako súčasť archivačného systému Heritrix. Systém by mal tieto zdroje čo
                 najpresnejšie a najefektívnejšie automaticky identifikovať a archivovať pre využitie
-                v projekte WebArchivWebArchiv Národnej knižnice ČR. Programové riešenie systému je implementované
+                v projekte WebArchiv Národnej knižnice ČR. Programové riešenie systému je implementované
                 v jazyku Java. Program využíva funkcie viacerých projektov. Zvolenou platformou bol Linux
                 s vývojovým prostredím NetBeans.
             </para>
         </abstract>
         <keywordset>
-            <keyword>WebAnalyzerWebAnalyzer</keyword>
-            <keyword>HeritrixHeritrix</keyword>
-            <keyword>WebArchivWebArchiv</keyword>
-            <keyword>archiváciaarchivácia webu</keyword>
+            <keyword>WebAnalyzer</keyword>
+            <keyword>Heritrix</keyword>
+            <keyword>WebArchiv</keyword>
+            <keyword>archivácia webu</keyword>
             <keyword>Rozpoznanie webu</keyword>
             <keyword>Sklizeň</keyword>
         </keywordset>
@@ -951,7 +951,7 @@
     <chapter>
         <title>Návrh a Integrácia</title>
         <sect1>
-            <title>Integracia</title>
+            <title>Integrácia</title>
             <para>
                 Podľa popisu funkčnosti Heritrixu je nutné vhodne integrovať systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer, tak
                 aby sme dosiahli požadovaných výsledkov. Modul <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer musí každopádne
@@ -1292,7 +1292,7 @@
                         odkazov z bohemikálnych stránok.
                     </para>
                     <para>
-                        Postup archivovania odkazov z bohemikálnych stránok:
+                        Postup archivovania odkazov z bohemikálnych stránok: <xref linkend="img1"/>
                     </para>
                     <itemizedlist>
                         <listitem>
@@ -1408,7 +1408,7 @@
                                     <para><emphasis>4.2 CrawlURI FLAG=valid_URI, DEPTH=x</emphasis> - 
                                         CrawlURI, identifikovaná ako bohemikálna bude následne archivovaná. Predtým sa jej však nastaví
                                         príznak <emphasis>valid_URI</emphasis> a <emphasis>depth=x</emphasis>. Hodnotu pre hĺbku získa 
-                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer zo súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>, ktorý nastavuje užívateľ pred spustením. 
+                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer zo súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, ktorý nastavuje užívateľ pred spustením. 
                                         Tým zabezpečíme 
                                         aby si systém pamätal, do akej hĺbky má rekurzívne nájdené odkazy automaticky archivovať.
                                     </para>
@@ -1519,8 +1519,8 @@
                             </para>
                         </listitem>
                     </itemizedlist>
-                    <figure float="1" id="archiveLinks"> 
-                        <title>spracovanie crawlURI</title>                    
+                    <figure float="1" id="img1"> 
+                        <title>Diagram popisujúci spracovanie URI pomocou integrácie viacerých modulov</title>                    
                         <mediaobject>
                             <imageobject>
                                 <imagedata scale="60" fileref="archiveLinks.png" format="PNG"/>
@@ -1544,7 +1544,7 @@
         <para>   
             <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sme navrhli tak, aby mohol byť použitý ako samostatná
             komponenta, ktorá bude identifikovať URI podľa nastavených požiadavkov.
-            Súčasťou je súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>, v ktorom môže užívateľ nastaviť
+            Súčasťou je súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, v ktorom môže užívateľ nastaviť
             aké rozhodovacie kritéria sa majú použiť a za akých podmienok sa má
             stránka identidikovať ako validná.
         </para>
@@ -1564,7 +1564,7 @@
                 <title>Class Diagram modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer</title>                    
                 <mediaobject>
                     <imageobject>
-                        <imagedata scale="40" fileref="webanalyzerCD.png" format="PNG"/>
+                        <imagedata scale="48" fileref="webanalyzerCD.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>    
@@ -1585,7 +1585,7 @@
                         <listitem>
                             <para><emphasis role="bold">PropertiesReader</emphasis> -
                                 Trieda, ktorá načíta a zvaliduje hodnoty parametrov z externého
-                                súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>.
+                                súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>.
                             </para>
                         </listitem>
                         <listitem>
@@ -1747,12 +1747,12 @@
                 (konkrétne z modulu <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer).
             </para>
             <sect2>
-                <title>inicializácia</title>
+                <title>Inicializácia</title>
                 <para>
                     <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sa musí pred použitím nainicializovať. Inicializácia
                     WebaAnalyzeru sa uskutočňuje zároveň s inicializáciu prosesoru
                     <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer, ktorý je súčasťou Heritrixu. Postup
-                    inicializovania:
+                    inicializovania: <xref linkend="appAsd1"/>
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -1764,7 +1764,7 @@
                     <listitem>
                         <para><emphasis role="bold">2.create PropertiesReader</emphasis> - 
                             Pri inicializácií je nutné načítať nastavené vlastnosti v 
-                            externom súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>, ktoré definujú
+                            externom súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, ktoré definujú
                             požiadavky na identifikáciu.
                         </para>
                     </listitem>
@@ -1820,17 +1820,9 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-                <figure float="1" id="sd1"> 
-                    <title>seq</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="20" fileref="SD1.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure>    
             </sect2>
             <sect2>
-                <title>identifikácia MimeType dokumentu</title>
+                <title>Identifikácia MimeType dokumentu</title>
                 <para>
                     Pred samotnou analýzou dokumentu je nutné overiť jeho typ, aby
                     sme sa vyhli textovej analýze binárneho dokumentu.
@@ -1839,7 +1831,7 @@
                     V tomto prípade by mal užívateľ nakonfigurovať <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer tak, 
                     aby používal iba odpovedajúce kritéria pri identifikácií. Moduly
                     na vyhľadávanie e-mailov, telefónych čísel alebo slov v slovníku
-                    by mali byť vypnuté.
+                    by mali byť vypnuté. <xref linkend="appAsd2"/>
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -1928,20 +1920,12 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-                <figure float="1" id="sd2"> 
-                    <title>seq</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="20" fileref="SD2.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure> 
             </sect2>
             <sect2>
-                <title>analýza</title>
+                <title>Analýza</title>
                 <para>
                     Po nainicializovaní modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer môžeme začať používať jeho
-                    metódu na analyzovanie.
+                    metódu na analyzovanie. <xref linkend="appAsd3"/>
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -2094,24 +2078,16 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-                <figure float="1" id="sd3"> 
-                    <title>seq</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="20" fileref="SD3.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure> 
             </sect2>
             <sect2>
-                <title>uzavrenie</title>
+                <title>Uzavrenie</title>
                 <para>
                     Keď skončí <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis> v Heritrixe, tak sa následne zatvárajú
                     všetky procesory, ktoré boli použité. Preto sme v integračnom 
                     procesore <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer pri jeho finalizovaní zavolali
                     metódu na finalizáciu modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer. Tým zabezpečíme, že
                     sa <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer správne ukončí, aby nevznikali zbytočné problémy
-                    v spojení s Heritrixom.
+                    v spojení s Heritrixom. <xref linkend="appAsd4"/>
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -2137,14 +2113,6 @@
                         </para>
                     </listitem>
                 </itemizedlist>
-                <figure float="1" id="sd4"> 
-                    <title>seq</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="20" fileref="SD4.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure> 
             </sect2>
         </sect1>
         <sect1>
@@ -2152,7 +2120,7 @@
             <para>
                 Konfigurácia celého systému sa skladá z konfigurácie Heritrixu, 
                 prostredníctvom jeho webového rozhrania a z konfigurácie WebAnalyzeru
-                cez externý súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>.
+                cez externý súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>.
                 <indexterm><primary>Heritrix</primary></indexterm>Heritrix musíme nastaviť tak aby používal naše integračné procesory
                 (<indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer, LinksScoper, ARCWriterProcessor). 
                 - na vstupe <indexterm><primary>semienka</primary></indexterm>semienka, čo sú odkazy mimo národnú doménu
@@ -2279,47 +2247,11 @@
                 <para>
                     Konfigurácia modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sa uskutočňuje pred spustením
                     nadefinovanej úlohy <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis> Heritrixu. 
-                    Všetko je v jednom externom súbore
-                    <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis>.
+                    Všetko potrebné sa nachádza v jednom externom súbore
+                    <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis><xref linkend="appB"/>.
                 </para>
-                <programlisting><![CDATA[
-# Properties file for <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
-# As first read the readme.txt
-# point properties must be in interval from 0 to 10
-
-# properties for geoIpSearcher
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.geoip.use=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.geoip.point=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.geoip.countrycode=cz
-
-# properties for dictionarySearcher
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.dictionary.use=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.manager.dictionary.language=cz
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.dictionary.point=1
-
-# properties for emailSearcher
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.use=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.point=1
-
-# properties for phoneSearcher
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.phone.use=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.phone.regexp=\\+420 [0-9]{3} ?[0-9]{3} ?[0-9]{3}
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.phone.point=1
-
-# properties for htmlLangSearcher
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.htmllang.use=1
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.htmllang.regexp=lang ?= ?[\"|']? ?cs ?[\"|']?
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.htmllang.point=1
-
-# properties for urlAnalyzer, points je typu long
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.urlanalyzer.min.valid.points=200
-# min 0 - archives only first valid url with its images, bin links,
-# max 1000000 - archives up to depth a milion of links refered from a valid url
-<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.urlanalyzer.depth.toarchive=0
-                ]]></programlisting>
                 <para>                    
-                    V súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.properties</emphasis> môžeme nájsť vlastnosti a ich hodnoty, ktoré
+                    V súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis> môžeme nájsť vlastnosti a ich hodnoty, ktoré
                     systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer používa. Medzi dôležité patria hodnoty vlastností:
                 </para>
                 <itemizedlist>
@@ -2739,7 +2671,7 @@
             úlohou pri identifikovaní webu iného národa, je zohnať odpvedajúce zdroje ako sú
             slovníky, zoznamy hodnotných odkazov alebo zoznamy miest. Tieto zdroje potom 
             upravíme do požadovanej podoby aby s nimi <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer dokázal pracovať.
-            </para><para>
+        </para><para>
             Ak bude systém pracovať spoľahlivo, tak sa ho pokúsime vydať pod licenciou
             GNU ako súčasť Heritrixu. Ďalším dôležitým mílnikom je vydanie novej verzie
             Heritrixu pod názvom <emphasis><indexterm><primary>Heritrix</primary></indexterm>Heritrix 2</emphasis>, ktorá má udajne znamenať veľký pokrok 
@@ -2749,42 +2681,136 @@
             Modul <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer bude voľne dostupný na stránkach webarchívu a rovnako
             sprístupnime aj skompilovanú spustiteľnú verziu Heritrixu s integrovaným 
             modulom <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
-            </para><para>
+        </para><para>
             Dúfame, že systém nájde svoje využitie a pomôže plniť ciele WebArchívu.
         </para>
     </chapter>
+    
+    <appendix id="appA">
+        <title>A</title>
+        <para>Sekvenčné diagramy popisujúce systém WebAnalyzer:
+        </para>
+                <figure float="1" id="appAsd1"> 
+                    <title>Diagram popisujúci inicializáciu systému WebAnalyzer</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="50" fileref="SD1.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure>    
+                <figure float="1" id="appAsd2"> 
+                    <title>Diagram popisujúci identifikovanie Mime Type dokumentu</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="50" fileref="SD2.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure> 
+                <figure float="1" id="appAsd3"> 
+                    <title>Diagram popisujúci priebeh analýzy dokumentu</title>                    
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata scale="50" fileref="SD3.png" format="PNG"/>
+                        </imageobject>
+                    </mediaobject>
+                </figure> 
+        <figure float="1" id="appAsd4"> 
+            <title>Diagram popisujúci finalizáciu systému WebAnalyzer</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="50" fileref="SD4.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+    </appendix>    
+    
+    <appendix id="appB">
+        <title>B</title>
+        <para>Ukážka konfiguračného súboru <emphasis>webAnalyzer.properties</emphasis>:
+        </para>
+        <programlisting><![CDATA[
+# Properties file for WebAnalyzer.
+# As first read the readme.txt
+# point properties must be in interval from 0 to 10
+
+# properties for geoIpSearcher
+WebAnalyzer.searcher.geoip.use=1
+WebAnalyzer.searcher.geoip.point=1
+WebAnalyzer.searcher.geoip.countrycode=cz
+
+# properties for dictionarySearcher
+WebAnalyzer.searcher.dictionary.use=1
+WebAnalyzer.manager.dictionary.language=cz
+WebAnalyzer.searcher.dictionary.point=1
+
+# properties for emailSearcher
+WebAnalyzer.searcher.email.use=1
+WebAnalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)
+WebAnalyzer.searcher.email.point=1
+
+# properties for phoneSearcher
+WebAnalyzer.searcher.phone.use=1
+WebAnalyzer.searcher.phone.regexp=\\+420 [0-9]{3} ?[0-9]{3} ?[0-9]{3}
+WebAnalyzer.searcher.phone.point=1
+
+# properties for htmlLangSearcher
+WebAnalyzer.searcher.htmllang.use=1
+WebAnalyzer.searcher.htmllang.regexp=lang ?= ?[\"|']? ?cs ?[\"|']?
+WebAnalyzer.searcher.htmllang.point=1
+
+# properties for urlAnalyzer, points je typu long
+WebAnalyzer.urlanalyzer.min.valid.points=200
+# min 0 - archives only first valid url with its images, bin links,
+# max 1000000 - archives up to depth a milion of links refered from a valid url
+WebAnalyzer.urlanalyzer.depth.toarchive=0
+        ]]></programlisting>
+    </appendix>    
+    
+    <appendix id="appC">
+        <title>C</title>
+        <para>Súčasťou práce je priložené CD, kde sú k dispozícií jednotlivé ukážky:
+            <itemizedlist mark="opencircle">
+                <listitem><simpara>zdrojový kód upraveného systému Heritrix</simpara></listitem>
+                <listitem><simpara>zdrojový kód systému WebAnalyzer</simpara></listitem>
+                <listitem><simpara>spustiteľná verzia systému Heritrix s integrovaným systémom WebAnalyzer</simpara></listitem>
+                <listitem><simpara>tato práca vo formáte PDF</simpara></listitem>
+                <listitem><simpara>tato práca vo formáte HTML</simpara></listitem>
+            </itemizedlist>
+        </para>
+    </appendix>    
+    
     
     <bibliography>
         <bibliodiv>
             <biblioentry>
                 <abbrev>01</abbrev>
                 <author>
-                    <surname>WebArchivWebArchiv</surname>
+                    <surname>WebArchiv</surname>
                 </author>
-                <title>WebArchivWebArchiv - archiv českého webu [online]</title>
+                <title>WebArchiv - archiv českého webu [online]</title>
                 <publisher>
-                    <publishername>WebArchivWebArchiv</publishername>
+                    <publishername>WebArchiv</publishername>
                 </publisher>
                 <pubdate>09.04.2008</pubdate>
                 <releaseinfo>
-                    <ulink url="http://www.WebArchivWebArchiv.cz">
-                        http://www.WebArchivWebArchiv.cz
+                    <ulink url="http://www.webarchiv.cz">
+                        http://www.webarchiv.cz
                     </ulink>
                 </releaseinfo>            
             </biblioentry>
             <biblioentry>
                 <abbrev>02</abbrev>
                 <author>
-                    <surname>WebArchivWebArchiv</surname>
+                    <surname>WebArchiv</surname>
                 </author>
                 <title>Kritéria výběru webových zdrojů [online]</title>
                 <publisher>
-                    <publishername>WebArchivWebArchiv</publishername>
+                    <publishername>WebArchiv</publishername>
                 </publisher>
-                <pubdate>09.04.2008</pubdate>
+                <pubdate>09.04.2008</pubdate> 
                 <releaseinfo>
-                    <ulink url="http://www.WebArchivWebArchiv.cz/kriteria">
-                        http://www.WebArchivWebArchiv.cz/kriteria
+                    <ulink url="http://www.webarchiv.cz/kriteria">
+                        http://www.webarchiv.cz/kriteria
                     </ulink>
                 </releaseinfo>            
             </biblioentry>
