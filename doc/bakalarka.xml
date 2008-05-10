@@ -120,7 +120,7 @@
             požiadavkam pre definíciu bohemikálneho zdroja. Podmienky sú
             vyhodnocované na základe kritérií implementovaných v systéme. Medzi
             základné patria identifikácia jazyka, identifikácia českých IP adries, 
-            identifikácia e-mailov a telefónnych čísel. Každá zpracovaná stránka, 
+            identifikácia e-mailov a telefónnych čísel. Každá spracovaná stránka, 
             ktorá je systémom na rozpoznanie identifikovaná ako bohemikálna je 
             následne archivovaná systémom <indexterm><primary>Heritrix</primary></indexterm>Heritrix.
         </para>
@@ -216,9 +216,9 @@
                 odkazujú na ďalšie stránky. Pavúk následne parsuje nájdené 
                 stránky, aby našiel nové odkazy. Celý proces sa rekurzívne
                 opakuje, pokiaľ už nebudú žiadne odkazy, ktoré by sa spracovali.
-                Webový pavúk posiela HTTP požiadavky na dokumenty, umiestnené na
+                Webový pavúk posiela HTTP požiadavky na dokumenty umiestnené na
                 serveroch. Postup je rovnaký ako keď užívateľ kliká na odkazy vo
-                svojom webovom prehliadači, Webový pavúk však dokáže tento 
+                svojom webovom prehliadači. Webový pavúk však dokáže tento 
                 proces automatizovať.
             </para>
             <sect2>
@@ -286,10 +286,10 @@
                     stačí kliknúť na jeden zo záznamov a prezerať archivovanú
                     stránku. Odkazy, ktoré sa na tejto stránke nachádzajú 
                     odkazujú na iné stránky z archívu. Pri klikaní na odkazy sa
-                    Waybacka Machine vždy snaží vrátiť stránky, ktoré sú 
+                    Wayback Machine vždy snaží vrátiť stránky, ktoré sú 
                     archivované v čo najbližšom čase ako zvolená stránka.
                     To znamená že môžete 
-                    surfovať po webe, tak ako vyzeral v danom čase v minulosti.
+                    surfovať po webe tak, ako vyzeral v danom čase v minulosti.
                 </para>
             </sect2>
         </sect1>
@@ -313,16 +313,16 @@
                 doména už nieje česká. Preto je výhodné skúmať tieto odhodené
                 odkazy zo stránok s českou doménou ako prvé. <indexterm><primary>Heritrix</primary></indexterm>Heritrix sa dá
                 nakonfigurovať tak, aby tieto odhodené odkazy z českých stránok 
-                logoval do osobitného súboru. Tento súbor po skončení sklizne 
-                .cz bude plný hodnotných odkazov, ktoré môžeme predať Heritrixu
-                na vstupe vo forme semienok pri následnej sklizni mimo .cz.
+                logoval do osobitného súboru. Tento súbor bude po skončení sklizne 
+                domény .cz plný hodnotných odkazov, ktoré môžeme predať Heritrixu
+                na vstupe vo forme semienok pri následnej sklizni mimo doménu .cz.
             </para>
             <para>
                 Po skončení <emphasis>sklizne_cz_2007</emphasis> <indexterm><primary>Heritrix</primary></indexterm>Heritrix
                 vygeneroval súbor <emphasis>outScope.log</emphasis>, ktorého
                 veľkosť je 16 GB. Na každom riadku sa nachádzajú logovacie 
-                informácie a potom URL, ktorá sa použije ako semienko pre 
-                <indexterm><primary>sklizeň</primary></indexterm>sklizeň mimo .cz. Z technických problémov nieje možné predhodiť
+                informácie a URL, ktorá sa použije ako semienko pre 
+                <indexterm><primary>sklizeň</primary></indexterm>sklizeň mimo doménu .cz. Z technických príčin nieje možné predhodiť
                 Heritrixu 16 GB dlhý zoznam semienok a preto je nutné tento 
                 zoznam rozdeliť na viac kolekcií, ktoré sa postupne spracujú.
             </para>
@@ -373,7 +373,7 @@
             <para>
                 Pred programovaním vlastného modulu je nevyhnutné vedieť akým
                 spôsobom <indexterm><primary>Heritrix</primary></indexterm>Heritrix pracuje a keďže program je vytvorený v Jave, 
-                je nutné vedieť orientovať sa v tomto programovacom jazyku.
+                je nutné vedieť sa orientovať v tomto programovacom jazyku.
             </para>
             <para>
                 <indexterm><primary>Heritrix</primary></indexterm>Heritrix pozostáva z jadra a prídavných modulov. Triedy jadra 
@@ -409,7 +409,7 @@
                 Objetk <indexterm><primary>Frontier</primary></indexterm>Frontier je zodpovedný za prideľovanie následovnej URI, ktorá
                 má byť spracovaná. Má zapezpečovať zdvorilosť, ktorá zaisťuje, že
                 žiadny webový server nebude príliš zaťažovaný sťahovaním stránok, 
-                ktoré sú na ňom umiestnené. Po tom ako je URI zpracovaná je 
+                ktoré sú na ňom umiestnené. Po tom ako je URI spracovaná je 
                 predaná opäť objektu <indexterm><primary>Frontier</primary></indexterm>Frontier spolu so všetkými jej objavenými 
                 odkazmi, ktoré by mal <indexterm><primary>Frontier</primary></indexterm>Frontier naplánovať na ďalšie 
                 spracovanie<citation>03</citation>.
@@ -448,7 +448,7 @@
             </para>
             <para>
                 Procesor PreconditionEnforcer zabezpečuje, že <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> a <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> todo footnote
-                sú skontrolované pred tým než daná stránka stiahne zo serveru.
+                sú skontrolované pred tým, než sa daná stránka stiahne zo serveru.
                 LinksScoper testuje či je daná URI v oblasti záujmu a ak áno, tak aký
                 výsoký je záujem o danú URI. Podľa toho LinksScoper nastaví prioritu
                 pre danú URI, na základe ktorej sa vykonáva zoradenie URI adries 
@@ -472,10 +472,10 @@
                 Procesory sú zoskupené do procesorových reťazcov. Každá reťaz vykonáva s
                 URI nejaký proces. Keď objekt Processor spracuje URI, <indexterm><primary>ToeThread</primary></indexterm>ToeThread pošle URI
                 do nasledujúceho procesoru, pokiaľ nie je spracovaná všetkými 
-                procesormi. Procesor má možnosť prikázať URI, aby preskočila do konkrétnej
-                reťaze daších procesorov. Rovnako ak Processor vyhodí fatálnu chybu, tak
+                procesormi. Procesor má možnosť prikázať URI aby preskočila do konkrétnej
+                reťaze procesorov. Rovnako ak Processor vyhodí fatálnu chybu, tak
                 URI automaticky skočí do poslednej reťaze nazvanej <emphasis>Post-processing chain</emphasis>.
-                Postup spracovania URI jednotlivými procesorovými reťazcami:
+                Postup spracovania URI jednotlivými procesorovými reťazami:
                 <figure>
                     <title>Reťazec procesorov</title>
                     <mediaobject>
@@ -532,7 +532,7 @@
                             <emphasis>procesor PreconditionEnforcer</emphasis> -
                             Zabezpečuje, že všetky predpoklady pre spracovanie URI
                             sú splnené. Konkrétne zahrňuje overenie, že <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> a 
-                            <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> boli získané pre danú URI adresu
+                            <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> boli získané pre danú URI
                             <citation>03</citation>.
                         </para>
                     </listitem>
@@ -541,7 +541,7 @@
             <sect2>
                 <title>Fetch processing chain</title>
                 <para>
-                    Procesory v tejto reťazi sú zodpovedné pre získanie dát zo 
+                    Procesory v tejto reťazi sú zodpovedné za získanie dát zo 
                     vzdialeného serveru. Mal by tu byť jeden procesor pre každý 
                     protokol, ktorý <indexterm><primary>Heritrix</primary></indexterm>Heritrix podporuje, ako napríklad FetchHTTP
                     <citation>03</citation>.
@@ -561,7 +561,7 @@
                     Táto reťaz je zodpovedná za zapisovanie dát do archívnych 
                     súborov. <indexterm><primary>Heritrix</primary></indexterm>Heritrix obsahuje procesor ARCWriterProcessor, ktorý
                     zapisuje dáta do formátu <indexterm><primary>ARC</primary></indexterm>ARC. Nové procesory by mohli byť 
-                    naprogramovanén tak, aby podpodorvali aj iné formáty<citation>03</citation>.
+                    naprogramované tak, aby podpodorvali aj iné formáty<citation>03</citation>.
                 </para>
             </sect2>
             <sect2>
@@ -586,7 +586,7 @@
                         <para>
                             <emphasis>procesor LinksScoper</emphasis> -
                             Kontroluje všetky odkazy extraktované z aktuálneho získaného
-                            obsahu s oblasťou záujmu. Všetky odkazy, ktoré nepatria 
+                            obsahu. Všetky odkazy, ktoré nepatria 
                             do oblasti záujmu (oblasť záujmu môže byť napr. doména .cz), 
                             ktorú sme si zvolili sú vyradené<citation>03</citation>.
                         </para>
@@ -594,7 +594,7 @@
                     <listitem>
                         <para>
                             <emphasis>procesor FrontierScheduler</emphasis> -
-                            Rozplánuje všetky URI adresy nájdene v aktuálne spracovávanej
+                            Rozplánuje všetky odkazy nájdene v aktuálne spracovávanej
                             URI do objektu <indexterm><primary>Frontier</primary></indexterm>Frontier, tak aby sa postupne spracovali podľa
                             priority<citation>03</citation>.
                         </para>
@@ -622,8 +622,8 @@
                         Je to URI, ktorá je objavená počas behu procesu a môže 
                         byť zahrnutá do kolekcie URI čakajúcich na spracovanie.
                         <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI sa vytvorí z objektu Link, ktorý predstavuje
-                        odkaz objavený na spracovávanej CrawlURI. Vytváranie <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI z
-                        Link má na starosti procesor LinksScoper. <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
+                        odkaz objavený na spracovávanej CrawlURI. Vytváranie objektu<indexterm><primary>CandidateURI</primary></indexterm>CandidateURI z
+                        objektu Link má na starosti procesor LinksScoper. <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
                         môže byť zahrnutá do kolekcie čakajúcich URI, ak spĺňa definované
                         požiadavky. Pri zavolaní objektom <indexterm><primary>ToeThread</primary></indexterm>ToeThread sa <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI zmení
                         na objekt CrawlURI<citation>05</citation>.
@@ -634,7 +634,7 @@
                         <emphasis>CrawlURI</emphasis> -
                         CrawlURI predstavuje URI, ktorá sa práve spracováva procesormi.
                         Uchováva stav, ktorý sa
-                        mení počas procesu spracovania. CrawlURI je 
+                        mení počas spracovania. CrawlURI je 
                         potomok triedy <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI. Samotná instancia je 
                         vytvorená v momente, keď sa vyberie z objektu <indexterm><primary>Frontier</primary></indexterm>Frontier 
                         a predá sa procesorom na spracovanie<citation>05</citation>.
@@ -642,12 +642,12 @@
                 </listitem>
             </itemizedlist>
             <sect2>
-                <title>Zoznam atributov objektu CrawlURI</title>
+                <title>Zoznam atribútov objektu CrawlURI</title>
                 <para>
-                    Objekt CrawlURI poskytuje zoznam atributov, ktorý je použitý
+                    Objekt CrawlURI poskytuje zoznam atribútov, ktorý je použitý
                     na uchovanie ľubovoľných informácií o URI počas procesu jej 
                     spracovnia. Pri písaní nových procesorov, určite využijete
-                    tento zoznam atribútov. Zoznam atributov je zoznam párov kľúč a
+                    tento zoznam atribútov. Je to vlastne zoznam párov kľúč a
                     hodnota<citation>05</citation>.
                 </para>
             </sect2>
@@ -655,7 +655,7 @@
                 <title>The recorder streams</title>
                 <para>
                     <indexterm><primary>Heritrix</primary></indexterm>Heritrix by nebol moc užitočný, keby neposkytoval prístup k 
-                    HTTP požiadavku a odpovedi. Pre tento účel objekt CrawlURI má
+                    HTTP požiadavku a odpovedi. Pre tento účel má objekt CrawlURI
                     metodu nazvanú getHTTPRecorder(). Rekordér je referencovaný
                     v objekte CrawlURI a tým prístupný pre všetky procesory, ktoré
                     s CrawlURI pracujú<citation>05</citation>.
@@ -695,19 +695,19 @@
                     <title>Povinný jedno argumentový konštruktor</title>
                     <para>
                         Všetky moduly potrebujú mať konštruktor prijímajúci práve jeden 
-                        argument typu java.lang.String. Reťazec je použitý na 
+                        argument typu <emphasis>java.lang.String</emphasis>. Reťazec je použitý na 
                         identifikovanie modulu. V prípade, že nový modul je 
                         rovnakého typu ako existujúci modul, ktorý sa môže vyskytovať 
                         v Heritrixe práve jeden krát, musí sa meno nového modulu 
                         zhodovať s menom existujúceho modulu. To je presne prípad
                         modulu <indexterm><primary>Frontier</primary></indexterm>Frontier, ktorý je v procese plazenia po webových 
-                        stránkach použitý práve raz<citation>07</citation>.
+                        stránkach použitý práve jeden krát<citation>07</citation>.
                     </para>
                 </sect3>
                 <sect3>
                     <title>Definovanie atribútov</title>
                     <para>
-                        Atribúty v module, ktoré chcete aby boli konfigurovateľné
+                        Atribúty v module, ktoré majú byť konfigurovateľné
                         musia byť definované v konštruktore modulu. Pre tento účel 
                         existuje metóda <emphasis>addElementToDefinition(Type type)</emphasis>.
                         <citation>07</citation>:
@@ -735,10 +735,10 @@
                     <para>
                         Ak pri pridávaní nového modulu používate nejakú 
                         knižnicu, je nevyhnutné aby bola zmienená v konfiguračných
-                        súboroch Heritrixu, ktoré používa zostavovací nástroj Maven 1.
+                        súboroch Heritrixu, ktoré používa zostavovací nástroj <emphasis>Maven 1</emphasis>.
                         Rovnako ak celý nový modul zabalíte 
-                        do knižnice jar, stačí ju pridať do adresára 
-                        <emphasis>$<indexterm><primary>Heritrix</primary></indexterm>Heritrix_HOME/lib</emphasis> a zapísať nový modul do konkrétneho
+                        do knižnice <emphasis>jar</emphasis>, stačí ju pridať do adresára 
+                        <emphasis>HERITRIX_HOME/lib</emphasis> a zapísať nový modul do konkrétneho
                         konfiguračného súboru v adresári <emphasis>/src/conf/modules</emphasis>.
                     </para>
                 </sect3>
@@ -768,10 +768,10 @@
                 <listitem>
                     <para>
                         <emphasis>next(int timeout)</emphasis> -
-                        Metóda next je volaná objektom <indexterm><primary>ToeThread</primary></indexterm>ToeThread, ktorý predstavuje vlákno, ktoré
+                        Metóda next je volaná objektom <indexterm><primary>ToeThread</primary></indexterm>ToeThread, predstavujúci vlákno, ktoré
                         má vždy pridelenú práve jednu URI s ktorou pracuje. Pri volaní sa predávajú
                         URI podľa pridelenej priority. To umožňuje, že sa najprv spracujú <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy a súbory
-                        <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis>, predtým než sa z konkrétneho hostu získajú nejaké dáta.
+                        <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> predtým než sa z konkrétneho hostu získajú nejaké dáta.
                         Následne sa vybraná URI reprezentovaná objetkom <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI premení na
                         objekt CrawlURI, ktorý je vhodný na spracovanie procesormi<citation>08</citation>.
                     </para>
@@ -782,10 +782,10 @@
                         Keď je URI spracovaná reťazou procesorov, tak končí v objekte LinksScoper.
                         Všetky URI by tu mali skončiť, aj keď nespĺňali predpoklady na to 
                         aby boli spracované.
-                        LinksScoper iteruje cez všetky nové URI adresy, nájdené v 
+                        LinksScoper iteruje cez všetky nové URI nájdené v 
                         kontexte danej CrawlURI a ak vyhovujú požiadavkom skúmanej 
-                        oblasti, tak ich prekonvertuje z objektov Link na <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI.
-                        Neskôr ich v reťazi postprocessor chain objekt FrontierScheduler 
+                        oblasti, tak ich prekonvertuje z objektov Link na objekty <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI.
+                        Neskôr ich v reťazi <emphasis>Post-processor chain</emphasis> objekt FrontierScheduler 
                         pridá do objetku <indexterm><primary>Frontier</primary></indexterm>Frontier volaním metody <emphasis>schedule(<indexterm><primary>CandidateURI</primary></indexterm>CandidateURI)</emphasis>.
                         Táto metóda zabezpečuje, aby bola každá URI pridaná maximálne raz
                         <citation>08</citation>.
@@ -830,7 +830,7 @@
                 mala byť braná do úvahy, zatiaľ čo dočasné informácie ako <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> alebo
                 história pokusov spracovať rovnakú URI by sa nemali uvažovať. Tieto
                 časovo náročné rozhodnutia by sa mali uskutočňovať v inom mieste
-                výpočtu<citation>10</citation>.todo cit
+                výpočtu<citation>10</citation>.
             </para>
         </sect1>
         <sect1>
@@ -854,7 +854,7 @@
                 a zapíšu jeho obsah do objektu HttpRecorder. Objekty Extractor 
                 (HTMLExtractor, CSSExtractor, ...) čítajú objekt HttpRecorder a 
                 pridávajú objevené odkazy do zoznamu odkazov nájdených na danej CrawlURI
-                <citation>11</citation>. todo cit
+                <citation>11</citation>.
             </para>
             <para>
                 Niekoľko iných metód môže byť prepísaných na špeciálne účely:
@@ -862,7 +862,7 @@
             <itemizedlist>
                 <listitem>
                     <para>
-                        <emphasis>initialTasks()</emphasis>
+                        <emphasis>initialTasks()</emphasis> - 
                         Táto metóda bude volaná až bude nastavený celý proces plazenia, ale predtým než
                         bude nejaká URI spracovaná. Je to vlasnte inicializačný kód, ktorý
                         musí byť spustený práve jeden krát pri štarte plazenia webu<citation>11</citation>.
@@ -870,7 +870,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        <emphasis>finalTasks()</emphasis>
+                        <emphasis>finalTasks()</emphasis> - 
                         Táto metóda bude zavolaná po tom ako bude spracovaná posledná URI.
                         Je to na samom konci plazenia webu a znamená to, že proces 
                         je normálne ukončený. V podstate je to miesto, kde sa môže
@@ -879,7 +879,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        <emphasis>report()</emphasis>
+                        <emphasis>report()</emphasis> - 
                         Táto metóda vracia reťazec, ktorý obsahuje ľudsky čitateľnú správu o
                         stave alebo progrese procesu plazenia webu. Táto správa je 
                         prístupná cez webové uživateľské rozhranie. Procesor by 
@@ -897,34 +897,34 @@
                 <itemizedlist>
                     <listitem>
                         <para>
-                            <emphasis>getAlist()</emphasis>
+                            <emphasis>getAlist()</emphasis> - 
                             Táto metóda vracia objekt <emphasis>AList</emphasis> danej CrawlURI.
                             <emphasis>AList</emphasis> je v podstate mapa do ktorej si môžeme
-                            uložiť hocijaké informácie, ktoré potrebujem použiť pri spracovávaní.
+                            uložiť hocijaké informácie, ktoré potrebujeme použiť pri spracovávaní.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            <emphasis>setHttpRecorder(HttpRecorder)</emphasis>
-                            Nastavuje HttpRecorder, ktorý obsahuje stiahnutý obsah. Metóda je zvyčajne 
+                            <emphasis>setHttpRecorder(HttpRecorder)</emphasis> - 
+                            Nastavuje HttpRecorder, ktorý obsahuje stiahnutý obsah zo serveru. Metóda je zvyčajne 
                             vykonaná nejakým procesorom z reťaze <emphasis>Fetch processing chain</emphasis>.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            <emphasis>getHttpRecorder()</emphasis>
+                            <emphasis>getHttpRecorder()</emphasis> - 
                             Metóda, ktorá získa stiahnutý obsah.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            <emphasis>getContentSize()</emphasis>
+                            <emphasis>getContentSize()</emphasis> - 
                             Ak bol dokument úspešne stiahnutý, táto metóda vráti jeho dĺžku v bytoch.
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            <emphasis>getContentType()</emphasis>
+                            <emphasis>getContentType()</emphasis> - 
                             Mime type stiahnutého obsahu.
                         </para>
                     </listitem>
@@ -935,15 +935,16 @@
                 <para>
                     HttpRecorder je pripojený ku každej CrawlURI, ktorá bola úspešne stiahnutá pomocou FetchHTTP procesoru.
                     Procesory, ktoré sa zaujímajú o textový obsah stiahnutej CrawlURI k nemu môžu pristupovať pomocou
-                    metódy <emphasis>getReplayCharSequence()</emphasis>, vracajúcej objekt <emphasis>java.langCharSequence</emphasis>.
+                    metódy <emphasis>getReplayCharSequence()</emphasis>, vracajúcej objekt <emphasis>java.lang.CharSequence</emphasis>.
                 </para>
             </sect2>
             <sect2>
                 <title>Poznámky k písaniu modulu Processor</title>
                 <para>
                     Pre každý procesor je vytvorená iba jedna instancia počas celého
-                    procesu definovaného <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis>. Keďže je <indexterm><primary>Heritrix</primary></indexterm>Heritrix multivláknová aplikácia, 
-                    tak musí byť procesor napísaný správne aby nedochádzalo ku konfliktom<citation>11</citation>.
+                    procesu definovanej úlohy <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis>. 
+                    Keďže je <indexterm><primary>Heritrix</primary></indexterm>Heritrix multivláknová aplikácia, 
+                    musí byť procesor napísaný správne aby nedochádzalo ku konfliktom<citation>11</citation>.
                 </para>
             </sect2>
         </sect1>
@@ -953,7 +954,7 @@
         <sect1>
             <title>Integrácia</title>
             <para>
-                Podľa popisu funkčnosti Heritrixu je nutné vhodne integrovať systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer, tak
+                Podľa popisu funkčnosti Heritrixu je nutné vhodne integrovať systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer tak,
                 aby sme dosiahli požadovaných výsledkov. Modul <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer musí každopádne
                 spracovávať každú URI, ktorá prejde procesom plazenia webu. Preto je 
                 potrebné integrovať <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer do niektorého z modulov.
@@ -983,9 +984,9 @@
                 z reťaze <emphasis>Fetch processing chain</emphasis>.
                 Naopak na úplnom konci spracovania <indexterm><primary>Heritrix</primary></indexterm>Heritrix zistil o URI maximálne 
                 množstvo informácií, ktoré by mohli byť pre <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer hodnotné.
-                Keby sme nasadili <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer v tomto stave a identifikovali URI, 
+                Keby sme nasadili <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer v tomto bode a identifikovali URI, 
                 tak by sme prišli o možnosť archivovania bohemikálnych URI.
-                <indexterm><primary>archivácia</primary></indexterm>archivácia sa totiž vykonáva procesorom ARCWriterProcessor, ktorý vstupuje
+                <indexterm><primary>archivácia</primary></indexterm>Archivácia sa totiž vykonáva procesorom ARCWriterProcessor, ktorý vstupuje
                 do činnosti skôr ako skončí URI v objekte <indexterm><primary>Frontier</primary></indexterm>Frontier.
             </para>
             <para>
@@ -999,9 +1000,9 @@
                 môže byť použitý na viacerých miestach procesu spracovania URI, takže by nebol 
                 problém umiestniť ho tesne pred modul archivovania a pomocou WebAnalyzeru
                 určit, či je aktuálna URI bohemikálna alebo nie. Podľa tohoto rozhodnutia by 
-                ju potom mohol následujúci procesor archivovať. Pokus sa však ukázal, že
+                ju potom mohol následujúci procesor archivovať. Pokus však ukázal, že
                 ani filter nie je vhodným modulom. <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pri analyzovaní používa viacero
-                projektov a knižníc, s ktorými spolupracuje. Funkcionalita týchto podsýstemov
+                projektov a knižníc, s ktorými spolupracuje. Funkcionalita týchto podsystémov
                 WebAnalyzeru vyžaduje, aby bol <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pred samotným spustením
                 nainicializovaný. Tým pádom je nutné vždy pred jeho používaním zavolať jeho 
                 metodu <emphasis>initializeWebAnalyzer()</emphasis>, ktorá zabezpečí, že sa otvoria a nainicializujú
@@ -1017,17 +1018,17 @@
                 Scope sám o sebe poskytoval 
                 metódy, <emphasis>initialize()</emphasis> a <emphasis>finalize()</emphasis>, ktoré sa dali preťažiť a mohol by sa v nich
                 inicializovať a zatvárať objekt <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer. Taktiež umiestnenie modulu pred
-                procesorom na archiváciu vyhovovalo. Scope sa zdal vyhovujúcim ale na základe 
+                procesorom na archiváciu vyhovovalo. Modul Scope sa zdal vyhovujúcim, ale na základe 
                 vyjadrenia <indexterm><primary>Internet Archive</primary></indexterm>Internet Archive, ktorý mal v pláne modul Scope úplne preorganizovať a 
                 zrefaktorovať v nadchádzajúcej verzii Heritrixu, sme skúsili ešte inú možnosť.
             </para>
             <para>
-                Poslednou a konečnou možnosťou bola integrácia do modulu Processor. Ktorá sa 
-                ukázala byť najviac vyhovujúcou. Procesor sa vyskytuje v niekoľkých vartiantách
-                ako sme spomenuli v sekcii Processor todo odkaz. <indexterm><primary>Heritrix</primary></indexterm>Heritrix definuje niekoľko 
-                reťazí proceserov. Pre <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je bolo najvýhodnejšie umiestniť procesor 
+                Poslednou a konečnou možnosťou bola integrácia do modulu Processor, ktorá sa 
+                ukázala byť najviac vyhovujúcou možnosťou. Procesor sa vyskytuje v niekoľkých vartiantách
+                ako sme spomenuli v sekcii Processor. <indexterm><primary>Heritrix</primary></indexterm>Heritrix definuje niekoľko 
+                reťazí proceserov. Pre <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je najvýhodnejšie umiestniť procesor 
                 do reťaze <emphasis>Extractor processing chain</emphasis>. Prvé dve reťaze <emphasis>Pre-fetch processing chain</emphasis>
-                a <emphasis>Fetch processing chain</emphasis> neboli vyhovujúce pretože v tom čase ešte nemáme 
+                a <emphasis>Fetch processing chain</emphasis> neboli vyhovujúce pretože v tom čase ešte nemáme prístupný 
                 textový obsah URI, ktorý môže <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer použiž na analýzu textu. Textový 
                 obsah URI je dostupný až po skončení reťaze <emphasis>Fetch-processing chain</emphasis>. Nasledujúca
                 reťaz <emphasis>Extractor processing chain</emphasis> obsahuje procesory nazvané Extractor, ktorých
@@ -1041,7 +1042,7 @@
                 Nasledujúca reťaz po <emphasis>Extractor-processing chain</emphasis> 
                 je <emphasis>Write/Index-processing chain</emphasis>, ktorej
                 hlavnou úlohou je archivovať URI. Úplne posledná reťaz procesorov je <emphasis>Post-processing
-                chain</emphasis>, ktorá spracováva objavené odkazy a podľa dedinovaných kritérií ich 
+                chain</emphasis>, ktorá spracováva objavené odkazy a podľa definovaných kritérií ich 
                 ďalej zaraďuje do procesu alebo vyhadzuje.
             </para>
             <para>
@@ -1121,16 +1122,15 @@
                         <para>
                             <emphasis><indexterm><primary>archivácia</primary></indexterm>archivácia odkazov</emphasis> - 
                             Podobný problém ako s obrázkami vznikol aj pri odkazoch. 
-                            Pri identifikácií vznikla požiadavka, aby systém okrem 
-                            samotnej bohemikálnej stránky archvival automaticky aj všetky
+                            Pri identifikácií vznikla požiadavka aby systém okrem 
+                            samotnej bohemikálnej stránky archivoval automaticky aj všetky
                             odkazy, ktoré sa na tejto stránky vyskytujú a to do určitej úrovne.
                             To znamená, že bolo nutné definovať do akej hĺbky od bohemikálnej
                             stránky sa majú referencované stránky automaticky archivovať.
-                            Tieto referencované stránky z bohemikálnych URI by mohli 
-                            byť hodnotným zdrojom a preto ich treba automaticky archivovať.
+                            Tieto stránky by totiž mohli byť hodnotným zdrojom odkazovaným z bohemikánej stránky.
                             Opäť bolo nutné aby si systém pamätal, z ktorej rodičovskej URI bola
                             aktuálna URI objavená a či tá rodičovská URI bola identifikovaná
-                            ako bohemikálna. Ak áno, tak ju mal systém automaticky archivovať.
+                            ako bohemikálna.
                         </para>
                     </listitem>
                     <listitem>
@@ -1164,7 +1164,7 @@
                             odpvedajúci <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam. Tento 
                             <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam <indexterm><primary>Heritrix</primary></indexterm>Heritrix automatický archivuje.
                             My však chceme archivovať len tie <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy, ktoré sa spájajú
-                            s bohemikálnymi stránkami. Tohoto stavu je ale ťažké dociahnuť, pretože
+                            s bohemikálnymi stránkami. Tohoto stavu je ale ťažké dosiahnuť, pretože
                             v čase keď prebieha analýza stránky je už odpvedajúci <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam archivovaný.
                             Riešením by bola dodatočná <indexterm><primary>archivácia</primary></indexterm>archivácia <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamov. Dočasné riešenie
                             je nearchivovať žiadne <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy.
@@ -1177,14 +1177,14 @@
                 <para>
                     Na základe nedostatkov z prvej otestovanej verzie, vznikli ďalšie
                     požiadavky, ktoré by mal systém splňovať. Na základe nových
-                    požiadavkov vznikol use case diagram, ktorý popisuje
+                    požiadavkov vznikol use case diagram <xref linkend="img2"/>, ktorý popisuje
                     integráciu modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer so systémom <indexterm><primary>Heritrix</primary></indexterm>Heritrix. Integrácia
                     je realizovaná pomocou modulov <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer, 
                     <indexterm><primary>LinksScoperWebAnalyzer</primary></indexterm>LinksScoperWebAnalyzer a ARCWriterProcessorWebAnayzer, ktoré
                     sú súčasťou Heritrixu. Procesor <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer je jediný, 
                     ktorý používa rozhranie modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
                 </para>
-                <figure>
+                <figure id="img2">
                     <title>Use case diagram integrácie systému <indexterm><primary>Heritrix</primary></indexterm>Heritrix a <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer</title>                    
                     <mediaobject>
                         <imageobject>
@@ -1201,7 +1201,7 @@
                         požiadavky pre nasledujúce spracovanie danej URI ( napr.
                         <emphasis><indexterm><primary>DNS</primary></indexterm>DNS, <indexterm><primary>robots</primary></indexterm>robots.txt</emphasis>). 
                         ARCWriterProcessor tieto <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy
-                        automaticky archivuje, čo nie je vyhovujúce. 
+                        automaticky archivuje.
                         Pre nás je však zbytočné archivovať všetky <indexterm><primary>DNS</primary></indexterm>DNS záznamy. 
                         Tento problém 
                         zatiaľ nemá vysokú prioritu a preto použijeme vlastný
@@ -1221,8 +1221,8 @@
                         dokumentu automaticky nastavovali pre tieto dokumenty 
                         <emphasis>contentType = text/plain</emphasis>. V skutočnosti to však mohol
                         byť dokument s MimeType typu video, audio alebo application.
-                        Pri textovej analýze takýchto falošných <quote>textových</quote> dokumentov
-                        modulom <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sa vytvárajú 
+                        Pri textovej analýze takýchto falošných <quote>textových</quote> dokumentov,
+                        modulom <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer, sa vytvárajú 
                         enormne veľké objekty <emphasis>java.lang.String</emphasis>, ktoré spôsobujú
                         výnimku <emphasis>java.lang.OutOfMemory</emphasis>.
                     </para>
@@ -1235,11 +1235,11 @@
                         identifikuje správny MimeType dokumentu. MimeTypeDetector
                         je nutné umiestniť do procesoru <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer pred
                         spustením modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer, aby sa predišlo analýzam
-                        binárnych dokumentov. todo odkaz na mimetupedetecotrr
+                        binárnych dokumentov.
                     </para>
                 </sect3>
                 <sect3>
-                    <title><indexterm><primary>archivácia</primary></indexterm>archivácia odkazov a obrázkov</title>
+                    <title><indexterm><primary>archivácia</primary></indexterm>Archivácia odkazov a obrázkov</title>
                     <para>
                         Predchádzajúca verzia systém archivuje len tie URI, ktoré 
                         <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer identifikoval ako bohemikálne. Všetky ostatné
@@ -1250,7 +1250,7 @@
                         z bohemikálnej stránky pravdepodobne nesú hodnotné informácie asociované
                         s odpovedajúcou bohemikálnou stránkou.
                     </para>
-                    <figure>
+                    <figure id="img3">
                         <title>Archivovanie odkazov do hĺbky 2</title>                    
                         <mediaobject>
                             <imageobject>
@@ -1272,23 +1272,23 @@
                         môže nastaviť užívateľ pred spustením celého procesu.
                     </para>
                     <para>
-                        <indexterm><primary>archivácia</primary></indexterm>archivácia odkazov z bohemikálnych stránok do určitej hĺbky 
+                        <indexterm><primary>archivácia</primary></indexterm>Archivácia odkazov z bohemikálnych stránok do určitej hĺbky 
                         sa dala zrealizovať novým modulom <indexterm><primary>LinksScoperWebAnalyzer</primary></indexterm>LinksScoperWebAnalyzer a odpovedajúcimi zmenami
                         v procesore <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer tak, aby mohli moduly vzájomne spolupracovať.
                         Veľkou pomôckou boli objekty CrawlURI a <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI, 
                         ktoré obsahujú objekt AList, čo je zoznam objektov pridružených k
-                        danej URI. Do tohto zoznamu je možné pridať hocijaký objekt, ku 
+                        danej URI. Do tohto zoznamu je možné pridať hocijaký príznak (objekt), ku 
                         ktorému môžeme pristupovať v ľubovoľnom module. Na základe týchto
                         príznakov si <indexterm><primary>Heritrix</primary></indexterm>Heritrix môže zapamätať, ktoré URI sú bohemikálne, 
                         ktoré URI sú validnými odkazmi z bohemikálnych stránok alebo
                         URI, ktoré predstavujú obrázky, css štýly či iné zdroje asociované s
-                        bohemikálnymi stránkami. Týmto spôsobom môžeme všetky typy URI odkazované z 
+                        bohemikálnymi stránkami. Týmto spôsobom môžeme všetky URI odkazované z 
                         bohemikálnej stránky archivovať a to do určitej úrovne, ktorú
                         si môže užívateľ sám zvoliť.
                     </para>
                     <para>
                         Modul <indexterm><primary>LinksScoperWebAnalyzer</primary></indexterm>LinksScoperWebAnalyzer je potomkom modulu 
-                        LinksScoper, ale dopĺňa funcionalitu na spracovanie 
+                        LinksScoper, ale dopĺňa funkcionalitu na spracovanie 
                         odkazov z bohemikálnych stránok.
                     </para>
                     <para>
@@ -1330,7 +1330,7 @@
                                     <para><emphasis>2.3 CrawlURI FLAG=archive_bin_link, DEPTH=0</emphasis> - 
                                         CrawlURI s príznakom <emphasis>archive_bin_link</emphasis> definuje, že
                                         táto URI je odkazom z bohemikálnej stránky, ale v stromovej štruktúre
-                                        predstavuje list (todo odkaz na obr.). To znamená, že sa vykonala
+                                        predstavuje list (<xref linkend="img3"/>). To znamená, že sa vykonala
                                         <indexterm><primary>archivácia</primary></indexterm>archivácia všetkých uzlov vedúcich z bohemikálnej stránky (koreňa)
                                         do definovanej hĺbky. V listoch však môžu existovať odkazy na obrázky, 
                                         css štýly a iné zdroje, ktorý by chýbali v už archivovaných stránakch.
@@ -1408,7 +1408,7 @@
                                     <para><emphasis>4.2 CrawlURI FLAG=valid_URI, DEPTH=x</emphasis> - 
                                         CrawlURI, identifikovaná ako bohemikálna bude následne archivovaná. Predtým sa jej však nastaví
                                         príznak <emphasis>valid_URI</emphasis> a <emphasis>depth=x</emphasis>. Hodnotu pre hĺbku získa 
-                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer zo súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, ktorý nastavuje užívateľ pred spustením. 
+                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer zo súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>, ktorý nastavuje užívateľ pred spustením. 
                                         Tým zabezpečíme 
                                         aby si systém pamätal, do akej hĺbky má rekurzívne nájdené odkazy automaticky archivovať.
                                     </para>
@@ -1544,27 +1544,28 @@
         <para>   
             <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sme navrhli tak, aby mohol byť použitý ako samostatná
             komponenta, ktorá bude identifikovať URI podľa nastavených požiadavkov.
-            Súčasťou je súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, v ktorom môže užívateľ nastaviť
+            Súčasťou je súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>, v ktorom môže užívateľ nastaviť
             aké rozhodovacie kritéria sa majú použiť a za akých podmienok sa má
             stránka identidikovať ako validná.
         </para>
         <para>
             <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je navrhnutý tak, aby bolo jednoduché pridať nové
-            rozhodovacie krytérium do kódu. Poskytuje rozhrania, ktoré musí
+            rozhodovacie kritérium do kódu. Poskytuje rozhrania, ktoré musí
             nové kritérium implementovať.
         </para>
         <sect1>
             <title>Návrh tried modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer</title>
             <para>
-                Návrh tried modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je zobrazený na obrázku Class Diagram modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer. todo odkaz na obr.
+                Návrh tried modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je 
+                zobrazený na obrázku Class Diagram modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
                 Triedy sú zabalené do jednotlivých balíkov, ktorých triedy
-                vykonávajú podobnú funcionalitu, alebo sú vzájomne tesne spjaté. <xref linkend="appACD"/>
+                vykonávajú podobnú funkcionalitu, alebo sú vzájomne tesne spjaté. <xref linkend="appACD"/>
             </para>
             <itemizedlist>
                 <listitem>
                     <para><emphasis>cz.webarchiv.webanalyzer.multithread</emphasis> -
                         Tento balík obsahuje triedy, ktoré sa starajú o načítavanie
-                        vlasntostí definovaných v externom súbore a triedu, ktoré poskytuje
+                        vlasntostí definovaných v externom súbore a triedu, ktorá poskytuje
                         rozhranie pre prácu s celým systémom.
                     </para>
                     <itemizedlist>
@@ -1577,12 +1578,12 @@
                         <listitem>
                             <para><emphasis role="bold">PropertiesReader</emphasis> -
                                 Trieda, ktorá načíta a zvaliduje hodnoty parametrov z externého
-                                súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>.
+                                súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>.
                             </para>
                         </listitem>
                         <listitem>
                             <para><emphasis role="bold">WebAnalyzerProperties</emphasis> - 
-                                Trieda, ktorá slúži na uchovanie informácií načítaných z externého
+                                Trieda slúži na uchovanie informácií načítaných z externého
                                 súboru. Ostatné triedy majú takto prístup ku všetkým informáciam
                                 definovaným užívateľom.
                             </para>
@@ -1603,7 +1604,7 @@
                         </listitem>
                         <listitem>
                             <para><emphasis role="bold">PropertiesReader</emphasis> -
-                                Trieda, ktorá obsahuje konštanty na lepšiu indetifikáciu
+                                Trieda, ktorá obsahuje konštanty na lepšiu identifikáciu
                                 rozhodovacích kritérií.
                             </para>
                         </listitem>
@@ -1619,7 +1620,7 @@
                             <para><emphasis role="bold">UrlAnalyzer</emphasis> - 
                                 Trieda, ktorá inicializuje všetky požadované rozhodovacie kritéria a
                                 spúšťa analýzu. Okrem toho počíta štatistiky a rozhoduje či je 
-                                stránka validná alebo nie.
+                                stránka validná.
                             </para>
                         </listitem>
                         <listitem>
@@ -1756,21 +1757,21 @@
                     <listitem>
                         <para><emphasis role="bold">2.create PropertiesReader</emphasis> - 
                             Pri inicializácií je nutné načítať nastavené vlastnosti v 
-                            externom súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>, ktoré definujú
+                            externom súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>, ktoré definujú
                             požiadavky na identifikáciu.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">3. loadPropertiesReader</emphasis> - 
                             Metóda načíta hodnoty pre konkrétne vlastnosti a zvaliduje
-                            ich. Ak je hodnota nevalidná, tak systém vyhodí výnimku.
+                            ich. Ak je hodnota nevalidná, systém vyhodí výnimku.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">4. create WebAnalyzerProperties</emphasis> - 
                             PropertiesReader vytvorí objekt WebAnalyzerProperties a naplní
                             mu všetky hodnoty jednotlivých vlastností. WebAnalyzerProperties
-                            bude uchovávať tieto informácie, aby k nim mohli 
+                            bude uchovávať tieto informácie aby k nim mohli 
                             ostatné triedy pristupovať.
                         </para>
                     </listitem>
@@ -1808,7 +1809,7 @@
                     <listitem>
                         <para><emphasis role="bold">10. init()</emphasis> - 
                             Každý manažér sa musí inicializovať, aby otvoril potrebné spojenia
-                            do databáze, súboru alebo iných zdrojov. todo odkaz na obr do prilohy
+                            do databáze, súboru alebo iných zdrojov.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -1924,7 +1925,7 @@
                         <para><emphasis role="bold">1. run()</emphasis> - 
                             <indexterm><primary>Heritrix</primary></indexterm>Heritrix volá metódu <emphasis>run()</emphasis>, ktorá spúšťa analýzu.
                             Metóde run sú predané parametre, ktoré predstavujú informácie
-                            získané z Heritrixu. Medzi významné patría názov URI, ktorá sa analyzuje, 
+                            získané z Heritrixu. Medzi významné patria názov URI, ktorá sa analyzuje, 
                             jej textový obsah a množina odkazov objavených na tejto URI.
                         </para>
                     </listitem>
@@ -1963,15 +1964,17 @@
                     <listitem>
                         <para><emphasis role="bold">7. setPointsCounter()</emphasis> - 
                             Každá instancia vyhľadávača si priradí už vytvorený objekt
-                            PointsCounter, ktorý bude používať.
+                            PointsCounter, ktorý bude používať. Každý vyhľadávač pri 
+                            nájdení hľadanej informácie pripočíta alebo
+                            odpočíta počet bodov analyzovanej stránke.
                         </para>
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">8. getProperties()</emphasis> - 
-                            Každý vyhľadávač pri nájdení hľadanej informácie pripočíta alebo
-                            odpočíta počet bodov analyzovanej stránke. Počet bodov s ktorými
-                            vyhľadávač pracuje je  taktiež definovaný v externom súbore a 
-                            je prístupní cez objekt WebAnalyzerProperties.
+                            Počet bodov s ktorými
+                            vyhľadávač pracuje je taktiež definovaný v externom súbore a 
+                            je prístupný cez objekt WebAnalyzerProperties, z ktorého si
+                            vyhľadávače všetky hodntoy získajú.
                         </para>
                     </listitem>
                     <listitem>
@@ -1986,7 +1989,7 @@
                             súborom, a preto používajú manažerov, ktoré poskytujú synchronizované 
                             metody volané odpovedajúcim vyhľadávačom. Pri vytvorení si 
                             musí každý vyhľadávač asociovať svoj už vytvorený manažér.
-                            Tým sa končí vytváranie vhľadávačov a môžu sa použiť pri analýze.
+                            Tým sa končí vytváranie vhľadávačov, ktoré sa môžu použiť pri analýze.
                         </para>
                     </listitem>
                     <listitem>
@@ -2031,7 +2034,7 @@
                     <listitem>
                         <para><emphasis role="bold">17. getStatistics(curi)</emphasis> - 
                             Po spracovaní skúmanej URI všetkými vyhľadávačmi
-                            <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer vypíše štatistiky získané. Vypisovanie
+                            <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer vypíše získané štatistiky. Vypisovanie
                             je nastavené do viacerých logovacích súborov.
                         </para>
                     </listitem>
@@ -2052,7 +2055,7 @@
                         </para>
                     </listitem>
                     <listitem>
-                        <para><emphasis role="bold">21. valid = (ponints >= minPointsToValid)</emphasis> - 
+                        <para><emphasis role="bold">21. valid = (points >= minPointsToValid)</emphasis> - 
                             Vyhodnotenie validity funguje na základe porovnania získaných bodov a bodov
                             predstavujúcich hranicu, ktorú treba prekonať aby bola stránka identifikovaná ako
                             validná. Táto hranica je definovaná užívateľom v externom súbore.
@@ -2112,13 +2115,9 @@
             <para>
                 Konfigurácia celého systému sa skladá z konfigurácie Heritrixu, 
                 prostredníctvom jeho webového rozhrania a z konfigurácie WebAnalyzeru
-                cez externý súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis>.
+                cez externý súbor <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>.
                 <indexterm><primary>Heritrix</primary></indexterm>Heritrix musíme nastaviť tak aby používal naše integračné procesory
                 (<indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer, LinksScoper, ARCWriterProcessor). 
-                - na vstupe <indexterm><primary>semienka</primary></indexterm>semienka, čo sú odkazy mimo národnú doménu
-                - všetky objavené odkazy smerujúce do národnej domény musia byť
-                odstránené
-                - omedziť
             </para>
             <sect2>
                 <title>Konfigurácia Heritrixu</title>
@@ -2155,7 +2154,7 @@
                             <listitem>
                                 <para>
                                     <emphasis><indexterm><primary>ARCWriterProcessorWebAnalyzer</primary></indexterm>ARCWriterProcessorWebAnalyzer</emphasis> -
-                                    do reťaze <emphasis>Write/Index processing chain</emphasis>musíme
+                                    do reťaze <emphasis>Write/Index processing chain</emphasis> musíme
                                     pridať tento procesor, ktorý nearchivuje <indexterm><primary>DNS</primary></indexterm>DNS záznamy.
                                     Pôvodný procesor ARCWriterProcessor odstránime.
                                 </para>
@@ -2221,7 +2220,7 @@
                                 <para>
                                     <emphasis>Počet vláken <indexterm><primary>ToeThread</primary></indexterm>ToeThread</emphasis> -
                                     Môžeme nastaviť počet vláken, ktoré budú súčasne 
-                                    spracovávať URI adresy. Pôvodne 50.
+                                    spracovávať URI adresy. Rozsah 1-200.
                                 </para>
                             </listitem>
                             <listitem>
@@ -2240,22 +2239,22 @@
                     Konfigurácia modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer sa uskutočňuje pred spustením
                     nadefinovanej úlohy <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis> Heritrixu. 
                     Všetko potrebné sa nachádza v jednom externom súbore
-                    <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis><xref linkend="appB"/>.
+                    <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis> <xref linkend="appB"/>.
                 </para>
                 <para>                    
-                    V súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webAnalyzer.properties</emphasis> môžeme nájsť vlastnosti a ich hodnoty, ktoré
+                    V súbore <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis> môžeme nájsť vlastnosti a ich hodnoty, ktoré
                     systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer používa. Medzi dôležité patria hodnoty vlastností:
                 </para>
                 <itemizedlist>
                     <listitem>
-                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.urlanalyzer.min.valid.points=200</emphasis> -
+                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.urlanalyzer.min.valid.points=200</emphasis> -
                             táto vlastnosť definuje aký počet
                             bodov musí skúmaný dokument pri analýze dosiahnuť, aby bol identifikovaný ako
                             validný.
                         </para>
                     </listitem>
                     <listitem>
-                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.urlanalyzer.depth.toarchive=3</emphasis> -
+                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.urlanalyzer.depth.toarchive=3</emphasis> -
                             táto vlastnosť slúži pre <indexterm><primary>Heritrix</primary></indexterm>Heritrix, 
                             ktorý ju používa na archivovanie odkazov z validnej stránky do určitej hĺbky. 
                             Ak je nastavená hodnota 0, tak sa archivuje len validná stránka, spolu s jej zdrojmi
@@ -2275,20 +2274,20 @@
                         </para>
                     </listitem>
                     <listitem>
-                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.use=1</emphasis> -
+                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.searcher.email.use=1</emphasis> -
                             pri analýze sa má použiť vyhľadávač emailSearcher.
                             Hodnota 0 znamená, že komponenta sa nemá použiť.
                         </para>
                     </listitem>
                     <listitem>
-                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)</emphasis> -
+                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.searcher.email.regexp=([a-z0-9._-]+@[a-z0-9.-]+\\.cz)</emphasis> -
                             EmailSearcher vyhľadáva z daného kontextu všetky emaily. Pomocou regulárneho výrazu si
                             môžeme nastaviť, ktoré z nich nás zaujímajú. Zadaný regulárny výraz ukazuje, že zo všetkých
                             e-mailov hľadáme iba tie s doménou .cz.
                         </para>
                     </listitem>
                     <listitem>
-                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.searcher.email.point=1</emphasis> -
+                        <para><emphasis role="bold"><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.searcher.email.point=1</emphasis> -
                             Vždy pri nájdení hľadaného e-mailu sa pripočíta analyzovanej stránke definovaný počet bodov.
                         </para>
                     </listitem>
@@ -2309,7 +2308,8 @@
                     Priebeh celého procesu môžeme sledovať priamo cez webové rozhranie
                     Heritrixu. Podrobné informácie sa zapisujú do viacerých logov.
                     Niektoré logujú čisto priebeh Heritrixu, iné logujú štatisktiky
-                    , ktoré produkuje <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pri analyzované stránok. Štatisktiky
+                    , ktoré produkuje <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer 
+                    pri analyzovaní stránok. Štatisktiky
                     ukazujú všetky informácie o spracovávanej URI a počet dosiahnutých
                     bodov v konkrétnych vyhliadavačoch. Samozrejme je možné 
                     po úprave logovacej úrovne v súbore <emphasis>log4j.xml</emphasis> logovať aj 
@@ -2327,7 +2327,7 @@
                 Štatiskity vyjadrujú koľko percent zo všetkých nájdených elementov
                 je validných. Napríklad pri hľadaní českých e-mailov sa na stránke 
                 môžu vyskytovať 4 e-maily, ale len 2 z nich budú české. Štatistiky
-                budú uvádzať hodnotu 50%.
+                budú uvádzať hodnotu 50% pre vyhľadávač EmailSearcher.
             </para>
             <sect2>
                 <title>EmailSearcher</title>
@@ -2379,8 +2379,8 @@
                     krajinu a mesto, odkiaľ pochádza IP adresa (je hostovaná na nejakom servery).
                     Tieto varianty ponúkajú
                     zdarma. My použijeme <emphasis>GeoLite Country</emphasis>, pretože chceme zistiť krajinu
-                    danej IP adresy. <emphasis>GeoLite Country</emphasis> v podstate obsahuje databázu, 
-                    IP adries s jej informáciami. K tejto databáze dodávajú API, pomocou
+                    danej IP adresy. <emphasis>GeoLite Country</emphasis> v podstate obsahuje databázu
+                    IP adries s ich informáciami. K tejto databáze dodávajú API, pomocou
                     ktorého sa dajú informácie o IP adrese rýchlo vyhľadať. 
                     Náš vyhľadávač používa svojho manažéra, ktorý volá funkcie z tohoto
                     API. Manažér musí pred používaním inicializovať databázu <emphasis>GoeLite Country</emphasis>. 
@@ -2395,7 +2395,7 @@
                 <title>DictionarySearcher</title>
                 <para>
                     Táto komponenta slúži na vyhľadávanie slov v konkrétnom slovníku.
-                    Pomáha pri identifikácií českého jazyka, na základe slov nachádzajúcich 
+                    Pomáha pri identifikácií českého jazyka na základe slov nachádzajúcich 
                     sa v kontexte stránky. Pred spracovaním textu je použitý filter, 
                     ktorý upraví text do vhodnej podoby. Odstránia sa skripty, kód
                     a nečitateľné znaky. Prefiltrovaný text sa ďalej upraví na jeden 
@@ -2410,16 +2410,12 @@
                         Slovník slov je vlastne zoznam slov. Pri vytváraní
                         slovníka českých slov, som použil korpus českého jazyka ako 
                         základný zdroj. Slovník musí byť rýdzo český. To znamená, že nemôže obsahovať
-                        slová, ktoré sa vyskytujú aj iných jazykoch. Preto bolo nutné
+                        slová, ktoré sa vyskytujú aj iných jazykoch, a Ppreto bolo nutné
                         tieto slová odstrániť. Napríklad slovo <emphasis>auto</emphasis>
                         sa nachádza v českom, slovenskom aj anglickom jazyku. 
                         Najviac českých slov sa prekrýva
                         so slovenským jazykom a preto bolo nutné tieto slová odstrániť pomocou
-                        korpusu slovenského jazyka. Okrem toho som použil aj iné
-                        zdroje ktoré boli zdrama prístupné. Slovníky pre mobilné telefóny
-                        boli dobrým podkladom. Všetky slovníky som programovo spracoval do
-                        potrebnej podoby a potom som ich mohol použiť na ďalšie odfiltrovanie
-                        českých slov.
+                        korpusu slovenského jazyka. 
                         Výsledná fyzická podoba zoznamu 
                         rýdzo českých slov bol textový súbor, v ktorom bolo na každom 
                         riadku jedno slovo.
@@ -2428,7 +2424,7 @@
                 <sect3>
                     <title>Vytvorenie indexu</title>
                     <para>
-                        Ďalšia otázka bola ako sa bude v tomto slovníku vyhľadávať.
+                        Ďalšia otázka bola, ako sa bude v tomto slovníku vyhľadávať.
                         Slovník mal okolo 14 MB ,takže bol pomerne
                         veľký. Prvá varianta bola pamätať si celý zoznam slov v nejakej
                         štruktúre v pamäti. Druhá varianta bola spraviť k slovníku
@@ -2437,19 +2433,8 @@
                     <para>
                         Pred vytvorením indexu je nutné slová v slovníku zoradiť
                         podľa abecedy. Následne sa vytvoril index
-                        Príklad:
-                        
-                        
-                        
-                        
-                        Odpovedajúci index:
-                        0
-                        12
-                        20
-                        29
-                        
-                        
-                        <table frame="all" pgwide="1">
+                        Príklad je znázornený v tabuľke: <xref linkend="tab1"/>
+                        <table frame="all" pgwide="1" id="tab1">
                             <title>Index k slovníku</title>
                             <tgroup cols="2">
                                 <colspec align="left" colname="col1" colwidth="5cm" />
@@ -2482,7 +2467,7 @@
                         o prístup k hodnotám indexu a druhý načítava slovo od
                         konkrétneho byte až po koniec riadku (znak <emphasis>\n</emphasis>).
                         Potom stačilo naprogramovať klasické binárne vyhľadávanie, ktoré si
-                        ako pivota zvolí hodnotu <emphasis>n</emphasis> z indexu vyjadrujúcu byte
+                        ako pivota zvolí hodnotu <emphasis>n</emphasis> z indexu, vyjadrujúcu byte
                         na ktorom začína odpovedajúce slovo. Manažér na načítavanie slov zo 
                         slovníka takto môže preskočiť daný počet bytov a načítať priamo
                         odpovedajúce slovo. Toto slovo sa následne porovná so skúmaným 
@@ -2494,7 +2479,7 @@
                     <title>Synchronizácia</title>
                     <para>
                         Každé vlákno si pri vyhľadávaní slov vytvorí vlastnú instanciu
-                        objektu DictionarySearcher, ale samotné čítanie zo súboru, ktoré
+                        objektu DictionarySearcher. Samotné čítanie zo súboru, ktoré
                         poskytuje odpovedajúci manažér je prístupné cez synchronizovanú
                         metódu.
                     </para>
@@ -2608,44 +2593,46 @@
             ako bude viac priestoru.
         </para>
         <para>
-            Testovali sme na vzorke xxx adries, odkazov zo sklizne 2007,
-            doba trvania xxx hodin, spracovanych stranok xxx
-            dopln grafy.
+            Z testovania sem vybrali určitý výsek štatistík pre zobrazenie do grafickej
+            podoby.
+            Testovali sme na vzorke 450 adries (odhodených odkazov zo sklizne 2007).
+            Systém ich analyzoval v priebehu 2 minút na osobnom notebooku s internetovým
+            pripojením 100 Mb/s. V Heritrixe sme nastavili maximálne 5 vláken. Spracovanie
+            na výkonnom serverovom počítači je oveľa rýchlejšie a je možné nastaviť
+            Heritrixu maxiálny počet 200 vláken.
         </para>
         <figure float="1" id="geo"> 
-            <title>seq</title>                    
+            <title>GeoIPSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="50" fileref="geo.png" format="PNG"/>
+                    <imagedata scale="82" fileref="geo.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
         <figure float="1" id="dict"> 
-            <title>seq</title>                    
+            <title>DictSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="50" fileref="dict.png" format="PNG"/>
+                    <imagedata scale="82" fileref="dict.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
         <figure float="1" id="html"> 
-            <title>seq</title>                    
+            <title>HtmlSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="50" fileref="html.png" format="PNG"/>
+                    <imagedata scale="82" fileref="html.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
         <figure float="1" id="email"> 
-            <title>seq</title>                    
+            <title>EmailSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="50" fileref="email.png" format="PNG"/>
+                    <imagedata scale="82" fileref="email.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
-        
-        
     </chapter>
     <chapter>
         <title>Záver</title>
@@ -2656,7 +2643,7 @@
             mimo národnú doménu bude ešte nejakú dobu pokračovať. Postupom času sa budú
             pridávať ďalšie kritéria a celý systém sa bude upravovať podľa nových požiadavkov, 
             ktoré sa objavia po väčších skúsenostiach s týmto systémom. Počas ďalšieho
-            vývoja sa budeme snažiť, aby bol systém čo najviac modulárny, tak aby boli
+            vývoja sa budeme snažiť, aby bol systém čo najviac modulárny aby boli
             zmeny či pridanie novej funkcionality jednoduché. Zároveň sa snažíme 
             vyvíjať systém tak, aby sa mohol použiť nielen na identifikovanie českého
             webu, ale aby bolo možné identifikovať aj weby iných národov. Jedinou
@@ -2674,7 +2661,7 @@
             sprístupnime aj skompilovanú spustiteľnú verziu Heritrixu s integrovaným 
             modulom <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
         </para><para>
-            Dúfame, že systém nájde svoje využitie a pomôže plniť ciele WebArchívu.
+            Dúfame, že systém nájde svoje využitie a pomôže plniť ciele WebArchivu.
         </para>
     </chapter>
     
