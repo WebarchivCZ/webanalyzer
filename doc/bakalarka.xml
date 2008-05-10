@@ -1558,16 +1558,8 @@
             <para>
                 Návrh tried modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je zobrazený na obrázku Class Diagram modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer. todo odkaz na obr.
                 Triedy sú zabalené do jednotlivých balíkov, ktorých triedy
-                vykonávajú podobnú funcionalitu, alebo sú vzájomne tesne spjaté.
+                vykonávajú podobnú funcionalitu, alebo sú vzájomne tesne spjaté. <xref linkend="appACD"/>
             </para>
-            <figure float="1" id="webanalyzerCD"> 
-                <title>Class Diagram modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer</title>                    
-                <mediaobject>
-                    <imageobject>
-                        <imagedata scale="48" fileref="webanalyzerCD.png" format="PNG"/>
-                    </imageobject>
-                </mediaobject>
-            </figure>    
             <itemizedlist>
                 <listitem>
                     <para><emphasis>cz.webarchiv.webanalyzer.multithread</emphasis> -
@@ -2690,43 +2682,52 @@
         <title>A</title>
         <para>Sekvenčné diagramy popisujúce systém WebAnalyzer:
         </para>
-                <figure float="1" id="appAsd1"> 
-                    <title>Diagram popisujúci inicializáciu systému WebAnalyzer</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="50" fileref="SD1.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure>    
-                <figure float="1" id="appAsd2"> 
-                    <title>Diagram popisujúci identifikovanie Mime Type dokumentu</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="50" fileref="SD2.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure> 
-                <figure float="1" id="appAsd3"> 
-                    <title>Diagram popisujúci priebeh analýzy dokumentu</title>                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scale="50" fileref="SD3.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure> 
+        <figure float="1" id="appAsd1"> 
+            <title>Diagram popisujúci inicializáciu systému WebAnalyzer</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="50" fileref="SD1.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure>    
+        <figure float="1" id="appAsd2"> 
+            <title>Diagram popisujúci identifikovanie Mime Type dokumentu</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="50" fileref="SD2.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+        <figure float="1" id="appAsd3"> 
+            <title>Diagram popisujúci priebeh analýzy dokumentu</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="50" fileref="SD3.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
         <figure float="1" id="appAsd4"> 
             <title>Diagram popisujúci finalizáciu systému WebAnalyzer</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="50" fileref="SD4.png" format="PNG"/>
+                    <imagedata scale="75" fileref="SD4.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
+        <figure float="1" id="appACD"> 
+            <title>Class Diagram modulu WebAnalyzer</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="60" fileref="webanalyzerCD.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure>    
     </appendix>    
+    
     
     <appendix id="appB">
         <title>B</title>
-        <para>Ukážka konfiguračného súboru <emphasis>webAnalyzer.properties</emphasis>:
+        <para>Ukážka konfiguračného súboru <emphasis>webanalyzer.properties</emphasis>:
         </para>
         <programlisting><![CDATA[
 # Properties file for WebAnalyzer.

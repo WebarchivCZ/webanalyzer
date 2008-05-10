@@ -132,7 +132,7 @@ The processors in this chain are responsible for getting the data from the remot
 \subsubsection{Extractor processing Chain}
 At this point the content of the document referenced by the URI is available and several processors will in turn try to get new links from it.
 
-\subsubsection{Write/index processing Chain}
+\subsubsection{Write/Index processing Chain}
 This chain is responsible for writing the data to archive files. Heritrix comes with an ARCWriterProcessor which writes to the ARC format. New processors could be written to support other formats and even create indexes.
 
 \subsubsection{Post-processing Chain}
@@ -179,7 +179,7 @@ After implementing and testing the first version with Extractor module, we notic
 On the basis of new requirements the use case diagram was created, to describe the intregration of WebAnalyzer into Heritrix. The integration is realized by modules ExtractorWebAnalyzer, ARCWriterProcessorWebAnalyzer and LinksScoperWebAnalyzer. The ExtractorWebAnalyzer is the only one, that directly uses the interface of WebAnalyzer module.
 
 \begin{center}
-\includegraphics[width=120mm]{usecase1.png}
+\includegraphics[width=130mm]{usecase1.png}
 \end{center}
 
 \subsubsection{The Archiving of DNS Records}
@@ -453,17 +453,19 @@ In the future we want to implement searcher, that will use some functions from \
 
 The system hasn't run till the end so far. We was testing it only for 24 hours, due to lack of disk space. The system is still under construction and we expect that new errors may occur during the complete test, which may take few weeks.
 
-Some statistics from test. The system processed xxx URIs in xxx hours. The Collection of seeds consisted of URIs outside the national domain.
-todo make new charts chande xxx to concrete values
+Some statistics from test. The system analyzed 450 URIs in 2 minutes. The collection of seeds consisted of URIs outside the national domain.
 
 \begin{center}
-\includegraphics[width=120mm]{dict.png}
+\includegraphics[width=135mm]{dict.png}
 
-\includegraphics[width=120mm]{email.png}
 
-\includegraphics[width=120mm]{geo.png}
+\includegraphics[width=135mm]{email.png}
 
-\includegraphics[width=120mm]{html.png}
+
+\includegraphics[width=135mm]{geo.png}
+
+
+\includegraphics[width=135mm]{html.png}
 \end{center}
 
 %================================NEW SECTION================================%
