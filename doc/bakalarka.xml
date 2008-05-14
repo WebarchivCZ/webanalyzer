@@ -270,7 +270,9 @@
                 Problém indexovania a vyhľadávania záznamov v <indexterm><primary>ARC</primary></indexterm>ARC súboroch 
                 rieši systém <indexterm><primary>ARCWayback</primary></indexterm>ARCWayback, ktorý si WebArchív vyvinul presne na 
                 svoje potreby. Sprístupnenie týchto záznamov poskytuje ďalší
-                systém <indexterm><primary>Wayback Machine</primary></indexterm>Wayback Machine. Systém <indexterm><primary>ARCWayback</primary></indexterm>ARCWayback popisuje práca todo
+                systém <indexterm><primary>Wayback Machine</primary></indexterm>Wayback Machine. 
+                Systém <indexterm><primary>ARCWayback</primary></indexterm>ARCWayback, ktorý používa WebArchiv je popísaný 
+                v práci <emphasis>Accessing the Czech Web Archive</emphasis><citation>11</citation>.
             </para>
             <sect2>
                 <title><indexterm><primary>Wayback Machine</primary></indexterm>Wayback Machine</title>
@@ -337,7 +339,7 @@
             <indexterm><primary>Internet Archive</primary></indexterm>Internet Archive. Poskytuje užívateľsky príjemne webové rozhranie a
             okrem toho umožňuje spustiť a inicializovať <indexterm><primary>sklizeň</primary></indexterm>sklizeň cez príkazový 
             riadok, čím ušetrí čas pri spúšťaní opakovaných úloch. Užívateľský
-            manuál sa nachádza na stránkach Heritrixu http://crawler.archive.org. todo url asi emphasis
+            manuál sa nachádza na stránkach Heritrixu <emphasis>http://crawler.archive.org</emphasis>
         </para>
         <para>
             Pred spustením sklizne je treba v Heritrixe vytvoriť takzvaný <emphasis><indexterm><primary>crawl job</primary></indexterm>crawl job</emphasis>,
@@ -447,7 +449,9 @@
                 FrontierScheduler.
             </para>
             <para>
-                Procesor PreconditionEnforcer zabezpečuje, že <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> a <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> todo footnote
+                Procesor PreconditionEnforcer zabezpečuje, že 
+                <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> a 
+                <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis>
                 sú skontrolované pred tým, než sa daná stránka stiahne zo serveru.
                 LinksScoper testuje či je daná URI v oblasti záujmu a ak áno, tak aký
                 výsoký je záujem o danú URI. Podľa toho LinksScoper nastaví prioritu
@@ -501,7 +505,7 @@
                             Vlastníci webových stránok používajú textový súbor nazvaný <indexterm><primary>robots</primary></indexterm>robots.txt, aby prostredníctvom
                             neho predali inštrukcie o ich stránkach webovým robotom (The Robots Exclusion Protocol).
                             Vždy keď chce webový robot navštíviť URL webovej stránky, najprv hľadá tento súbor
-                            <indexterm><primary>robots</primary></indexterm>robots.txt. Napríklad pri návšteve URL http://www.seznam.cz sa robot pokúša získať
+                            <indexterm><primary>robots</primary></indexterm>robots.txt. Pri návšteve URL http://www.seznam.cz sa robot pokúša získať
                             súbor z URL http://www.seznam.cz/<indexterm><primary>robots</primary></indexterm>robots.txt. V tomto súbore
                             môže byť zapísané, že by robot nemal navštevovať žiadne stránky z 
                             danej domény. Existuje však mnoho robotov, ktoré tento súbor
@@ -577,7 +581,7 @@
                     <listitem>
                         <para>
                             <emphasis>procesor CrawlStateUpdater</emphasis> - 
-                            Aktualizuje informácie o každom hoste, ktoré sa možu uplatniť
+                            Aktualizuje informácie o každom hoste, ktoré sa môžu uplatniť
                             pri ďalšom spojení na server. Konkrétne <emphasis><indexterm><primary>robots</primary></indexterm>robots.txt</emphasis> a informácie
                             o IP adresách<citation>03</citation>.
                         </para>
@@ -595,7 +599,7 @@
                         <para>
                             <emphasis>procesor FrontierScheduler</emphasis> -
                             Rozplánuje všetky odkazy nájdene v aktuálne spracovávanej
-                            URI do objektu <indexterm><primary>Frontier</primary></indexterm>Frontier, tak aby sa postupne spracovali podľa
+                            URI do objektu <indexterm><primary>Frontier</primary></indexterm>Frontier tak aby sa postupne spracovali podľa
                             priority<citation>03</citation>.
                         </para>
                     </listitem>
@@ -694,8 +698,8 @@
                 <sect3>
                     <title>Povinný jedno argumentový konštruktor</title>
                     <para>
-                        Všetky moduly potrebujú mať konštruktor prijímajúci práve jeden 
-                        argument typu <emphasis>java.lang.String</emphasis>. Reťazec je použitý na 
+                        Všetky moduly musia mať konštruktor prijímajúci práve jeden 
+                        argument typu reťazec. Reťazec je použitý na 
                         identifikovanie modulu. V prípade, že nový modul je 
                         rovnakého typu ako existujúci modul, ktorý sa môže vyskytovať 
                         v Heritrixe práve jeden krát, musí sa meno nového modulu 
@@ -884,8 +888,7 @@
                         stave alebo progrese procesu plazenia webu. Táto správa je 
                         prístupná cez webové uživateľské rozhranie. Procesor by 
                         mohol informovať o počte CrawlURI, ktoré spracoval alebo
-                        počte odkazov, ktoré objavil alebo
-                        iné podstatné informácie daného procesoru<citation>11</citation>.
+                        počte odkazov, ktoré objavil <citation>11</citation>.
                     </para>
                 </listitem>
             </itemizedlist>
@@ -1350,7 +1353,7 @@
                                         </listitem>
                                         <listitem>
                                             <para><emphasis>2.3.2 CrawlURI Content type=other</emphasis> - 
-                                                CrawlURI s príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
+                                                CrawlURI s nastaveným príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
                                                 je iný ako <emphasis>text/html</emphasis> sa taktiež automaticky archivujú. 
                                                 Tým dosiahneme archiváciu obrázkov
                                                 a iných multimediálnych dokumentov, ktoré sa nachádzajú na už archivovaných
@@ -1359,7 +1362,7 @@
                                         </listitem>
                                         <listitem>
                                             <para><emphasis>2.3.2 CrawlURI Content type=other</emphasis> - 
-                                                CrawlURI s príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
+                                                CrawlURI s nastaveným príznakom <emphasis>archive_bin_link</emphasis>, ktorých MimeType
                                                 je <emphasis>text/html</emphasis> sa už archivovať nebudú a rovnako sa nebudú nastavovať žiadne príznaky
                                                 pre odkazy na tejto stránke. To by už znamenalo presiahnutie definovanej hĺbky zadanej
                                                 užívateľom.
@@ -1469,8 +1472,8 @@
                                         </listitem>
                                         <listitem>
                                             <para><emphasis>6.2.3 <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI FLAG=archive_bin_link</emphasis> - 
-                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x=0. Objektom <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
-                                                vytvoreným z odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
+                                                CrawlURI s nastaveným príznakom<emphasis>depth=0</emphasis>. Objektom <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
+                                                vytvoreným z takýchto odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
                                             </para>
                                         </listitem>                                        
                                     </itemizedlist>
@@ -1495,8 +1498,8 @@
                                         </listitem>
                                         <listitem>
                                             <para><emphasis>6.3.3 <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI FLAG=archive_bin_link</emphasis> - 
-                                                CrawlURI, ktorej príznak <emphasis>depth=x</emphasis> má hodnotu x = 0. Objektom <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
-                                                vytvoreným z odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
+                                                CrawlURI s nastaveným príznakom <emphasis>depth=0</emphasis>. Objektom <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI
+                                                vytvoreným z takýchto odkazov sa nastaví príznak <emphasis>archive_bin_link</emphasis>.
                                             </para>
                                         </listitem>                                        
                                     </itemizedlist>
@@ -2013,7 +2016,7 @@
                     </listitem>
                     <listitem>
                         <para><emphasis role="bold">14. search(curi)</emphasis> - 
-                            V cykle sa spustí každý vyhľadávač jeho metódou 
+                            V cykle sa spustí každý nadefinovaný vyhľadávač jeho spúšťacou metódou 
                             <emphasis>search(ProcessedCrawlURI curi)</emphasis>. 
                             Každý vyhľadávač pracuje 
                             nad konkrétnými atribútmi objektu ProcessedCrawlURI.
@@ -2425,7 +2428,7 @@
                     <title>Vytvorenie indexu</title>
                     <para>
                         Ďalšia otázka bola, ako sa bude v tomto slovníku vyhľadávať.
-                        Slovník mal okolo 14 MB ,takže bol pomerne
+                        Slovník mal okolo 14 MB, takže bol pomerne
                         veľký. Prvá varianta bola pamätať si celý zoznam slov v nejakej
                         štruktúre v pamäti. Druhá varianta bola spraviť k slovníku
                         index a pomocou neho vyhľadávať.
@@ -2599,40 +2602,9 @@
             Systém ich analyzoval v priebehu 2 minút na osobnom notebooku s internetovým
             pripojením 100 Mb/s. V Heritrixe sme nastavili maximálne 5 vláken. Spracovanie
             na výkonnom serverovom počítači je oveľa rýchlejšie a je možné nastaviť
-            Heritrixu maxiálny počet 200 vláken.
+            Heritrixu maximálny počet 200 vláken. Výsledky sú zobrazené v grafoch, 
+            umiestnených v prílohe. <xref linkend="geo"/>, <xref linkend="dict"/>, <xref linkend="email"/>, <xref linkend="html"/>
         </para>
-        <figure float="1" id="geo"> 
-            <title>GeoIPSearcher výsledky</title>                    
-            <mediaobject>
-                <imageobject>
-                    <imagedata scale="82" fileref="geo.png" format="PNG"/>
-                </imageobject>
-            </mediaobject>
-        </figure> 
-        <figure float="1" id="dict"> 
-            <title>DictSearcher výsledky</title>                    
-            <mediaobject>
-                <imageobject>
-                    <imagedata scale="82" fileref="dict.png" format="PNG"/>
-                </imageobject>
-            </mediaobject>
-        </figure> 
-        <figure float="1" id="html"> 
-            <title>HtmlSearcher výsledky</title>                    
-            <mediaobject>
-                <imageobject>
-                    <imagedata scale="82" fileref="html.png" format="PNG"/>
-                </imageobject>
-            </mediaobject>
-        </figure> 
-        <figure float="1" id="email"> 
-            <title>EmailSearcher výsledky</title>                    
-            <mediaobject>
-                <imageobject>
-                    <imagedata scale="82" fileref="email.png" format="PNG"/>
-                </imageobject>
-            </mediaobject>
-        </figure> 
     </chapter>
     <chapter>
         <title>Záver</title>
@@ -2709,6 +2681,40 @@
                 </imageobject>
             </mediaobject>
         </figure>    
+        
+        <figure float="1" id="geo"> 
+            <title>GeoIPSearcher výsledky</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="82" fileref="geo.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+        <figure float="1" id="dict"> 
+            <title>DictSearcher výsledky</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="82" fileref="dict.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+        <figure float="1" id="html"> 
+            <title>HtmlSearcher výsledky</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="82" fileref="html.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+        <figure float="1" id="email"> 
+            <title>EmailSearcher výsledky</title>                    
+            <mediaobject>
+                <imageobject>
+                    <imagedata scale="82" fileref="email.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure> 
+        
     </appendix>    
     
     
@@ -2909,7 +2915,24 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
                     url="http://crawler.archive.org/articles/developer_manual/processor.html">http://crawler.archive.org/articles/developer_manual/processor.html</ulink></releaseinfo>
-            </biblioentry>            
+            </biblioentry>      
+            <biblioentry>
+                <abbrev>12</abbrev>
+                <author>
+                    <surname>Lukáš Matejka</surname>
+                </author>
+                <title>Accessing the Czech Web Archive [online]</title>
+                <publisher>
+                    <publishername>WebArchiv</publishername>
+                </publisher>
+                <pubdate>09.04.2008</pubdate>
+                <releaseinfo>
+                    <ulink url="http://en.webarchiv.cz/files/dokumenty/ostatni/thesis.pdf">
+                        http://en.webarchiv.cz/files/dokumenty/ostatni/thesis.pdf
+                    </ulink>
+                </releaseinfo>            
+            </biblioentry>
+            
         </bibliodiv>
     </bibliography>
     <index></index>
