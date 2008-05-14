@@ -27,6 +27,7 @@
 
 \begin{center}
 \thispagestyle{empty}
+\renewcommand{\thepage}{\Roman{page}}
 
 \huge{Identification and Archiving of the Czech Web Outside the National Domain}
 
@@ -38,6 +39,7 @@
 
 \newpage
 \thispagestyle{empty}
+\renewcommand{\thepage}{\Roman{page}}
 \tableofcontents
 
 \end{center}
@@ -45,6 +47,8 @@
 
 %================================NEW SECTION================================%
 
+\renewcommand{\thepage}{\arabic{page}}
+\setcounter{page}{1}
 \section{Introduction}
 
 The placement of different documents on the Internet has recently become very popular. Internet users find this feature helpfull, because new documents can be uploaded on the Internet in relatively small effort. Some of these documents are considered to be very important in spheres such as hi\-sto\-ry, science, art and so forth. But there exists a risk that the information will be changed, or even deleted and lost forever. Therefore it's our duty to save this sort of documents for future generation.
@@ -57,7 +61,6 @@ This work describes the system to identify and archive the Cech web outside the 
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{The WebArchiv Project}
 
 Main task of the project WebArchiv is archiving and providing access to the archival collecton of Czech web. The WebArchiv uses web crawlers to perform comprehensive harvesting of national domain. Heritris seems to be suitable tool for this kind of work, because it's modular, extendible and everyone finds it easy to configure the crawl job. The Heritrix provides a lot of configurable modules that can be combined together and this gives you many creative possibilities to specify the crawl job you need. And if you demand some new functionality, it's possible to develop new module and attach it to Heritrix.
@@ -72,10 +75,11 @@ The \emph{out of scope} links, that comes out from harvesting of Czech web are v
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{Heritrix}
 
-Heritrix is able to do both, crawl web and archive it. It's open-source software written in Java, that provides user-friendly web interface. User manual is available on \url{http://crawler.archive.org}. Before describing the WebAnalyzer, we should know how Heritrix works.
+Heritrix is able to do both, crawl web and archive it. It's open-source software written in Java, that provides user-friendly web interface. User manual is available on \url{http://crawler.archive.org}. Before describing the WebAnalyzer, we should know how Heritrix works. In next sections we will use many keywords that are explained in Heritrix developer manual \url{http://crawler.archive.org/articles/developer_manual/index.html}.
+
+\begin{comment}
 
 \subsection{A brief Overview}
 Heritrix is designed to be modular. Which modules to use can be set at runtime from the user interface. If you demand new functionality, you can implement new module and attach it to Heritrix, or you can replace existing module.
@@ -146,10 +150,11 @@ A URI should always pass through this chain even if a decision not to crawl the 
 
 Further information are available in developer manual \url{http://crawler.archive.org/articles/developer_manual/index.html}.
 
+\end{comment}
+
 %================================NEW SECTION================================%
 
-\newpage
-\section{The Integration}
+\section{Integration of WebAnalyzer}
 
 It's very important to integrate the WebAnalyzer into the Heritrix properly for us to reach required behaviour. The WebAnalyzer must analyze every URI, that goes through the process of crawling. Therefore it's necessary to integrate the WebAnalyzer into some module that will be used by Heritrix.
 
@@ -175,7 +180,7 @@ The Extractor provides \emph{initialize()} and \emph{finalize()} methods. All Pr
 
 After implementing and testing the first version with Extractor module, we noticed several imperfections. The system wasn't able to archive images, css styles, links and other sources placed on the Bohemian URI. The integration must be done by more modules, to solve these problems.
 
-\subsection{The Integration by Modules}
+\subsection{New Modules}
 On the basis of new requirements the use case diagram was created, to describe the intregration of WebAnalyzer into Heritrix. The integration is realized by modules ExtractorWebAnalyzer, ARCWriterProcessorWebAnalyzer and LinksScoperWebAnalyzer. The ExtractorWebAnalyzer is the only one, that directly uses the interface of WebAnalyzer module.
 
 \begin{center}
@@ -185,10 +190,10 @@ On the basis of new requirements the use case diagram was created, to describe t
 \subsubsection{The Archiving of DNS Records}
 Before processing any webpage, Heritrix automaticaly archives all asso\-cia\-ted DNS records. We don't need all these DNS records but only those of Bohemian URI. It's hard to reach this state, therefore we use our own ARCWriterProcessorWebAnalyzer, that simply ignores all DNS records so far.
 
-\subsubsection{The Mime Type Detector}
-While testing the first version, we noticed many \emph{java.lang.OutOfMemory} exceptions caused by analyzing the documents, the Mime type of which was wrong detected by Heritrix.
+\subsubsection{The MIME Type Detector}
+While testing the first version, we noticed many \emph{java.lang.OutOfMemory} exceptions caused by analyzing the documents, the MIME type of which was wrong detected by Heritrix.
 
-Old servers unable to identify the type of document, set \emph{text/plain} value as content type for each document. The WebAnalyzer analyzed only documents of text type, but actually they could be audio or video documents, the size of which can take hundreds of MB. The text analyzing led to creating huge \emph{java.lang.String} objects, that caused \emph{java.lang.OutOfMemory} exceptions. The functionality of Heritrix to identify the content type of document is not sufficient and therefore we have to implement some sort of Mime Type detector, that will identify the content type of document before it will be analyzed by WebAnalyzer. This ensures that documents of binary content won't be analyzed by WebAnalyzer.
+Old servers unable to identify the type of document, set \emph{text/plain} value as content type for each document. The WebAnalyzer analyzed only documents of text type, but actually they could be audio or video documents, the size of which can take hundreds of MB. The text analyzing led to creating huge \emph{java.lang.String} objects, that caused \emph{java.lang.OutOfMemory} exceptions. The functionality of Heritrix to identify the content type of document is not sufficient and therefore we have to implement some sort of MIME Type detector, that will identify the content type of document before it will be analyzed by WebAnalyzer. This ensures that documents of binary content won't be analyzed by WebAnalyzer.
 
 \subsubsection{The Archiving of Links and Images}
 \label{aolai}
@@ -213,7 +218,7 @@ Lets describe the workflow of archiving links from Bohemian URI:
 \item[2. ExtractorWebAnalyzer innerProcess(CrawlURI curi)] - After the CrawlURI reaches the ExtractorWebAnalyzer, it is checked whether it contains some flag. Next processing depedns on the flag's value.
 
 \begin{description}
-\item[2.1 CrawlURI NO FLAG] - The CrawlURI has no flag. WebAnalyzer will identifiy its mime type with MimeTypeDetector.
+\item[2.1 CrawlURI NO FLAG] - The CrawlURI has no flag. WebAnalyzer will identifiy its MIME type with MimeTypeDetector.
 \item[2.2 CrawlURI FLAG=valid\_link, DEPTH=x] - The CrawlURI has the flag \emph{valid\_link} determining that this CrawlURI was re\-fe\-ren\-ced from Bohemian URI and it has to be archived immediately. WebAnalyzer doesn't analyze this CrawlURI, it would do it in vain. The CrawlURI is sent directly to ARCWriterProcessorWebAnalyzer to be archived. The \emph{DEPTH=x} determines the level, to which the links discovered on this CrawlURI has to be archived as well.
 \item[2.3 CrawlURI FLAG=archive\_bin\_link, DEPTH=0] - The \\CrawlURI with this flag determines, that this URI is referenced from Bohemian URI. We have to archive all CrawlURIs with this flag except of html pages to ensure that all images and other sources referenced from Bohemian URI will be archived. Crawl\-URI\-s with this flag represent the lists of tree. See picture \S\ref{aolai}.
 
@@ -225,10 +230,10 @@ Lets describe the workflow of archiving links from Bohemian URI:
 \end{description}
 
 
-\item[3. MimeTypeDetector isContentTypeText(curi.getName())] - The \\CrawlURI with no flag is identified by MimeTypeDetector. According to the identified mime type, the next step is chosen.
+\item[3. MimeTypeDetector isContentTypeText(curi.getName())] - The \\CrawlURI with no flag is identified by MimeTypeDetector. According to the identified MIME type, the next step is chosen.
 
 \begin{description}
-\item[3.1 CrawlURI Content type=other] - The CrawlURI which identified mime type is different from \emph{text} will not be analyzed. Pro\-bab\-ly it is a URI with binary content. This CrawlURI skips to post-processing chain.
+\item[3.1 CrawlURI Content type=other] - The CrawlURI which identified MIME type is different from \emph{text} will not be analyzed. Pro\-bab\-ly it is a URI with binary content. This CrawlURI skips to post-processing chain.
 \item[3.2 CrawlURI Content type=text] - The CrawlURI with \emph{text} content type will be analyzed by WebAnalyzer in next step.
 \end{description}
 
@@ -276,7 +281,6 @@ Lets describe the workflow of archiving links from Bohemian URI:
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{WebAnalyzer}
 
 The WebAnalyzer is realized as standalone module packaged into \emph{.jar} file. WebAnalyzer provides simple interface, that is used by ExtractorWebAnalyzer to identify the processed URI. WebAnalyzer identifies the processed URI on the basis of properties specified by user. These properties can be defined in external file \emph{webanalyzer.properies}. User is able to configure which componentes of WebAnalyzer he wants to use. Important thing is to specify conditions for valid URI.
@@ -315,11 +319,11 @@ Lets describe the packages:
 \item[ProcessedCrawlURI] - This class stores information about processed URI (name, content, content type, links).
 \end{description}
 
-\item[cz.webarchiv.webanalyzer.multithread.mime] - This package represents components that identify the mime type or URI.
+\item[cz.webarchiv.webanalyzer.multithread.mime] - This package represents components that identify the MIME type or URI.
 \begin{description}
-\item[Content] - This class provides interface to call the main method that identifies the mime type of URI. This class initializes all other objects needed for identifying.
-\item[MimeType] - The class that stores information about mime type.
-\item[MimeTypes] - This class stores all MimeType objects and is able to identify the mime type of unkonwn document on the basis of its(todo its) name or content.
+\item[Content] - This class provides interface to call the main method that identifies the MIME type of URI. This class initializes all other objects needed for identifying.
+\item[MimeType] - The class that stores information about MIME type.
+\item[MimeTypes] - This class stores all MimeType objects and is able to identify the MIME type of unkonwn document on the basis of its(todo its) name or content.
 \item[MimeTypesException] - The Exception that is thrown if some error occurs.
 \end{description}
 
@@ -338,46 +342,53 @@ Lets describe the packages:
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{Workflow}
 
 Workflow of identifing the URI is divided into 4 parts. Each part represents one method, that is called from Heritrix.
 
 \subsection{The Initialization}
 
+\begin{comment}
 \begin{center}
 \includegraphics[width=120mm]{SD1.png}
 \end{center}
+\end{comment}
 
-Before using the WebAnalyzer, it's necessary to initialize it. The i\-ni\-tia\-li\-za\-tion is performed simultaneously with the initialization of Extractor\-Web\-Analyzer. There is only one instance of WebAnalyzer object during the running of crawl job. The WebAnalyzer gets the properties from \emph{webanalyzer.properties} file, so that it can initialize all managers which are needed for searchers chosen by the user. After initialization WebAnalyzer is prepared to use.
+Before using the WebAnalyzer, it's necessary to initialize it. The i\-ni\-tia\-li\-za\-tion is performed simultaneously with the initialization of Extractor\-Web\-Analyzer. There is only one instance of WebAnalyzer object during the running of crawl job. The WebAnalyzer gets the properties from \emph{webanalyzer.properties} file, so that it can initialize all managers which are needed for searchers chosen by the user. After initialization WebAnalyzer is prepared to use. (see appendix figure 1)
 
-\subsection{The Identification of Mime Type}
+\subsection{The Identification of MIME Type}
 
+\begin{comment}
 \begin{center}
 \includegraphics[width=120mm]{SD2.png}
 \end{center}
+\end{comment}
 
-Before analyzing the document it's important to identify its mime type. The text analyzing of binary document doesn't have sense. But user may want to identify the analyzed document only on the basis of URI name or IP address. Than the user has to deny all searchers that use text content to analyze the URI. Only searchers like GeoIPSearcher can be allowed in that case.
+Before analyzing the document it's important to identify its MIME type. The text analyzing of binary document doesn't have sense. But user may want to identify the analyzed document only on the basis of URI name or IP address. Than the user has to deny all searchers that use text content to analyze the URI. Only searchers like GeoIPSearcher can be allowed in that case. (see appendix figure 2)
 
 When the MimeTypeDetector is used for the first time, the Content object calls \emph{init()} method, that initializes all necessary objects. MimeTypesReader reads all elements from external xml document and creates MimeType instances from them. These instances are than stored into the collection of object MimeTypes. Now everything's prepared for identifing the unknown documents.
 
 \subsection{The Analyzis}
 
+\begin{comment}
 \begin{center}
 \includegraphics[width=120mm]{SD3.png}
 \end{center}
+\end{comment}
 
-The initialized WebAnalyzer is ready to analyze the URI. WebAnalyzer accepts some parametres of processed CrawlURI such as content, name and discovered links. Everytime when the Heriritrx calls WebAnalyzer to analyze the URI, new instance of UrlAnalyzer object is created. We prefer each thread has its own UrlAnalyzer instance, so that many threads can analyze the documents.
+The initialized WebAnalyzer is ready to analyze the URI. WebAnalyzer accepts some parametres of processed CrawlURI such as content, name and discovered links. Everytime when the Heriritrx calls WebAnalyzer to analyze the URI, new instance of UrlAnalyzer object is created. We prefer each thread has its own UrlAnalyzer instance, so that many threads can analyze the documents. (see appendix figure 3)
 
 For each UrlAnalyzer new instance of PointsCounter is created and associated with it. According to the properties defined by the user all required searchers are instantiated. Each instance of ISearcher is associated with PointsCounter object, for searchers to be able to increment points of analyzed document, when relevant information is found. Some of the searches uses theirs managers. These managers provides synchronized methods, that accesses to files and databases. On the basis of reached points, the UrlAnalyzer decides whether the analyzed document is valid or not. Having received confirmation, that the processed URI is valid, Heritrix hanles it as we described above.
 
 \subsection{The Finalization}
 
+\begin{comment}
 \begin{center}
 \includegraphics[width=120mm]{SD4.png}
 \end{center}
+\end{comment}
 
-When the whole process of crawl job is finished, it's necessaryto finalize the WebAnalyzer instance, so that it can be used in next crawl job. The WebAnalyzer instance is closed simultaneously with ExtractorWebAnalyzer processor. All managers in WebAnalyzer close opened database connections, files and streams.
+When the whole process of crawl job is finished, it's necessaryto finalize the WebAnalyzer instance, so that it can be used in next crawl job. The WebAnalyzer instance is closed simultaneously with ExtractorWebAnalyzer processor. All managers in WebAnalyzer close opened database connections, files and streams. (see appendix figure 4)
 
 \subsection{The Configuration}
 
@@ -444,19 +455,18 @@ ForbiddenDictSearcher will search vulgar words, because we don't want to archive
 The next module that can be usefull is CitySearcher. We just have to gain the list of cities of concrete nation. We can use \emph{Apache Lucene} project to implement this module.
 
 \subsubsection*{GoogleSearcher}
-In the future we want to implement searcher, that will use some functions from \emph{GoogleAPI}, but we don't have exact idea so far.
+In the future we want to implement searcher, that will use some functions from \emph{GoogleAPI}, but we don't have an exact idea so far.
 
 %================================NEW SECTION================================%
 
-\newpage
 \section{Testing}
 
 The system hasn't run till the end so far. We was testing it only for 24 hours, due to lack of disk space. The system is still under construction and we expect that new errors may occur during the complete test, which may take few weeks.
 
-Some statistics from test. The system analyzed 450 URIs in 2 minutes. The collection of seeds consisted of URIs outside the national domain.
+Some statistics from test. The system analyzed 450 URIs in 2 minutes on private notebook. The collection of seeds consisted of URIs outside the national domain. The Heritrix was configured to use 5 threads.
 
 \begin{center}
-\includegraphics[width=135mm]{dict.png}
+\includegraphics[width=135mm]{dict.png}	
 
 
 \includegraphics[width=135mm]{email.png}
@@ -470,8 +480,38 @@ Some statistics from test. The system analyzed 450 URIs in 2 minutes. The collec
 
 %================================NEW SECTION================================%
 
-\newpage
-\section{The Conclusion}
+\section{Harvesting in other Nations}
+
+The harvesting of web outside the national domain is also solved in other nations. The criteria they use are very similar to ours.
+
+The Portuguese Web is defined as the set of documents which contain information related to Portugal. In practice, they consider documents that satisfy one of the following conditions [3]:
+\begin{itemize}
+\item Hosted on a site under the .PT domain
+\item Hosted on a site under the .COM, .NET, .ORG or .TV domains written in Portuguese and with at least one incomming link originated in a web page hosted under the .PT domain.
+\end{itemize}
+An alternative approach to find sites related to a country outside the national domain, is to include sites physically hosted in the country using the WHOIS [4] database.	
+
+The Australian Web is defined as the set of documents with .AU domain. During the crawl links identified in crawled pages that were not on the .AU domain were logged and passed through a GeoIP database to determine if the site was located in Australia [5]. 
+
+In Denmark they also collect sites from outside domain .DK which are considered \emph{directed at a public in Denmark} primarily sites in Danish but also sites of Danish companies, artists and institutions that are domiciled in Denmark. The methods of locating these have been partially automatic, partially manual. The automatic method involved running a list of links on .DK websites pointing outside the domain (and therefore not harvested) against a GeoIP presumably revealing websites with Danish owners. The manual method meant searching via Google for web pages which include Danish place names but which are not on domain .DK, which uncovered many sites for local associations and institutions [6].
+
+In Thailand they propose the following set of criteria as an appropriate strategy for crawling the Thai Web [7].
+\begin{itemize}
+\item Top-level domain of the web is .TH
+\item IP address of its web server is physically assigned in Thailand (using GeoIP API).
+\item Language of the web page is Thai.
+\end{itemize}
+
+In Greek the criteria that are used to characterize the Greek Web are [8]:
+\begin{itemize}
+\item Top-level domain of the web is .GR
+\item Language of the web is Greek.
+\item \emph{Greek} content. A Web site may not have the .GR suffix in its name, or may not be written in Greek. However, it may contain information closely related to Greece. Such sites can be tracked by examining their content (i.e. whether they include any of the words \emph{Hellas, Greece, Greek, etc.})
+\end{itemize}
+
+%================================NEW SECTION================================%
+
+\section{Conclusion}
 
 We have to mention that the system si still under construction and we will develop new criteria to identify URIs. When we gain more experience with the system, we will upgrade it to meet new requirements that may occur during the running. We will try to develop the system to be modular, for us to add new functionality easily. 
 
@@ -480,11 +520,51 @@ In the future the system will be able to identify not only Czech web but also we
 %================================NEW SECTION================================%
 
 \newpage
-\section{Sources}
+\section*{Sources}
 
-\begin{itemize}
-\item http://www.webarchiv.cz
-\item http://crawler.archive.org/articles/developer\_manual/overview.html
-\end{itemize}
+\begin{enumerate}
+\item \url{http://www.webarchiv.cz}
+\item \url{http://crawler.archive.org/articles/developer\_manual/overview.html}
+\item \url{http://bibnum.bnf.fr/ecdl/2003/proceedings.php?f=gomes}
+\item \url{http://www.ripe.net/db/whois/whois.html}
+\item \url{ http://64.233.183.104/search?q=cache:GEy7FXtUj3sJ:pandora.nla.gov.au/documents/domain\_harvest\_report\_public.pdf+crawling+outside+national+domain&hl=cs&ct=clnk&cd=2&gl=cz&client=firefox-a}
+\item \url{http://66.102.9.104/search?q=cache:gjMt5FWTxm0J:netarkivet.dk/publikationer/CollectingTheDanishInternet\_2007.pdf+denmark+archiving+outside+domain&hl=cs&ct=clnk&cd=1&gl=cz&client=firefox-a}
+\item \url{http://portal.acm.org/ft\_gateway.cfm?id=1352868&type=pdf&coll=ACM&dl=ACM&CFID=27816416&CFTOKEN=50667111}
+\item \url{http://www.iwaw.net/04/Lampos.pdf}
+\end{enumerate}
+
+%================================NEW SECTION================================%
+
+\newpage
+\section*{Appendix}
+
+
+\begin{center}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=120mm]{SD1.png}
+\caption{Initialization of WebAnalyzer}\label{fig:erptsqfit1}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=120mm]{SD2.png}
+\caption{Identification of MIME type}\label{fig:erptsqfit2}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=120mm]{SD3.png}
+\caption{The Analyzis}\label{fig:erptsqfit3}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=120mm]{SD4.png}
+\caption{The Finalization}\label{fig:erptsqfit4}
+\end{figure}
+
+\end{center}
 
 \end{document}
