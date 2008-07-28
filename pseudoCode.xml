@@ -594,5 +594,20 @@ http://java.sun.com/j2ee/1.4/docs/tutorial/doc/
     <bc_praca>
         MimeType Detector. Rozdelenie na Searcher
     </bc_praca>
+    <todo>
+	- precitat poriadne email od IWAW a odpisat, potvrdit ze so vsetkym suhlasim.
+	- presunut sa na raptor, rozbehat testy, opravit clanok podla emailu od iwaw
+	- pripravit prezentaciu
+        - insert integration classes from heritrix into SVN
+        - poriadne prefiltrovat cesky wordlist, s ostatnymi korpusmi + otestovat
+        - spustit velky test na raptore
+        - dohodnut sa s Pomikalkom na jeho Python module(trigram)
+        - poriadne prefiltrovat wordlisty: create following java classes for this purpose
+        1.Filter - vyfiltruje iba wordlist zo zdroja slov
+        2.DuplicateChecker - removes duplicates
+        3.WordlistFilter - removes words existing in some other wordlist
+        4.WordlistSorter - sortes the wordlist
+        5.WordlistIndexer - creates index for certain wordlist
+    </todo>
     
 </root>
