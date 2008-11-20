@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -45,7 +46,9 @@ class Editor {
 
                 // read file
                 fis = new FileInputStream(input);
+//                InputStreamReader in = new InputStreamReader(fis, "ISO-8859-2");
                 InputStreamReader in = new InputStreamReader(fis, "UTF-8");
+                
                 BufferedReader br = new BufferedReader(in);
                 // write file
                 FileOutputStream fos = new FileOutputStream(output);
@@ -63,18 +66,16 @@ class Editor {
                     // filtering starts here ===================================
 //                    String[] parts = line.split("\\s");
 //                    word = parts[0].toLowerCase();
-//                    if (word.matches(".*\\d.*")) {
+//                    if (word.matches(".*[\\d|_|&].*")) {
 //                        continue;
 //                    }
 //                    if (word.length() < 3) {
 //                        continue;
 //                    }
-//                    
-//                    if(word.contains("&")) {  
-//                        continue;
-//                    }
-//                
-//                    // writing
+                        if ((word = gainRelevantItemFromLine(line)) == null) {
+                            continue;
+                        }
+                    // writing
 //                    bw.write(word);
 //                    bw.newLine();
                     // filtering ends here =====================================
@@ -84,7 +85,7 @@ class Editor {
                     // I always have to comment right block of commands. read the source code carfully
                     // sorting starts here ==================================================
                     Word w = new Word();
-                    w.setWord(line);
+                    w.setWord(word);
                     sort.add(w);
                 }
 
@@ -93,6 +94,8 @@ class Editor {
                     bw.write(w.getWord());
                     bw.newLine();
                 }
+                bw.close();
+                br.close();
             // sorting ends here=====================================================
 
             } catch (FileNotFoundException ex) {
@@ -103,6 +106,7 @@ class Editor {
                 java.util.logging.Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ioe);
             } finally {
                 try {
+                    
                     out.close();
                     fis.close();
                 } catch (IOException ex) {
@@ -126,7 +130,7 @@ class Editor {
             FileReader fileReader = new FileReader(inputFile);
             bufferedReader = new BufferedReader(fileReader);
             String line;
-            List<String> lines = new ArrayList<String>();
+            Set<String> lines = new HashSet<String>();
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
@@ -152,11 +156,18 @@ class Editor {
             String outputFile) {
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
+        Set<Word> sort = new TreeSet<Word>();
+        
+        for (String s : collection) {
+            Word word = new Word();
+            word.setWord(s);
+            sort.add(word);
+        }
         try {
             fileWriter = new FileWriter(outputFile);
             bufferedWriter = new BufferedWriter(fileWriter);
-            for(String element : collection) {
-                bufferedWriter.write(element);
+            for(Word element : sort) {
+                bufferedWriter.write(element.getWord());
                 bufferedWriter.newLine();
             }
         } catch (IOException ex) {
@@ -189,10 +200,11 @@ class Editor {
             String line;
             while((line = bufferedReader.readLine()) != null) {
                 // edit line to desired form
-                if((line = gainRelevantItemFromLine(line)) == null) {
-                    continue;
-                }
-                System.out.println(line);
+                // WARNING uncomment this condition to edit read line
+//                if((line = gainRelevantItemFromLine(line)) == null) {
+//                    continue;
+//                }
+//                System.out.println(line);
                 // remove edited line from collection if present
                 if (collection.contains(line)) {
                     collection.remove(line);
@@ -215,6 +227,24 @@ class Editor {
     }
     
     /**
+     * This method filters collection by another collection
+     * 
+     * @param origCollection collection, that will be filtered 
+     * @param filterByCollection collection to filter
+     * @return filtered origCollection
+     */
+    public Collection<String> filterByCollection(
+            HashSet<String> origCollection, 
+            Collection<String> filterByCollection) {
+        for(String filterItem : filterByCollection) {
+            if (origCollection.contains(filterItem)) {
+                origCollection.remove(filterItem);
+            }
+        }
+        return origCollection;
+    }
+    
+    /**
      * This method edits line given as parameter. You can gain from given line 
      * only relevant information e.g. line="word 123 other unrelevant bullshits"
      * You are only interested in first word. 
@@ -225,10 +255,15 @@ class Editor {
     public String gainRelevantItemFromLine(String line) {
         String item = null;
         item = (line.split("\\s"))[1];
-        if (item.matches(".*[\\W|\\d|-|_].*")) {
+        if (item.equals("@")) {
+            item = (line.split("\\s"))[3];
+        }
+        if (item.length() < 3) {
+            return null;
+        }
+        if (item.matches(".*[\\d|_|&].*")) {
             return null;
         }
         return item.toLowerCase();
     }
-    
 }

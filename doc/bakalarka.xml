@@ -46,7 +46,7 @@
             široký sortiment možností pre takmer všetky skupiny ľudí.
         </para>
         <para>
-            V posledných rokoch nastal obrovský rozmach a Internet sa začal
+            Internet sa začal
             masovo zavádzať a používať v nespočetnom množstve inštitúcií, firiem
             a iných organizácií, či už verejnoprávnych alebo súkromných.
             Jeho veľký vplyv sa postupne premieta aj do škôl. Mení sa spôsob a forma
@@ -112,7 +112,7 @@
             Táto práca popisuje systém na rozpoznanie a archiváciu českého webu
             mimo národnú doménu. Systém na rozpoznanie českého webu je integrovaný
             do systému <indexterm><primary>Heritrix</primary></indexterm>Heritrix, ktorý okrem iného tieto identifikované stránky 
-            archivuje. Pomocou systému je možné identifikovať <indexterm><primary>bohemikálny zdroj</primary></indexterm>bohemikálny zdroj
+            archivuje. Pomocou systému je možné identifikovať <indexterm><primary>bohemikálny zdroj</primary></indexterm>bohemikálny(český) zdroj
             na základe viacerých kritérií, ktoré sú 
             v systéme zakomponované. Za <indexterm><primary>bohemikálny zdroj</primary></indexterm>bohemikálny zdroj systém považuje všetky
             stránky, ktoré spĺňajú určité podmienky. Tieto podmienky môže užívateľ
@@ -121,8 +121,47 @@
             vyhodnocované na základe kritérií implementovaných v systéme. Medzi
             základné patria identifikácia jazyka, identifikácia českých IP adries, 
             identifikácia e-mailov a telefónnych čísel. Každá spracovaná stránka, 
-            ktorá je systémom na rozpoznanie identifikovaná ako bohemikálna je 
+            ktorá je systémom na rozpoznanie identifikovaná ako česká je 
             následne archivovaná systémom <indexterm><primary>Heritrix</primary></indexterm>Heritrix.
+        </para>
+        <para>
+            Identifikáciou a archiváciou webu mimo národnú doménu sa zaoberajú 
+            aj iné krajiny. Kritéria na identifikáciu národného webu sú vo 
+            všetkých prípadoch veľmi podobné. 
+        </para>
+        <para>
+            Portugalský web je definovaný ako množina dokumentov, ktoré sú 
+            umiestnené na doméne .PT alebo sú umiestnené na doménach 
+            .COM, .NET, .ORG, .TV, napísané v portugalskom jazyku a sú 
+            odkazované aspoň z jednej stránky s doménou .PT. Ďalšie kritérium, 
+            ktoré používajú je <emphasis>WHOIS</emphasis><citation>13</citation>
+            databáza, podľa ktorej zisťujú z ktorej krajiny pochádza majiteľ 
+            webu<citation>14</citation>.
+        </para>
+        <para>
+            Austrálsky web je definovaný ako množina dokumentov umiestnených 
+            na doméne .AU. Počas sklizne sa stránky odkazujúce do iných domén 
+            kontrolujú pomocou GeoIP databáze, ktorá zistí, či sa stránka 
+            fyzicky nachádza v Austrálii<citation>15</citation>.
+        </para>
+        <para>
+            V Dánsku používajú automatický a manuálny prístup na identifikáciu 
+            národných stránok. Automatický prístup pracuje na základe GeoIP 
+            databázy rovnako ako v Austrálii. Manuálny prístup znamená 
+            vyhľadávanie stránok cez Google, ktoré obsahujú dánske názvy, 
+            ale nie sú umiestnené na .DK doméne<citation>16</citation>.
+        </para>
+        <para>
+            V Thajsku definujú nasledujúce kritéria pre národný web. Stránka je 
+            umiestnená na .TH doméne alebo IP adresa serveru je fyzicky 
+            umiestnená v Thajsku (GeoIP) alebo je stránka napísaná v thajskom 
+            jazyku.
+        </para>
+        <para>
+            V Grécku považujú za národný web stránky, ktoré sú napísané v 
+            gréckom jazyku alebo sú umiestnené na .GR doméne alebo obsahujú 
+            informácie, ktoré sa viažu s Gréckom. Napríklad sa vyhľadávajú 
+            slová ako sú Hellas, Greek a Greece<citation>17</citation>.
         </para>
         <para>
             Následná kapitola bližšie popisuje spôsob archivácie v projekte 
@@ -147,7 +186,7 @@
             <para>
                 Ideálnym cieľom projektu by bolo archivovať všetky české zdroje, 
                 ktoré kedy boli na Internete umiestnené. Z technických dôvodov to
-                však nieje možné a preto <indexterm><primary>WebArchiv</primary></indexterm>WebArchiv používa osvedčené techniky, ktoré
+                však nie je možné a preto <indexterm><primary>WebArchiv</primary></indexterm>WebArchiv používa osvedčené techniky, ktoré
                 sa k tomuto ideálnemu cieľu približujú. V súčasnosti <indexterm><primary>WebArchiv</primary></indexterm>WebArchiv
                 používa tri základné spôsoby archivácie.
             </para>
@@ -256,7 +295,8 @@
                         stavebným kameňom arhívu. Obvyklá veľkosť ARCu je 100 MB.
                         Skladá sa z hlavičky, ktorá jednoznačne identifikuje
                         každý <indexterm><primary>ARC</primary></indexterm>ARC a jednotolivých URL záznamov, ktoré obsahujú
-                        samotné dáta.
+                        samotné dáta. Nástupcom súboru ARC je WARC, ktorý sa bude tradične používať na ukládanie dát získaných zo 
+                        sklizní Internetového obsahu. WARC je navrhnutý ako norma ISO 28500.
                     </para>
                 </sect3>
             </sect2>
@@ -311,8 +351,8 @@
                 Tieto odhodené odkazy mimo doménu .cz však môžu byť hodnotným 
                 materiálom pri nástupe sklizne mimo .cz. Existuje možnosť, že
                 odkazy mimo doménu .cz, ktoré sa nachádzajú na českej stránke 
-                môžu odkazovať na iné relevanté, bohemikálne stránky, ktorých 
-                doména už nieje česká. Preto je výhodné skúmať tieto odhodené
+                môžu odkazovať na iné relevanté, české stránky, ktorých 
+                doména už nie je česká. Preto je výhodné skúmať tieto odhodené
                 odkazy zo stránok s českou doménou ako prvé. <indexterm><primary>Heritrix</primary></indexterm>Heritrix sa dá
                 nakonfigurovať tak, aby tieto odhodené odkazy z českých stránok 
                 logoval do osobitného súboru. Tento súbor bude po skončení sklizne 
@@ -324,7 +364,7 @@
                 vygeneroval súbor <emphasis>outScope.log</emphasis>, ktorého
                 veľkosť je 16 GB. Na každom riadku sa nachádzajú logovacie 
                 informácie a URL, ktorá sa použije ako semienko pre 
-                <indexterm><primary>sklizeň</primary></indexterm>sklizeň mimo doménu .cz. Z technických príčin nieje možné predhodiť
+                <indexterm><primary>sklizeň</primary></indexterm>sklizeň mimo doménu .cz. Z technických príčin nie je možné predhodiť
                 Heritrixu 16 GB dlhý zoznam semienok a preto je nutné tento 
                 zoznam rozdeliť na viac kolekcií, ktoré sa postupne spracujú.
             </para>
@@ -963,9 +1003,9 @@
                 potrebné integrovať <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer do niektorého z modulov.
                 Vhodná možnosť je navrhnúť a naimplementovať modul <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer, vo forme
                 knižnice <emphasis>.jar</emphasis>, ktorá bude poskytovať definované rozhranie, s ktorým 
-                bude niektorý z modulov Heritrixu spolupracovať a používať jeho služby.
+                bude niektorý z modulov Heritrixu spolupracovať a používať jeho služby. Systém
                 <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer by mal vziať na vstupe URI, o ktorej na základe
-                svojich funkcií a definovaných požiadavkov určí, či je bohemikálna alebo nie.
+                svojich funkcií a definovaných požiadavkov určí, či je česká alebo nie.
                 Teraz ostávalo zistiť, ktorý modul bude
                 ten najvhodnejší pre integráciu s WebAnalyzerom. 
             </para>
@@ -988,7 +1028,7 @@
                 Naopak na úplnom konci spracovania <indexterm><primary>Heritrix</primary></indexterm>Heritrix zistil o URI maximálne 
                 množstvo informácií, ktoré by mohli byť pre <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer hodnotné.
                 Keby sme nasadili <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer v tomto bode a identifikovali URI, 
-                tak by sme prišli o možnosť archivovania bohemikálnych URI.
+                tak by sme prišli o možnosť archivovania českých URI.
                 <indexterm><primary>archivácia</primary></indexterm>Archivácia sa totiž vykonáva procesorom ARCWriterProcessor, ktorý vstupuje
                 do činnosti skôr ako skončí URI v objekte <indexterm><primary>Frontier</primary></indexterm>Frontier.
             </para>
@@ -1002,11 +1042,11 @@
                 spracovávaní každej URI určuje, či spĺňa definované kritéria alebo nie. Filter
                 môže byť použitý na viacerých miestach procesu spracovania URI, takže by nebol 
                 problém umiestniť ho tesne pred modul archivovania a pomocou WebAnalyzeru
-                určit, či je aktuálna URI bohemikálna alebo nie. Podľa tohoto rozhodnutia by 
+                určit, či je aktuálna URI česká alebo nie. Podľa tohoto rozhodnutia by 
                 ju potom mohol následujúci procesor archivovať. Pokus však ukázal, že
                 ani filter nie je vhodným modulom. <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pri analyzovaní používa viacero
                 projektov a knižníc, s ktorými spolupracuje. Funkcionalita týchto podsystémov
-                WebAnalyzeru vyžaduje, aby bol <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pred samotným spustením
+                systému WebAnalyzer vyžaduje, aby bol <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer pred samotným spustením
                 nainicializovaný. Tým pádom je nutné vždy pred jeho používaním zavolať jeho 
                 metodu <emphasis>initializeWebAnalyzer()</emphasis>, ktorá zabezpečí, že sa otvoria a nainicializujú
                 všetky spojenia k externým súborom, databázam a indexom, ktoré <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer používa.
@@ -1029,7 +1069,7 @@
                 Poslednou a konečnou možnosťou bola integrácia do modulu Processor, ktorá sa 
                 ukázala byť najviac vyhovujúcou možnosťou. Procesor sa vyskytuje v niekoľkých vartiantách
                 ako sme spomenuli v sekcii Processor. <indexterm><primary>Heritrix</primary></indexterm>Heritrix definuje niekoľko 
-                reťazí proceserov. Pre <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je najvýhodnejšie umiestniť procesor 
+                reťazí procesorov. Pre systém <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer je najvýhodnejšie umiestniť procesor 
                 do reťaze <emphasis>Extractor processing chain</emphasis>. Prvé dve reťaze <emphasis>Pre-fetch processing chain</emphasis>
                 a <emphasis>Fetch processing chain</emphasis> neboli vyhovujúce pretože v tom čase ešte nemáme prístupný 
                 textový obsah URI, ktorý môže <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer použiž na analýzu textu. Textový 
@@ -1100,7 +1140,7 @@
                     sme v procesore <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer nastavili, ktorá URI sa má
                     archivovať a ktorá má naopak procesor na archivovanie preskočiť.
                     Tým sme dokázali archivovať všetky URI, ktoré <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer identifikoval
-                    ako bohemikálne.
+                    ako české.
                 </para>
             </sect2>
             <sect2>
@@ -1113,12 +1153,12 @@
                     <listitem>
                         <para>
                             <emphasis><indexterm><primary>archivácia</primary></indexterm>archivácia obrázkov</emphasis> - 
-                            Pri archivácií bohemikálnej stránky sa nearchivovali obrázky
+                            Pri archivácií českej stránky sa nearchivovali obrázky
                             a css štýly, čím bola stránka veľmi ochudobnená. Každý obrázok
                             a hociktorý iný zdroj na stránke je samostatnou URI adresou
                             spracovávanou nezávisle na ostatných URI adresách. Preto je nutné
                             aby si systém pamätal, ktoré URI sú obrázky z už archivovaných 
-                            bohemikálnych stránok a archivoval ich tiež.
+                            českých stránok a archivoval ich tiež.
                         </para>
                     </listitem>
                     <listitem>
@@ -1126,14 +1166,14 @@
                             <emphasis><indexterm><primary>archivácia</primary></indexterm>archivácia odkazov</emphasis> - 
                             Podobný problém ako s obrázkami vznikol aj pri odkazoch. 
                             Pri identifikácií vznikla požiadavka aby systém okrem 
-                            samotnej bohemikálnej stránky archivoval automaticky aj všetky
+                            samotnej českej stránky archivoval automaticky aj všetky
                             odkazy, ktoré sa na tejto stránky vyskytujú a to do určitej úrovne.
-                            To znamená, že bolo nutné definovať do akej hĺbky od bohemikálnej
+                            To znamená, že bolo nutné definovať do akej hĺbky od českej
                             stránky sa majú referencované stránky automaticky archivovať.
-                            Tieto stránky by totiž mohli byť hodnotným zdrojom odkazovaným z bohemikánej stránky.
+                            Tieto stránky by totiž mohli byť hodnotným zdrojom odkazovaným z českej stránky.
                             Opäť bolo nutné aby si systém pamätal, z ktorej rodičovskej URI bola
                             aktuálna URI objavená a či tá rodičovská URI bola identifikovaná
-                            ako bohemikálna.
+                            ako česká.
                         </para>
                     </listitem>
                     <listitem>
@@ -1165,12 +1205,14 @@
                         <para><emphasis>archivovanie <indexterm><primary>DNS</primary></indexterm>DNS záznamov</emphasis> - 
                             Predtým než sa nejaká stránka stiahne zo serveru, tak sa spracuje
                             odpvedajúci <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam. Tento 
-                            <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam <indexterm><primary>Heritrix</primary></indexterm>Heritrix automatický archivuje.
+                            <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam <indexterm><primary>Heritrix</primary></indexterm>Heritrix automatický archivuje, 
+                            vďaka čomu sme mali v ARC súboroch obrovské množstvo zbytočných DNS záznamov.
                             My však chceme archivovať len tie <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy, ktoré sa spájajú
-                            s bohemikálnymi stránkami. Tohoto stavu je ale ťažké dosiahnuť, pretože
+                            s českými stránkami. Tohoto stavu je ale ťažké dosiahnuť, pretože
                             v čase keď prebieha analýza stránky je už odpvedajúci <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznam archivovaný.
                             Riešením by bola dodatočná <indexterm><primary>archivácia</primary></indexterm>archivácia <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamov. Dočasné riešenie
-                            je nearchivovať žiadne <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy.
+                            je nearchivovať žiadne <emphasis><indexterm><primary>DNS</primary></indexterm>DNS</emphasis> záznamy, pretože nemajú 
+                            vpliv na sprístupnenie archivovaných stránok.
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -1245,13 +1287,13 @@
                     <title><indexterm><primary>archivácia</primary></indexterm>Archivácia odkazov a obrázkov</title>
                     <para>
                         Predchádzajúca verzia systém archivuje len tie URI, ktoré 
-                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer identifikoval ako bohemikálne. Všetky ostatné
-                        URI (URI obrázkov, css  súborov a iných odkazov bohemikálnej
+                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer identifikoval ako české. Všetky ostatné
+                        URI (URI obrázkov, css  súborov a iných odkazov českej
                         stránky) sa nearchivujú. My však potrebujeme archivovať
-                        nielen zdroje bohemikálnej stránky (obrázky, css) ale aj 
+                        nielen zdroje českej stránky (obrázky, css) ale aj 
                         odkazy vedúce z tejto stránky a to do určitej úrovne. Odkazy vedúce
-                        z bohemikálnej stránky pravdepodobne nesú hodnotné informácie asociované
-                        s odpovedajúcou bohemikálnou stránkou.
+                        z českej stránky pravdepodobne nesú hodnotné informácie asociované
+                        s odpovedajúcou českou stránkou.
                     </para>
                     <figure id="img3">
                         <title>Archivovanie odkazov do hĺbky 2</title>                    
@@ -1262,10 +1304,10 @@
                         </mediaobject>
                     </figure>
                     <para>
-                        Obrázok ukazuje strom, ktorého koreň je bohemikálna stránka
+                        Obrázok ukazuje strom, ktorého koreň je česká stránka
                         a jej listy sú odkazy z tejto stránky. Pri definovanej 
                         hĺbke 2 by sa mali všetky odkazy, obrázky a iné zdroje 
-                        vedúce z bohemikálnej stránky automaticky archivovať do
+                        vedúce z českej stránky automaticky archivovať do
                         tejto hĺbky. Pri archivovaní odkazov 2. úrovne
                         však budú tieto URI opäť bez obrázkov, css a iných zdrojov.
                         Preto musíme archivovať aj 3. úroveň, ale okrem html dokumentov.
@@ -1275,27 +1317,27 @@
                         môže nastaviť užívateľ pred spustením celého procesu.
                     </para>
                     <para>
-                        <indexterm><primary>archivácia</primary></indexterm>Archivácia odkazov z bohemikálnych stránok do určitej hĺbky 
+                        <indexterm><primary>archivácia</primary></indexterm>Archivácia odkazov z českých stránok do určitej hĺbky 
                         sa dala zrealizovať novým modulom <indexterm><primary>LinksScoperWebAnalyzer</primary></indexterm>LinksScoperWebAnalyzer a odpovedajúcimi zmenami
                         v procesore <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer tak, aby mohli moduly vzájomne spolupracovať.
                         Veľkou pomôckou boli objekty CrawlURI a <indexterm><primary>CandidateURI</primary></indexterm>CandidateURI, 
                         ktoré obsahujú objekt AList, čo je zoznam objektov pridružených k
                         danej URI. Do tohto zoznamu je možné pridať hocijaký príznak (objekt), ku 
                         ktorému môžeme pristupovať v ľubovoľnom module. Na základe týchto
-                        príznakov si <indexterm><primary>Heritrix</primary></indexterm>Heritrix môže zapamätať, ktoré URI sú bohemikálne, 
-                        ktoré URI sú validnými odkazmi z bohemikálnych stránok alebo
+                        príznakov si <indexterm><primary>Heritrix</primary></indexterm>Heritrix môže zapamätať, ktoré URI sú české, 
+                        ktoré URI sú validnými odkazmi z českých stránok alebo
                         URI, ktoré predstavujú obrázky, css štýly či iné zdroje asociované s
-                        bohemikálnymi stránkami. Týmto spôsobom môžeme všetky URI odkazované z 
-                        bohemikálnej stránky archivovať a to do určitej úrovne, ktorú
+                        českými stránkami. Týmto spôsobom môžeme všetky URI odkazované z 
+                        českej stránky archivovať a to do určitej úrovne, ktorú
                         si môže užívateľ sám zvoliť.
                     </para>
                     <para>
                         Modul <indexterm><primary>LinksScoperWebAnalyzer</primary></indexterm>LinksScoperWebAnalyzer je potomkom modulu 
                         LinksScoper, ale dopĺňa funkcionalitu na spracovanie 
-                        odkazov z bohemikálnych stránok.
+                        odkazov z českých stránok.
                     </para>
                     <para>
-                        Postup archivovania odkazov z bohemikálnych stránok: <xref linkend="img1"/>
+                        Postup archivovania odkazov z českých stránok: <xref linkend="img1"/>
                     </para>
                     <itemizedlist>
                         <listitem>
@@ -1321,7 +1363,7 @@
                                 <listitem>
                                     <para><emphasis>2.2 CrawlURI FLAG=valid_link, DEPTH=x</emphasis> - 
                                         CrawlURI má nastavený príznak <emphasis>valid_link</emphasis>, ktorý
-                                        definuje, že táto URI bola odkazom z bohemikálnej stránky a má sa 
+                                        definuje, že táto URI bola odkazom z českej stránky a má sa 
                                         okamžite archivovať. Nie je nutné robiť jej analýzu. Putuje rovno do
                                         procesoru ARCWriterProcesorWebAnalyzer, ktorý ju archivuje. Príznak
                                         <emphasis>DEPTH=x</emphasis>, definuje do akej hĺbky sa majú odkazy
@@ -1332,9 +1374,9 @@
                                 <listitem>
                                     <para><emphasis>2.3 CrawlURI FLAG=archive_bin_link, DEPTH=0</emphasis> - 
                                         CrawlURI s príznakom <emphasis>archive_bin_link</emphasis> definuje, že
-                                        táto URI je odkazom z bohemikálnej stránky, ale v stromovej štruktúre
+                                        táto URI je odkazom z českej stránky, ale v stromovej štruktúre
                                         predstavuje list (<xref linkend="img3"/>). To znamená, že sa vykonala
-                                        <indexterm><primary>archivácia</primary></indexterm>archivácia všetkých uzlov vedúcich z bohemikálnej stránky (koreňa)
+                                        <indexterm><primary>archivácia</primary></indexterm>archivácia všetkých uzlov vedúcich z českej stránky (koreňa)
                                         do definovanej hĺbky. V listoch však môžu existovať odkazy na obrázky, 
                                         css štýly a iné zdroje, ktorý by chýbali v už archivovaných stránakch.
                                         Preto je nutné z týchto listov archivovať všetky dokumenty okrem tých, 
@@ -1398,20 +1440,20 @@
                         <listitem>
                             <para><emphasis>4. <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer run(curiName, outlinks, contetType, content)</emphasis> - 
                                 CrawlURI, ktoré sa dostali do tejto vetvy sú spracované WebAnalyzerom. Ten na základe parametrov
-                                o danej CrawlURI identifikuje či sa jedná o bohemikálnu URI alebo nie.
+                                o danej CrawlURI identifikuje či sa jedná o českú URI alebo nie.
                             </para>
                             <itemizedlist>
                                 <listitem>
                                     <para><emphasis>4.1 CrawlURI NO FLAG</emphasis> - 
-                                        CrawlURI, ktorá bola WebAnalyzerom identifikovaná ako nebohemikálna postupuje do
+                                        CrawlURI, ktorá nebola WebAnalyzerom identifikovaná ako česká postupuje do
                                         reťaze <emphasis>Post-processing chain</emphasis>. Nenastavuje sa jej žiadny príznak.
                                     </para>
                                 </listitem>
                                 <listitem>
                                     <para><emphasis>4.2 CrawlURI FLAG=valid_URI, DEPTH=x</emphasis> - 
-                                        CrawlURI, identifikovaná ako bohemikálna bude následne archivovaná. Predtým sa jej však nastaví
+                                        CrawlURI, identifikovaná ako česká bude následne archivovaná. Predtým sa jej však nastaví
                                         príznak <emphasis>valid_URI</emphasis> a <emphasis>depth=x</emphasis>. Hodnotu pre hĺbku získa 
-                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer zo súboru <emphasis><indexterm><primary>WebAnalyzer</primary></indexterm>webanalyzer.properties</emphasis>, ktorý nastavuje užívateľ pred spustením. 
+                                        <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer z externého súboru, ktorý nastavuje užívateľ pred spustením. 
                                         Tým zabezpečíme 
                                         aby si systém pamätal, do akej hĺbky má rekurzívne nájdené odkazy automaticky archivovať.
                                     </para>
@@ -1538,7 +1580,7 @@
         <title><indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer - návrh a implementácia</title>
         <para>
             V kapitole o integrácií modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer so systémom <indexterm><primary>Heritrix</primary></indexterm>Heritrix, 
-            sme spomínali, že <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer bude klasická knižcnica, ktorá bude
+            sme spomínali, že systém<indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer bude klasická knižcnica, ktorá bude
             poskytovať rozhranie, používané v procesore <indexterm><primary>ExtractorWebAnalyzer</primary></indexterm>ExtractorWebAnalyzer.
             Zbytok funcionality celého systému na identifikovanie a rozpoznanie
             webu mimo národnej domény je zahrnutý v integračných moduloch.
@@ -2132,7 +2174,7 @@
                         <para>
                             Na vstupe by mali byť <indexterm><primary>semienka</primary></indexterm>semienka, ktoré predstavujú
                             odhodené odkazy zo <emphasis>sklizne_cz_2007</emphasis>. Tieto <indexterm><primary>semienka</primary></indexterm>semienka
-                            sú veľkí konkurenti na bohemikálne stránky mimo 
+                            sú veľkí konkurenti na české stránky mimo 
                             národnej domény.
                         </para>
                     </listitem>
@@ -2305,7 +2347,7 @@
                     Po tom ako sme nakonfigurovali oba systémy môžeme spustiť 
                     nadefinovanú úlohu Heritrixu. Heririx začne prehľadávať
                     web a s pomocou modulu <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer bude identifikovať 
-                    bohemikálne stránky, ktoré následne archivuje.
+                    české stránky, ktoré následne archivuje.
                 </para>
                 <para>
                     Priebeh celého procesu môžeme sledovať priamo cez webové rozhranie
@@ -2521,14 +2563,14 @@
             <sect2>
                 <title>ValidLinkSearcher</title>
                 <para>
-                    Tento vyhľadávač kontroluje, či sa skúmaný odkaz objavený 
-                    na analyzovanej stránke nachádza v zozname validných odkazov.
-                    Zoznam validných odkazov, sme získali z odkazov nachádzajúcich sa
-                    na najznámejších portáloch a rozcestníkoch daného národa. 
-                    Napríklad pri identifikácií českého národa sme získali odkazy 
-                    umiestené na známom rozcestníku <emphasis>www.seznam.cz</emphasis>.
-                    ValidLinkSearcher hľadá v odkazoch z analyzovanej stránky také 
-                    odkazy, ktoré sú pre daný národ hodnotné.
+                    Táto komponenta bude v objavených odkazoch vyhľadávať odkazy 
+                    <emphasis>hodnotné</emphasis> pre Český národ. 
+                    Pod pojmom <emphasis>hodnotný</emphasis> odkaz máme na
+                    mysli odkaz vedúci na typicky českú stránku. Zoznam hodnotných 
+                    odkazov môžeme získať zo známych českých portálov a rozcestníkov 
+                    (seznam.cz a iné). Vyhľadávanie bude implementované s využitím 
+                    projektu <emphasis>Apache Lucene</emphasis>, ktoré poskytuje 
+                    na tento typ činnosti vhodné API.
                 </para>
             </sect2>
             <sect2>
@@ -2546,17 +2588,19 @@
             <sect2>
                 <title>ForbiddenDictSearcher</title>
                 <para>
-                    Rovnako ako DictSearcher, ktorý pripočítava body za každé nájdené
-                    slovo v slovníku, budeme implementovať pravý opak, ktorý bude vyhľadávať
-                    v zozname vulgárnych slov a za každé nájdené slovo bude body odpočítavať.
-                    Tým znížime možnosť archivovania vulgárnych, rasistických a pornografických stránok.
-                    Tento modul zatiaľ nieje implementovaný, pretože čakáme na výsledky práce, 
-                    ktorá sa zaoberá práve identifikovaním takýchto neprijateľných stránok.
-                    Vzniknutý systém sa pokúsime zakomponovať do nášho modulu.
+                    Motiváciou WebArchivu je eliminovať stránky, ktoré obsahujú 
+                    informácie zákazané zákonom. V tomto prípade môže byť slovník 
+                    zakázaných slov jedným z kritérií. Pri nájdení nejakého slova 
+                    z tohto slovníka odčítame analyzovanej stránke body, čím 
+                    znížime možnosť archivovania stránok zakázaných zákonom. 
+                    Tento modul zatiaľ nie je implementovaný, pretože čakáme na 
+                    výsledky práce, ktorá sa zaoberá práve identifikovaním
+                    takýchto stránok. Tento systém sa pokúsime zakomponovať 
+                    do nášho modulu.
                 </para>
             </sect2>
             <sect2>
-                <title>TirgramSearcher</title>
+                <title>TrigramSearcher</title>
                 <para>
                     V blízkej budúcnosti plánujeme zahrnúť nový modul, ktorý
                     bude identifikovať jazyk pomocou trigramov. Na základe
@@ -2570,12 +2614,12 @@
                 </para>
             </sect2>
             <sect2>
-                <title>GoogleSearcher</title>
+                <title>Iné vyhľadávače</title>
                 <para>
-                    Plánujeme vytvoriť vyhľadávač, ktorý bude používať GoogleAPI.
-                    Konkrétnu predstavu zatiaľ nemáme. Najprv je nutné preštudovať
-                    aké funkcie GoogleAPI poskytuje a pokúsiť sa ich nejako využiť
-                    v našom systéme.
+                    Plánujeme vytvoriť vyhľadávač, ktorý bude používať <emphasis>GoogleAPI</emphasis> a
+                    projekt <emphasis>Whois</emphasis>. Pomocou <emphasis>Whois</emphasis> môžme 
+                    zistiť adresu majitľa analyzovanej stránky).
+                    Ide o problém vyžadujúci samostatnú analýzu, čo už presahuje rámec tejto práce.
                 </para>
             </sect2>
             
@@ -2584,12 +2628,13 @@
     <chapter>
         <title>Testy</title>
         <para>
-            Systém v tejto podobe zatiaľ nebol spustený, tak aby celý proces
+            Systém v tejto podobe zatiaľ nebol spustený tak aby celý proces
             sklizne mimo národnú doménu dobehol do konca. Maximálna dĺžka behu
-            systému bola okolo 24 hodín. Z dôvodu dočasného nedostatku 
-            hardwérových prostriedkov sa <indexterm><primary>sklizeň</primary></indexterm>sklizeň mimo národnú doménu
-            presunie na neskôr. V priebehu leta 2008 by malo byť všetko pripravené a
-            budeme môcť spustiť proces, aby sme získali nové presnejšie výsledky.
+            systému bola okolo 24 hodín. 
+            Kedže sklizeň 2007 ešte nebola presunutá do Národnej knihovny nemal 
+            som k dispozícií niekoľko TB na diskovom poli, ktoré som potreboval na
+            rozsiahlejší test. To som však nemohol ovplyvniť. Momentálne je
+            už sklizeň presunutá a môžeme spustiť testy, aby sme získali nové presnejšie výsledky.
             Je možné že objavíme aj nové chyby, ktoré sa pri sklizni trvajúcej
             1 deň neobjavili. Celý systém je ešte vo vývoji a je otestovaný
             iba v rámci aktuálnych možsnotí. Detailné testy bude nutné vykonať hneď
@@ -2604,6 +2649,16 @@
             na výkonnom serverovom počítači je oveľa rýchlejšie a je možné nastaviť
             Heritrixu maximálny počet 200 vláken. Výsledky sú zobrazené v grafoch, 
             umiestnených v prílohe. <xref linkend="geo"/>, <xref linkend="dict"/>, <xref linkend="email"/>, <xref linkend="html"/>
+        </para>
+        <para>
+            Graf na obrázku popisuje modrou farbou koľko elementov sa našlo na analyzovanej
+            stránke pomocou konkrétneho vyhľadávača. Napríklad pri vyhľadávači GeoIPSearcher
+            považujeme za element každý odkaz, ktorý sa nachádza na analyzovanej stránke. Pri 
+            DictSearcher je elementom každé slovo a tak to platí pre ostatné vyhľadávače. Červená
+            farba udáva, koľko z nájdených (modrých) elementov je validných (v našom prípade českých). 
+            Počet nájdených elementov je znázornený na osi Y. 
+            Každá hodnota na ose X predstavuje jednu analyzovanú stránku.
+            V každom grafe je 450 analyzovaných stránok.
         </para>
     </chapter>
     <chapter>
@@ -2624,11 +2679,12 @@
             upravíme do požadovanej podoby aby s nimi <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer dokázal pracovať.
         </para><para>
             Ak bude systém pracovať spoľahlivo, tak sa ho pokúsime vydať pod licenciou
-            GNU ako súčasť Heritrixu. Ďalším dôležitým mílnikom je vydanie novej verzie
-            Heritrixu pod názvom <emphasis><indexterm><primary>Heritrix</primary></indexterm>Heritrix 2</emphasis>, ktorá má udajne znamenať veľký pokrok 
-            od predchodzích verzií. Budeme sa snažiť <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer prospôsobiť novej
+            GNU ako súčasť Heritrixu. Ďalším dôležitým mílnikom je nová verzia
+            Heritrixu pod názvom <emphasis><indexterm><primary>Heritrix</primary></indexterm>Heritrix 2</emphasis>, 
+            ktorá vyšla nedávno a predstavuje veľký pokrok od predchodzích verzií. 
+            Budeme sa snažiť <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer prospôsobiť novej
             verzii Heritrixu alebo dokonca vylepšiť celú integráciu s novými funkciami, ktoré
-            bude <emphasis><indexterm><primary>Heritrix</primary></indexterm>Heritrix 2</emphasis> ponúkať.
+            <emphasis><indexterm><primary>Heritrix</primary></indexterm>Heritrix 2</emphasis> ponúka.
             Modul <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer bude voľne dostupný na stránkach webarchívu a rovnako
             sprístupnime aj skompilovanú spustiteľnú verziu Heritrixu s integrovaným 
             modulom <indexterm><primary>WebAnalyzer</primary></indexterm>WebAnalyzer.
@@ -2681,12 +2737,11 @@
                 </imageobject>
             </mediaobject>
         </figure>    
-        
         <figure float="1" id="geo"> 
             <title>GeoIPSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="82" fileref="geo.png" format="PNG"/>
+                    <imagedata scale="65" fileref="geo.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
@@ -2694,7 +2749,7 @@
             <title>DictSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="82" fileref="dict.png" format="PNG"/>
+                    <imagedata scale="65" fileref="dict.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
@@ -2702,7 +2757,7 @@
             <title>HtmlSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="82" fileref="html.png" format="PNG"/>
+                    <imagedata scale="65" fileref="html.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
@@ -2710,7 +2765,7 @@
             <title>EmailSearcher výsledky</title>                    
             <mediaobject>
                 <imageobject>
-                    <imagedata scale="82" fileref="email.png" format="PNG"/>
+                    <imagedata scale="65" fileref="email.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
         </figure> 
@@ -2811,11 +2866,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>03</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Overview of the crawler [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo>
@@ -2840,11 +2895,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>05</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Some notes on the URI classes [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2853,11 +2908,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>07</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Common needs for all configurable modules [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2866,11 +2921,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>08</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Writing FrontierFrontier [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2879,11 +2934,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>09</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Writing Filter [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2892,11 +2947,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>10</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Writing Scope [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2906,11 +2961,11 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
             <biblioentry>
                 <abbrev>11</abbrev>
                 <author>
-                    <surname>Internet ArchiveInternet Archive</surname>
+                    <surname>Internet  Archive</surname>
                 </author>
                 <title>Writing Processor [online]</title>
                 <publisher>
-                    <publishername>Internet ArchiveInternet Archive</publishername>
+                    <publishername>Internet  Archive</publishername>
                 </publisher>
                 <pubdate>26.03.2008</pubdate>
                 <releaseinfo><ulink
@@ -2932,6 +2987,71 @@ WebAnalyzer.urlanalyzer.depth.toarchive=0
                     </ulink>
                 </releaseinfo>            
             </biblioentry>
+            <biblioentry>
+                <abbrev>13</abbrev>
+                <author>
+                    <surname>VERIO</surname>
+                </author>
+                <title>Whois.Net [online]</title>
+                <publisher>
+                    <publishername>Whois.Net</publishername>
+                </publisher>
+                <pubdate>18.5.2008</pubdate>
+                <releaseinfo><ulink
+                    url="http://www.whois.net/">http://www.whois.net/</ulink></releaseinfo>
+            </biblioentry>     
+            <biblioentry>
+                <abbrev>14</abbrev>
+                <author>
+                    <surname>Gomes</surname>
+                </author>
+                <title>A Characterization of Portuguese Web [online]</title>
+                <publisher>
+                    <publishername>IWAW</publishername>
+                </publisher>
+                <pubdate>18.5.2008</pubdate>
+                <releaseinfo><ulink
+                    url="http://pandora.nla.gov.au/documents/domain_harvest_report_public.pdf">http://pandora.nla.gov.au/documents/domain_harvest_report_public.pdf</ulink></releaseinfo>
+            </biblioentry>    
+            <biblioentry>
+                <abbrev>15</abbrev>
+                <author>
+                    <surname>Koerbin</surname>
+                </author>
+                <title>Report on the Crawl and Harvest of the Whole Australian Web Domain Undertaken during June and July 2005 [online]</title>
+                <publisher>
+                    <publishername>National Library of Australia</publishername>
+                </publisher>
+                <pubdate>10.10.2005</pubdate>
+                <releaseinfo><ulink
+                    url="http://bibnum.bnf.fr/ecdl/2003/proceedings.php?f=gomes">http://bibnum.bnf.fr/ecdl/2003/proceedings.php?f=gomes</ulink></releaseinfo>
+            </biblioentry>    
+            <biblioentry>
+                <abbrev>16</abbrev>
+                <author>
+                    <surname>Grethe Jacobsen</surname>
+                </author>
+                <title>Harvesting the Danish internet – the first two years [online]</title>
+                <publisher>
+                    <publishername>netarkivet.dk</publishername>
+                </publisher>
+                <pubdate>2.5.2007</pubdate>
+                <releaseinfo><ulink
+                    url="http://netarkivet.dk/publikationer/CollectingTheDanishInternet_2007.pdf">http://netarkivet.dk/publikationer/CollectingTheDanishInternet_2007.pdf</ulink></releaseinfo>
+            </biblioentry>  
+            <biblioentry>
+                <abbrev>17</abbrev>
+                <author>
+                    <surname>Charalampos Lampos</surname>
+                </author>
+                <title>Archiving the Greek Web [online]</title>
+                <publisher>
+                    <publishername>Athens University of Economics and Business Department of Informatics</publishername>
+                </publisher>
+                <pubdate>18.5.2008</pubdate>
+                <releaseinfo><ulink
+                    url="http://www.iwaw.net/04/Lampos.pdf">http://www.iwaw.net/04/Lampos.pdf</ulink></releaseinfo>
+            </biblioentry>  
             
         </bibliodiv>
     </bibliography>

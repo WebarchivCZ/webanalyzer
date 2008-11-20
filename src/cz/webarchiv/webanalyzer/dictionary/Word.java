@@ -25,7 +25,7 @@ class Word implements java.lang.Comparable<Word> {
     public boolean equals(Object o) {
         if (o instanceof Word) {
             Word w = (Word) o;
-            return getWord().equals( w.getWord());
+            return getWord().equals(w.getWord());
         } else {
             return false;
         }

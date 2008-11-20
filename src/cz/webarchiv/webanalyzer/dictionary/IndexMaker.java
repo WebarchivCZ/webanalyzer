@@ -59,7 +59,7 @@ public class IndexMaker {
     
     public static void main(String[] args) {
         IndexMaker indexMaker = new IndexMaker();
-        indexMaker.run("_anal/korpus_cz_2.txt", "_anal/index_korpus_cz.txt");
+        indexMaker.run("_anal/wordlists/dict.csv", "_anal/wordlists/index.csv");
     }
 
 }

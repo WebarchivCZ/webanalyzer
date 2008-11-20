@@ -606,8 +606,7 @@ http://java.sun.com/j2ee/1.4/docs/tutorial/doc/
         1.Filter - vyfiltruje iba wordlist zo zdroja slov
         2.DuplicateChecker - removes duplicates
         3.WordlistFilter - removes words existing in some other wordlist
-        4.WordlistSorter - sortes the wordlist
-        5.WordlistIndexer - creates index for certain wordlist
+        4.WordlistIndexer - creates index for certain wordlist
     </todo>
     
 </root>
