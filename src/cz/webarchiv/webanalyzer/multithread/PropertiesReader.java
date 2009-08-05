@@ -25,6 +25,7 @@ public class PropertiesReader {
             WebAnalyzerProperties.getInstance();
     private static final PropertiesReader INSTANCE =
             new PropertiesReader();
+    private static final int MILLION = 1000000;
     // properties for webanalyzer from properties file
     private final String PROPERTIES_PATH = "_anal/webanalyzer.properties";
     private final String GEOIPSEARHCER_COUNTRYCODE = "webanalyzer.searcher.geoip.countrycode";
@@ -84,7 +85,7 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setDepthToArchive(
                     validateInt(properties.getProperty(
                     URL_ANALYZER_DEPTH_TO_ARCHIVE),
-                    URL_ANALYZER_DEPTH_TO_ARCHIVE, 0, 1000000));
+                    URL_ANALYZER_DEPTH_TO_ARCHIVE, 0, MILLION));
 
             // geoipsearcher properties
             WEB_ANALYZER_PROPERTIES.setGeoIpSearcherCountryCode(
@@ -93,7 +94,7 @@ public class PropertiesReader {
                     availableCountryCodes));
             WEB_ANALYZER_PROPERTIES.setGeoIpSearcherPoint(
                     validateInt(properties.getProperty(GEOIPSEARCHER_POINT),
-                    GEOIPSEARCHER_POINT, 0, 10));
+                    GEOIPSEARCHER_POINT, 0, MILLION));
             WEB_ANALYZER_PROPERTIES.insertSearcher(
                     validateInt(properties.getProperty(GEOIPSEARCHER_USE), 
                     GEOIPSEARCHER_USE, 0, 1), 
@@ -107,7 +108,7 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setDictionarySearcherPoint(
                     validateInt(properties.getProperty(
                     DICTIONARY_SEARCHER_POINT),
-                    DICTIONARY_SEARCHER_POINT, 0, 10));
+                    DICTIONARY_SEARCHER_POINT, 0, MILLION));
             WEB_ANALYZER_PROPERTIES.insertSearcher(
                     validateInt(properties.getProperty(DICTIONARY_SEARCHER_USE),
                     DICTIONARY_SEARCHER_USE, 0, 1),
@@ -121,7 +122,7 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setEmailSearcherPoint(
                     validateInt(properties.getProperty(
                     EMAILSEARCHER_POINT),
-                    EMAILSEARCHER_POINT, 0, 10));
+                    EMAILSEARCHER_POINT, 0, MILLION));
             WEB_ANALYZER_PROPERTIES.insertSearcher(
                     validateInt(properties.getProperty(EMAILSEARCHER_USE), 
                     EMAILSEARCHER_USE, 0, 1), 
@@ -135,7 +136,7 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setPhoneSearcherPoint(
                     validateInt(properties.getProperty(
                     PHONESEARCHER_POINT), 
-                    PHONESEARCHER_POINT, 0, 10));
+                    PHONESEARCHER_POINT, 0, MILLION));
             WEB_ANALYZER_PROPERTIES.insertSearcher(
                     validateInt(properties.getProperty(PHONESEARCHER_USE), 
                     PHONESEARCHER_USE, 0, 1), 
@@ -149,7 +150,7 @@ public class PropertiesReader {
             WEB_ANALYZER_PROPERTIES.setHtmlLangSearcherPoint(
                     validateInt(properties.getProperty(
                     HTMLLANGSEARCHER_POINT),
-                    HTMLLANGSEARCHER_POINT, 0, 10));
+                    HTMLLANGSEARCHER_POINT, 0, MILLION));
             WEB_ANALYZER_PROPERTIES.insertSearcher(
                     validateInt(properties.getProperty(HTMLLANGSEARCHER_USE), 
                     HTMLLANGSEARCHER_USE, 0, 1), 
