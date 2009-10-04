@@ -1,4 +1,6 @@
 /*
+ * Class needs some modifications to run properly !!!.
+ * 
  * This class is just for testing purposes. I would like to test whether it's
  * good to have separated thread that holds the connection to DB and executes
  * queries or DB connection is held by first thread that initializes webanalyzer

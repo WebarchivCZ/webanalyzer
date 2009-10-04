@@ -1,4 +1,6 @@
 /*
+ * Class needs some modifications to run properly !!!.
+ * 
  * This will create 200 threads and for each thread uriStatistic instance.
  * Before creating 200 thread a first thread will initialize DBAccessManagerTest
  * what means that DB connection will be created. Then ToeThreads will be
