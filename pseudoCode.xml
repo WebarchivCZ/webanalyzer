@@ -608,5 +608,18 @@ http://java.sun.com/j2ee/1.4/docs/tutorial/doc/
         3.WordlistFilter - removes words existing in some other wordlist
         4.WordlistIndexer - creates index for certain wordlist
     </todo>
+
+    <DBStats>
+        Each user has to create his own database with table and provided sql
+        DDL command. It would be much better if I use embedded DB or application
+        itself creates table if it doesn't already exist in the database.
+    </DBStats>
+    <continue>
+        set autoincrement in MySQL DB so that each URL record has unique
+        identifier.
+        See http://dev.mysql.com/doc/refman/5.0/en/example-auto-increment.html
+        Drop table webarchiv_stats_table and recreate a new one with autoincrement
+        and primary key.
+    </continue>
     
 </root>

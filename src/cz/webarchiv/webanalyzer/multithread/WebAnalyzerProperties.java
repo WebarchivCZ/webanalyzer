@@ -39,6 +39,16 @@ public class WebAnalyzerProperties {
     // properties for htmlLangSearcher
     private String htmlLangSearcherRegexp;
     private int htmlLangSearcherPoint;
+    // properties for dbStats
+    private int dbStatsUse;
+    private String dbURL;
+    private String dbUsername;
+    private String dbPassword;
+    private String dbTable;
+    private int dbResetAutoincrement;
+    private int dbTableCreate;
+    private int dbDropTable;
+    
     // searchers to use
     private List<Integer> searchersToUse = new ArrayList<Integer>();
 
@@ -180,5 +190,117 @@ public class WebAnalyzerProperties {
 
     public void setHtmlLangSearcherPoint(int htmlLangSearcherPoint) {
         this.htmlLangSearcherPoint = htmlLangSearcherPoint;
+    }
+
+    /**
+     * @return the dbStatsUse
+     */
+    public int getDbStatsUse() {
+        return dbStatsUse;
+    }
+
+    /**
+     * @param dbStatsUse the dbStatsUse to set
+     */
+    public void setDbStatsUse(int dbStatsUse) {
+        this.dbStatsUse = dbStatsUse;
+    }
+
+    /**
+     * @return the dbURL
+     */
+    public String getDbURL() {
+        return dbURL;
+    }
+
+    /**
+     * @param dbURL the dbURL to set
+     */
+    public void setDbURL(String dbURL) {
+        this.dbURL = dbURL;
+    }
+
+    /**
+     * @return the dbUsername
+     */
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    /**
+     * @param dbUsername the dbUsername to set
+     */
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
+    }
+
+    /**
+     * @return the dbPassword
+     */
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    /**
+     * @param dbPassword the dbPassword to set
+     */
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    /**
+     * @return the dbTable
+     */
+    public String getDbTable() {
+        return dbTable;
+    }
+
+    /**
+     * @param dbTable the dbTable to set
+     */
+    public void setDbTable(String dbTable) {
+        this.dbTable = dbTable;
+    }
+
+    /**
+     * @return the dbResetAutoincrement
+     */
+    public int getDbResetAutoincrement() {
+        return dbResetAutoincrement;
+    }
+
+    /**
+     * @param dbResetAutoincrement the dbResetAutoincrement to set
+     */
+    public void setDbResetAutoincrement(int dbResetAutoincrement) {
+        this.dbResetAutoincrement = dbResetAutoincrement;
+    }
+
+    /**
+     * @return the dbTableCreate
+     */
+    public int getDbTableCreate() {
+        return dbTableCreate;
+    }
+
+    /**
+     * @param dbTableCreate the dbTableCreate to set
+     */
+    public void setDbTableCreate(int dbTableCreate) {
+        this.dbTableCreate = dbTableCreate;
+    }
+
+    /**
+     * @return the dbDropTable
+     */
+    public int getDbDropTable() {
+        return dbDropTable;
+    }
+
+    /**
+     * @param dbDropTable the dbDropTable to set
+     */
+    public void setDbDropTable(int dbDropTable) {
+        this.dbDropTable = dbDropTable;
     }
 }

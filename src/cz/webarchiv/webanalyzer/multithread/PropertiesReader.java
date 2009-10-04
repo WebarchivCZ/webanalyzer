@@ -45,6 +45,17 @@ public class PropertiesReader {
     private final String HTMLLANGSEARCHER_REGEXP = "webanalyzer.searcher.htmllang.regexp";
     private final String HTMLLANGSEARCHER_POINT = "webanalyzer.searcher.htmllang.point";
     private final String HTMLLANGSEARCHER_USE = "webanalyzer.searcher.htmllang.use";
+    /* DB stats. */
+    private final String DBSTATS_USE = "webanalyzer.manager.dbstats.use";
+    private final String DBSTATS_URL = "webanalyzer.manager.dbstats.url";
+    private final String DBSTATS_USERNAME = "webanalyzer.manager.dbstats.username";
+    private final String DBSTATS_PASSWORD = "webanalyzer.manager.dbstats.password";
+    private final String DBSTATS_TABLE = "webanalyzer.manager.dbstats.table";
+    private final String DBSTATS_RESET_AUTOINCREMENT = "webanalyzer.manager.dbstats.reset.autoincrement";
+    private final String DBSTATS_TABLE_CREATE = "webanalyzer.manager.dbstats.table.create";
+    private final String DBSTATS_TABLE_DROP = "webanalyzer.manager.dbstats.table.drop";
+
+
     // todo domysliet
     // array of searchers to use in analyze
 
@@ -155,6 +166,29 @@ public class PropertiesReader {
                     validateInt(properties.getProperty(HTMLLANGSEARCHER_USE), 
                     HTMLLANGSEARCHER_USE, 0, 1), 
                     AnalyzerConstants.Searchers.HTML_LANG_SEARCHER);
+
+            // dbstats properties
+            WEB_ANALYZER_PROPERTIES.setDbStatsUse(
+                    validateInt(properties.getProperty(DBSTATS_USE),
+                    DBSTATS_USE, 0, 1));
+            // todo do some validation maybe
+            WEB_ANALYZER_PROPERTIES.setDbURL(
+                    properties.getProperty(DBSTATS_URL));
+            WEB_ANALYZER_PROPERTIES.setDbUsername(
+                    properties.getProperty(DBSTATS_USERNAME));
+            WEB_ANALYZER_PROPERTIES.setDbPassword(
+                    properties.getProperty(DBSTATS_PASSWORD));
+            WEB_ANALYZER_PROPERTIES.setDbTable(
+                    properties.getProperty(DBSTATS_TABLE));
+            WEB_ANALYZER_PROPERTIES.setDbResetAutoincrement(
+                    validateInt(properties.getProperty(DBSTATS_RESET_AUTOINCREMENT),
+                    DBSTATS_RESET_AUTOINCREMENT, 0, 1));
+            WEB_ANALYZER_PROPERTIES.setDbTableCreate(
+                    validateInt(properties.getProperty(DBSTATS_TABLE_CREATE),
+                    DBSTATS_TABLE_CREATE, 0, 1));
+            WEB_ANALYZER_PROPERTIES.setDbDropTable(
+                    validateInt(properties.getProperty(DBSTATS_TABLE_DROP),
+                    DBSTATS_TABLE_DROP, 0, 1));
 
             // log properties from properties file
             log4j.info(this.toString());
@@ -358,6 +392,32 @@ public class PropertiesReader {
         result.append(HTMLLANGSEARCHER_POINT + "=" + 
                 WEB_ANALYZER_PROPERTIES.getHtmlLangSearcherPoint() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        // dbstats properties
+        result.append(DBSTATS_USE + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbStatsUse() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_URL + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbURL() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_USERNAME + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbUsername() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_PASSWORD + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbPassword() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_TABLE + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbTable() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_RESET_AUTOINCREMENT + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbResetAutoincrement() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_TABLE_CREATE + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbTableCreate() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+        result.append(DBSTATS_TABLE_DROP + "=" +
+                WEB_ANALYZER_PROPERTIES.getDbDropTable() +
+                AnalyzerConstants.SystemProperties.LINE_SEPARATOR);
+
         result.append("}");
         return result.toString();
     }

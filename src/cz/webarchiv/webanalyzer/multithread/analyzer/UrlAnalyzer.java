@@ -18,14 +18,13 @@ import cz.webarchiv.webanalyzer.multithread.criteria.HtmlLangSearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.ISearcher;
 import cz.webarchiv.webanalyzer.multithread.criteria.PhoneSearcher;
 import cz.webarchiv.webanalyzer.multithread.mime.Content;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import cz.webarchiv.webanalyzer.multithread.criteria.AStatisticsSearcher;
+import cz.webarchiv.webanalyzer.multithread.managers.DBStatsManager;
 
 /**
  *
@@ -93,6 +92,11 @@ public class UrlAnalyzer {
         }
         // log statistics
         log4j.info(this.getStatistics(curi));
+        // insert statistics into DB if webanalyzer.properties says so
+        if (WebAnalyzerProperties.getInstance().getDbStatsUse() == 1) {
+            // call method that prepars parameters and inserts data into DB
+            insertStats(curi);
+        }
         return this.getValid();
     }
 
@@ -119,6 +123,52 @@ public class UrlAnalyzer {
     }
 
     /**
+     * Possible design of statistics inserted into DB. For particular curi,
+     * searchers, points counter, minValidPoints. According to the searcher used
+     * assign appropriate values to parametres in precompiled query.
+     *
+     * Call this method only in case it is defined to do it so in webanalyzer.properties
+     */
+    private void insertStats(ProcessedCrawlURI curi) {
+        // prepare ProcessedCrawlURI curi object for insert statement
+        // todo set autoincremment for id
+        log4j.debug("insertStats curi=" + curi.toString());
+        curi.setId(0);
+        curi.setReachedPoints(this.pointsCounter.getPoints());
+        // set parametres according to searchers used
+        // todo change this block of code. It's not effective way to do this action
+        for (ISearcher searcher : searchers) {
+            if (searcher instanceof GeoIpSearcher) {
+                log4j.trace("add GeoIpSearcher stats into DB stats table");
+                curi.setGeoIpAll(((AStatisticsSearcher) searcher).getAllElements());
+                curi.setGeoIpValid(((AStatisticsSearcher) searcher).getValidElements());
+                continue;
+            }
+            if (searcher instanceof DictionarySearcher) {
+                log4j.trace("add DictionarySearcher stats into DB stats table");
+                curi.setDictAll(((AStatisticsSearcher) searcher).getAllElements());
+                curi.setDictValid(((AStatisticsSearcher) searcher).getValidElements());
+                continue;
+            }
+            if (searcher instanceof HtmlLangSearcher) {
+                log4j.trace("add HtmlLangSearcher stats into DB stats table");
+                curi.setHtmlTagAll(((AStatisticsSearcher) searcher).getAllElements());
+                curi.setHtmlTagValid(((AStatisticsSearcher) searcher).getValidElements());
+                continue;
+            }
+            if (searcher instanceof EmailSearcher) {
+                log4j.trace("add EmailSearcher stats into DB stats table");
+                curi.setEmailAll(((AStatisticsSearcher) searcher).getAllElements());
+                curi.setEmailValid(((AStatisticsSearcher) searcher).getValidElements());
+                continue;
+            }
+        }
+        // curi filled up with all necessary information for insert statement
+        // call DBStatsManager and insert curi into DB
+        DBStatsManager.getInstance().insertStats(curi);
+    }
+
+    /**
      * Method return whether curi is valid or not.
      * @return true only if curi is valid, reached enough points
      */
@@ -133,7 +183,7 @@ public class UrlAnalyzer {
      */
     public PointsCounter getPointsCounter() {
         return pointsCounter;
-        
+
     }
 
     /**
@@ -146,7 +196,7 @@ public class UrlAnalyzer {
         curi.setContentType((new Content()).getContentType(
                 curi.getContentType(), curi.getUrlName(),
                 curi.getContent().getBytes()));
-        if (curi.getContentType() != null && 
+        if (curi.getContentType() != null &&
                 curi.getContentType().indexOf("text") > -1) {
             return true;
         }

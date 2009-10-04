@@ -62,7 +62,8 @@ public class ProfileWebAnalyzer {
 
             // pause main thread for a while, so that the toe thread has enough
             // time to search URL.
-            Thread.currentThread().sleep(200 * 1000);
+            // use join method instead of this sleep method. See DBTest.java
+            Thread.currentThread().sleep(20 * 1000);
 
             for (UrlAnalyzer analyzer : analyzers) {
                 log4j.debug(analyzer.getPointsCounter().getPoints());

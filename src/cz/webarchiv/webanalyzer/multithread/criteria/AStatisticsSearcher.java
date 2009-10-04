@@ -11,7 +11,7 @@ import cz.webarchiv.webanalyzer.multithread.analyzer.util.AnalyzerConstants;
  *
  * @author praso
  */
-abstract class AStatisticsSearcher {
+public abstract class AStatisticsSearcher {
     
     long allElements;
     long validElements;
@@ -29,6 +29,14 @@ abstract class AStatisticsSearcher {
                 ", validElements=" + validElements +
                 ", in percent=" + this.getStatisticsInPercent() +
                 AnalyzerConstants.SystemProperties.LINE_SEPARATOR;
+    }
+
+    public long getAllElements() {
+        return allElements;
+    }
+
+    public long getValidElements() {
+        return validElements;
     }
     
 

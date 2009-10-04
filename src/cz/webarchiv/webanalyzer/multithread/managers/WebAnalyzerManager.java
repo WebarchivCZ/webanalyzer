@@ -58,6 +58,13 @@ public class WebAnalyzerManager {
                     break;
             }
         }
+        // initialize DBStatsManager
+        if (WebAnalyzerProperties.getInstance().getDbStatsUse() == 1) {
+            log4j.debug("initialize DBStatsManager");
+            managers.add(DBStatsManager.getInstance());
+            DBStatsManager.getInstance().init();
+            log4j.debug("initializeManagers created DBStatsManager");
+        }
     }
 
     /**
