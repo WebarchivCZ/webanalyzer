@@ -18,6 +18,8 @@ import cz.webarchiv.webanalyzer.multithread.managers.DictionaryManager;
 import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 
+import java.text.Collator;
+
 /**
  *
  * @author Ivan Vlcek
@@ -48,6 +50,8 @@ public class DictionarySearcher extends AStatisticsSearcher
     // properties from property file
     private int dictionarySearcherPoint = WebAnalyzerProperties.getInstance().
             getDictionarySearcherPoint();
+
+    private Collator myCollation = Collator.getInstance();
 
     /**
      * Constructor.
@@ -125,9 +129,11 @@ public class DictionarySearcher extends AStatisticsSearcher
                 // End of file reached, loadWord returned null
                 return NOT_FOUND;
             }
-            if ((dictWord.compareTo(word)) < 0) {
+//            if ((dictWord.compareTo(word)) < 0) {
+            if (myCollation.compare(dictWord, word) < 0) {
                 low = mid + 1;
-            } else if (dictWord.compareTo(word) > 0) {
+//            } else if (dictWord.compareTo(word) > 0) {
+            } else if (myCollation.compare(dictWord, word) > 0) {
                 high = mid - 1;
             } else {
                 return mid;
