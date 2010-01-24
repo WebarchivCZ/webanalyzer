@@ -7,7 +7,6 @@ package cz.webarchiv.webanalyzer.dictionary;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  *

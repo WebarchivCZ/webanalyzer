@@ -11,8 +11,6 @@ package org.archive.analyzer;
 
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.archive.test.CreateIndex;
-import org.archive.test.SearchInIndex;
 
 /**
  *

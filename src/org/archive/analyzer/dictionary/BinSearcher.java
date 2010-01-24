@@ -10,8 +10,6 @@
 
 package org.archive.analyzer.dictionary;
 
-import org.archive.analyzer.*;
-
 /**
  *
  * @author Ivan Vlcek

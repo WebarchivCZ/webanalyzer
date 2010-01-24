@@ -9,8 +9,6 @@
 
 package org.archive.test;
 
-import org.apache.lucene.demo.IndexFiles;
-import org.apache.lucene.demo.SearchFiles;
 //import org.apache.lucene.
 
 

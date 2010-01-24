@@ -14,7 +14,6 @@
 
 package cz.webarchiv.webanalyzer.multithread.analyzer.util;
 
-import org.archive.analyzer.*;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;

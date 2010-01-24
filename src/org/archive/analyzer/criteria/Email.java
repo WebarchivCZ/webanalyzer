@@ -9,7 +9,6 @@
 
 package org.archive.analyzer.criteria;
 
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.archive.analyzer.*;

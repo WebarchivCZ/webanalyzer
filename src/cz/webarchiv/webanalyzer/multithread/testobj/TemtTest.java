@@ -2,7 +2,6 @@
 package cz.webarchiv.webanalyzer.multithread.testobj;
 
 import java.io.*;
-import java.lang.*;
 
 public class TemtTest {
   public static void main(String[] args) throws IOException{

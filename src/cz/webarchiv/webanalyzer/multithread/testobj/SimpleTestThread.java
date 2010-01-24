@@ -6,11 +6,9 @@ package cz.webarchiv.webanalyzer.multithread.testobj;
 
 import cz.webarchiv.webanalyzer.multithread.WebAnalyzer;
 import cz.webarchiv.webanalyzer.multithread.analyzer.UrlAnalyzer;
-import cz.webarchiv.webanalyzer.multithread.criteria.GeoIpSearcher;
 import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
-import org.archive.analyzer.util.RandomUtil;
 
 /**
  *

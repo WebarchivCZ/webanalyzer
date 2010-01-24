@@ -15,7 +15,6 @@ package org.archive.analyzer.criteria;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.security.auth.callback.LanguageCallback;
 import org.apache.log4j.Logger;
 import org.archive.analyzer.*;
 

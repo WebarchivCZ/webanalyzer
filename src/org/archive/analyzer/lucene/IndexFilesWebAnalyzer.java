@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
-import org.archive.analyzer.lucene.FileDocument;
 
 
 /**
